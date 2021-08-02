@@ -1,0 +1,23 @@
+{
+    "name": "cuple_app",
+    "short_name": "cuple_app",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0175C2",
+    "theme_color": "#0175C2",
+    "description": "▪	This is a matching app between couples. ▪	Both members of the couple should download this app. After initial registration, anyone can send invitations to others. ▪	A questionnaire on special events, dates, likes & plans will be there as the next part of registration. ▪	The site would remind the partner of the event 15 days before, then 7 days before and then the day before. This would be customizable from the admin site, so some reminders could be set to go out at different intervals, but other reminders, like date nights, would only go out once. ▪	App will recommend restaurants; ideas for gifts, local experiences based on couples preferences. ",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
