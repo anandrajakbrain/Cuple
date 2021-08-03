@@ -1,4 +1,5 @@
 import 'package:cuple_app/configuration/app_config.dart';
+import 'package:cuple_app/screens/registerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 
@@ -72,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return SplashScreen(
         seconds: 10,
-        navigateAfterSeconds: new AfterSplash(),
+        navigateAfterSeconds: new RegisterScreen(),
         // title: new Text(
         //   APP_NAME,
         //   style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
