@@ -13,8 +13,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       backgroundColor: APP_PRIMARY_COLOR,
       body: Container(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("Create An Account"),
+            Text("Create An Account",style: TextStyle(
+fontSize:
+            ),textAlign: TextAlign.center,),
           ],
         ),
       ),
