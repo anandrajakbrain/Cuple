@@ -1,4 +1,5 @@
 import 'package:cuple_app/configuration/app_config.dart';
+import 'package:cuple_app/screens/otpVerficationScreen.dart';
 import 'package:cuple_app/screens/registerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: APP_NAME,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: APP_NAME),
     );
   }
 }
@@ -83,26 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
         imageBackground: AssetImage("assets/img1.png"),
         styleTextUnderTheLoader: new TextStyle(),
         photoSize: 150,
-        onClick: () => print("Flutter Egypt"),
         loaderColor: Colors.red);
-  }
-}
-class AfterSplash extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-          title: new Text("$APP_NAME"),
-          automaticallyImplyLeading: false
-      ),
-      body: new Center(
-        child: new Text("Done!",
-          style: new TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30.0
-          ),),
-
-      ),
-    );
   }
 }
