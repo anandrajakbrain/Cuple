@@ -60,9 +60,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      // if (_formKey.currentState.validate()) {
+                      if (_formKey.currentState.validate()) {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerificationScreen()));
-                      // }
+                      }
                     },
                     child: SizedBox(
                       width: Utils(context).getMediaWidth() * 0.80,

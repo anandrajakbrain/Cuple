@@ -1,4 +1,5 @@
 import 'package:cuple_app/configuration/app_config.dart';
+import 'package:cuple_app/screens/notificationListScreen.dart';
 import 'package:cuple_app/screens/otpVerficationScreen.dart';
 import 'package:cuple_app/screens/registerScreen.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
+    return NotificationsListScreen();
     return SplashScreen(
         seconds: 10,
         navigateAfterSeconds: new RegisterScreen(),
