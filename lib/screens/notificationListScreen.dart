@@ -1,4 +1,6 @@
+import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/listContainer.dart';
+import 'package:cuple_app/configuration/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,27 +15,8 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 2,
-                  spreadRadius: 1,
-                )
-              ],
-            ),
-            child: Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        backgroundColor: Colors.white,
+        leading: CustomBackButton(),
+        backgroundColor: APP_BAR_COLOR,
         title: Text(
           "Notifications",
           style: TextStyle(color: Colors.black),
