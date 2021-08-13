@@ -5,6 +5,8 @@ import 'package:cuple_app/screens/otpVerficationScreen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import 'login.dart';
+
 class RegisterScreen extends StatefulWidget {
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -179,6 +181,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 print("Sign In");
+                                Navigator.of(context).pushReplacement(
+                                    new MaterialPageRoute(builder: (context) =>
+                                    new LoginScreen()));
                                 // Single tapped.
                               },
                           ),
