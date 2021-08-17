@@ -7,6 +7,7 @@ import 'package:cuple_app/screens/partnerWishList.dart';
 import 'package:cuple_app/screens/registerScreen.dart';
 import 'package:cuple_app/screens/reminderListScreen.dart';
 import 'package:cuple_app/screens/tipsListScreen.dart';
+import 'package:cuple_app/screens/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 
@@ -79,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    return ReminderListScreen();
+    return UserProfileScreen();
     return SplashScreen(
         seconds: 10,
         navigateAfterSeconds: new RegisterScreen(),

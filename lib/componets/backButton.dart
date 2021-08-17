@@ -8,23 +8,28 @@ class CustomBackButton extends StatefulWidget {
 class _CustomBackButtonState extends State<CustomBackButton> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey,
-              blurRadius: 2,
-              spreadRadius: 1,
-            )
-          ],
-        ),
-        child: Icon(
-          Icons.arrow_back,
-          color: Colors.black,
+    return InkWell(
+      onTap: (){
+        Navigator.pop(context);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey,
+                blurRadius: 2,
+                spreadRadius: 1,
+              )
+            ],
+          ),
+          child: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
         ),
       ),
     );
