@@ -69,6 +69,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                       crossAxisCount: 2,
                       childAspectRatio: Utils(context).getMediaHeight() /
                           Utils(context).getMediaWidth(),
+                      // childAspectRatio:10/10,
                     ),
                     itemBuilder: (BuildContext context, index) {
                       return ReminderCard();

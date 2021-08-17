@@ -9,6 +9,7 @@ import 'package:cuple_app/screens/registerScreen.dart';
 import 'package:cuple_app/screens/reminderListScreen.dart';
 import 'package:cuple_app/screens/settings_screen.dart';
 import 'package:cuple_app/screens/tipsListScreen.dart';
+import 'package:cuple_app/screens/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 

@@ -1,5 +1,6 @@
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ReminderCard extends StatefulWidget {
@@ -11,8 +12,9 @@ class _ReminderCardState extends State<ReminderCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Utils(context).getMediaHeight() * 0.04,
-      margin: EdgeInsets.all(8.0),
+      // height: Utils(context).getMediaHeight() * 0.01,
+      margin: EdgeInsets.all(5.0),
+      // padding: EdgeInsets.all(5.0),
       decoration: BoxDecoration(
           gradient: REMINDER_CARD_COLOR,
           borderRadius: BorderRadius.circular(8.0),
@@ -36,7 +38,7 @@ class _ReminderCardState extends State<ReminderCard> {
                 Utils(context).getMediaWidth() * 0.03),
           ),
           SizedBox(
-            height: Utils(context).getMediaHeight() * 0.02,
+            height: Utils(context).getMediaHeight() * 0.01,
           ),
           Container(
             padding: EdgeInsets.all(8.0),
@@ -55,9 +57,9 @@ class _ReminderCardState extends State<ReminderCard> {
                   Utils(context).getMediaWidth() * 0.03),
             ),
           ),
-          SizedBox(
-            height: Utils(context).getMediaHeight() * 0.02,
-          ),
+          // SizedBox(
+          //   height: Utils(context).getMediaHeight() * 0.01,
+          // ),
           Text(
             "2 Days",
             style: TextStyle(
@@ -66,9 +68,9 @@ class _ReminderCardState extends State<ReminderCard> {
                 fontSize:
                 Utils(context).getMediaWidth() * 0.03),
           ),
-          SizedBox(
-            height: Utils(context).getMediaHeight() * 0.02,
-          ),
+          // SizedBox(
+          //   height: Utils(context).getMediaHeight() * 0.01,
+          // ),
           Text(
             "To Celebrate Anniversary",
             style: TextStyle(
