@@ -1,6 +1,7 @@
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/listContainer.dart';
 import 'package:cuple_app/componets/wishlistContainer.dart';
+import 'package:cuple_app/configuration/app_config.dart';
 import 'package:flutter/material.dart';
 class MyWishList extends StatefulWidget {
   @override
@@ -21,8 +22,10 @@ class _MyWishListState extends State<MyWishList> {
         actions: [
 
         ],
+        elevation: 0.0,
       ),
       body: Container(
+        color: APP_BAR_COLOR,
         padding: EdgeInsets.all(8.0),
         child: Center(
           child: ListView.builder(

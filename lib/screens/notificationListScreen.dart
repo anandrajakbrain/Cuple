@@ -22,19 +22,23 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
           style: TextStyle(color: Colors.black),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextButton(
-              style: TextButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 15),
+          InkWell(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(fontSize: 15),
+                ),
+                onPressed: () {},
+                child: const Text('Clear All'),
               ),
-              onPressed: () {},
-              child: const Text('Clear All'),
             ),
           ),
         ],
+        elevation: 0,
       ),
       body: Container(
+        color: APP_BAR_COLOR,
         padding: EdgeInsets.all(8.0),
         child: Center(
           child: ListView.builder(

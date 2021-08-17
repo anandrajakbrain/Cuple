@@ -1,8 +1,9 @@
-// import 'package:cuple_app/componets/customMenuButton.dart';
-// import 'package:cuple_app/configuration/app_config.dart';
-// import 'package:cuple_app/configuration/utils.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
+import 'package:cuple_app/componets/backButton.dart';
+import 'package:cuple_app/componets/customMenuButton.dart';
+import 'package:cuple_app/configuration/app_config.dart';
+import 'package:cuple_app/configuration/utils.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 //
 // class UserProfileScreen extends StatefulWidget {
 //   @override
@@ -211,3 +212,343 @@
 //     ];
 //   }
 // }
+class UserProfile extends StatefulWidget {
+  @override
+  _UserProfileState createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
+  @override
+  Widget build(BuildContext context) {
+    return  Scaffold(
+      appBar: AppBar(
+        leading: CustomBackButton(),
+        backgroundColor: APP_BAR_COLOR,
+        title: Text(
+          "My Profile",
+          style: TextStyle(color: Colors.black),
+        ),
+        elevation: 0,
+      ),
+      body: Container(
+        color: APP_BAR_COLOR,
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Utils(context).getMediaWidth() * 0.03),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.08),
+                    child: Card(
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.height * 0.03),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [
+                                  Color(0XFFE556EB),
+                                  Color(0XFF5E08B3)
+                                ]
+                            )
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.08)),
+                            Text("John Doe", style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500
+                            ),),
+                            Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.01)),
+                            Text("john@gmail.com", style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300
+                            ),),
+                            Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                            Divider(thickness: 0.2,color: Colors.white,),
+                            Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.height * 0.08),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Mobile No.",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text("Gender",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text("Birth Date",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(":\t\t01234567890",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text(":\t\tMale",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text(":\t\t13 Jun, 1994",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                  Container(
+                    child: Text(
+                      " Anniversary",
+                      style: TextStyle(
+                        fontSize: Utils(context).getMediaWidth() * 0.04,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.0)),
+                  Container(
+                    child: Card(
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.height * 0.03),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [
+                                  Color(0XFFE556EB),
+                                  Color(0XFF5E08B3)
+                                ]
+                            )
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.height * 0.03),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text("Marriage Anniversary",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text("Birth Date",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text(":\t\t13 Jun, 2014",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text(":\t\t13 Jun, 1994",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                  Container(
+                    child: Text(
+                      " Celebration",
+                      style: TextStyle(
+                        fontSize: Utils(context).getMediaWidth() * 0.04,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.0)),
+                  Container(
+                    child: Card(
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.height * 0.03),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [
+                                  Color(0XFFE556EB),
+                                  Color(0XFF5E08B3)
+                                ]
+                            )
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.height * 0.03),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text("Dog's Birthday",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text("Connors Birthday",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text(":\t\t13 Jun, 2014",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                      Text(":\t\t13 Jun, 1994",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300
+                                        ),
+                                      ),
+                                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.01)),
+                  Container(
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                                Color(0XFF1A93EE),
+                                Color(0XFF6F34DD)
+                              ]
+                          ),
+                          borderRadius: BorderRadius.circular(30)
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("EDIT PROFILE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: Utils(context).getMediaHeight() * 0.16,
+                  width: Utils(context).getMediaHeight() * 0.16,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                          colors: [
+                            Color(0XFF5E08B3),
+                            Color(0XFFE556EB),
+                          ]
+                      )
+                  ),
+                  child: Center(
+                    child: Text("Image", style: TextStyle(color: Colors.white),),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+

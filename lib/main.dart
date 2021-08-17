@@ -1,6 +1,7 @@
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/screens/home_screen.dart';
 import 'package:cuple_app/screens/ideasListScreen.dart';
+import 'package:cuple_app/screens/login.dart';
 import 'package:cuple_app/screens/myWishList.dart';
 import 'package:cuple_app/screens/notificationListScreen.dart';
 import 'package:cuple_app/screens/otpVerficationScreen.dart';
@@ -82,10 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    return HomeScreen();
     return SplashScreen(
         seconds: 10,
-        navigateAfterSeconds: new RegisterScreen(),
+        navigateAfterSeconds: new LoginScreen(),
         // title: new Text(
         //   APP_NAME,
         //   style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),

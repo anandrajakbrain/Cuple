@@ -1,4 +1,5 @@
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/screens/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -106,7 +107,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => OtpVerificationScreen()));
+                          builder: (context) => HomeScreen()));
                   // }
                 },
                 child: SizedBox(

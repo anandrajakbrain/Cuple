@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class IdeasListScreen extends StatefulWidget {
+  bool isBottom;
+  IdeasListScreen({@required this.isBottom=false});
   @override
   _IdeasListScreenState createState() => _IdeasListScreenState();
 }
@@ -14,7 +16,54 @@ class IdeasListScreen extends StatefulWidget {
 class _IdeasListScreenState extends State<IdeasListScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  widget.isBottom?
+    Container(
+      height: Utils(context).getMediaHeight(),
+      child: Center(
+        child: GridView.builder(
+            gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            itemBuilder: (BuildContext context, index) {
+              return Container(
+                height: Utils(context).getMediaHeight() * 0.6,
+                margin: EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Color(0XFFE8F6F1),
+                  borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey[200],
+                      spreadRadius: 2,
+                      // blurRadius: 1
+                    ),
+                  ],
+                ),
+                child: GridTile(
+                  header: Container(
+                    padding: EdgeInsets.only(top: 10.0, bottom: 8.0),
+                    child: Image.asset(
+                      "assets/ideaImg2.png",
+                      // fit: BoxFit.cover,
+                      height: Utils(context).getMediaHeight() * 0.14,
+                      width: 1,
+                    ),
+                  ),
+                  child: SizedBox(),
+                  footer: Container(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Out Date Night",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: Utils(context).getMediaWidth() * 0.05,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              );
+            }),
+      ),
+    ):Scaffold(
       appBar: AppBar(
         leading: CustomMenuButton(),
         backgroundColor: APP_BAR_COLOR,
