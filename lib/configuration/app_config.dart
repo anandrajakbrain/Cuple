@@ -10,3 +10,8 @@ const LinearGradient REMINDER_CARD_COLOR = LinearGradient(colors: [
   Color(0XFFDE52E8),
 ]);
 
+const LinearGradient REMINDER_CARD_COLOR_HOME = LinearGradient(colors: [
+  Color(0XFFE9F4EF),
+  Color(0XFFE9F4EF),
+]);
+
