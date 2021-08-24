@@ -1,9 +1,14 @@
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/listUserReminderResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ReminderCard extends StatefulWidget {
+
+  UserListReminderData userListReminderData;
+  ReminderCard({@required this.userListReminderData});
   @override
   _ReminderCardState createState() => _ReminderCardState();
 }
@@ -30,7 +35,7 @@ class _ReminderCardState extends State<ReminderCard> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Love Anniversary",
+            "${widget.userListReminderData.name}",
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -50,7 +55,7 @@ class _ReminderCardState extends State<ReminderCard> {
               borderRadius: BorderRadius.circular(50),
             ),
             child: Text(
-              "June 28,2021",
+             DateFormat("MMM d,y").format(DateTime.parse(widget.userListReminderData.date),),// "June 28,2021",
               style: TextStyle(
                   color: Colors.white,
                   fontSize:
@@ -61,7 +66,7 @@ class _ReminderCardState extends State<ReminderCard> {
           //   height: Utils(context).getMediaHeight() * 0.01,
           // ),
           Text(
-            "2 Days",
+            "${DateTime.parse(widget.userListReminderData.date).difference(DateTime.now()).inDays} days",//"",
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

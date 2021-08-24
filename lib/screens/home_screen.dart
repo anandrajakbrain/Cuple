@@ -1,11 +1,20 @@
+import 'dart:convert';
+
 import 'package:circle_bottom_navigation/circle_bottom_navigation.dart';
 import 'package:circle_bottom_navigation/widgets/tab_data.dart';
 import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
+import 'package:cuple_app/componets/customMenuDrawer.dart';
 import 'package:cuple_app/componets/reminderCard.dart';
 import 'package:cuple_app/configuration/app_config.dart';
+import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/ideasListResponse.dart';
+import 'package:cuple_app/model/listUserReminderResponse.dart';
+import 'package:cuple_app/model/remindersListsResponse.dart';
+import 'package:cuple_app/model/tipsListResponse.dart';
+import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/createNewReminder.dart';
 import 'package:cuple_app/screens/funnycardListScreen.dart';
 import 'package:cuple_app/screens/ideasListScreen.dart';
@@ -23,6 +32,8 @@ import 'package:ff_navigation_bar/ff_navigation_bar_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -33,15 +44,33 @@ class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   int selectedIndex = 0;
   Widget controlWidget;
-
+  ListUserReminderResponse remindersListsResponse;
+  IdeasListResponse ideasListResponse;
+  TipsListResponse tipsListResponse;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Future.delayed(Duration(seconds: 2)).then((value){ getuserDetails();
+    getApis();
+
+
+
+    });
+  }
+
+  getuserDetails() async {
+    SharedPreferences prf = await SharedPreferences.getInstance();
+    setState(() {
+      userDetails = User.fromJson(jsonDecode(prf.getString("user")));
+    });
+
+    // prf.setString("user", jsonEncode(verifyOTPResponse.user));
   }
 
   @override
   Widget build(BuildContext context) {
+    // print(userDetails.name);
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -108,266 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
-        drawer: Drawer(
-          // Add a ListView to the drawer. This ensures the user can scroll
-          // through the options in the drawer if there isn't enough vertical
-          // space to fit everything.
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: [
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [Color(0XFF1A93EE), Color(0XFF6F34DD)]),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: Utils(context).getMediaHeight() * 0.11,
-                          width: Utils(context).getMediaHeight() * 0.11,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(colors: [
-                                Color(0XFF5E08B3),
-                                Color(0XFFE556EB),
-                              ])),
-                          child: Center(
-                            child: Text(
-                              "Image",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(
-                                left: Utils(context).getMediaWidth() * 0.03)),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'John Doe',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize:
-                                      Utils(context).getMediaHeight() * 0.024),
-                            ),
-                            Text(
-                              'john@gmail.com',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300,
-                                //fontSize: Utils(context).getMediaHeight() * 0.024
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => UserProfile()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 2,
-                          spreadRadius: 1,
-                        )
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colors.grey[400])),
-                            child: Icon(
-                              Icons.account_circle_outlined,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        Text("Profile")
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyWishList()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Container(
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colors.grey[400])),
-                            child: Icon(
-                              Icons.star_border,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        Text("My Wish List")
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PartnerWishlist(
-                                partnerName: "Jenny",
-                              )));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Container(
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colors.grey[400])),
-                            child: Icon(
-                              Icons.star_border,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        Text("Jeny's Wish List")
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SettingsScreen()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Container(
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colors.grey[400])),
-                            child: Icon(
-                              Icons.settings,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        Text("Settings")
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Container(
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.grey[400])),
-                          child: Icon(
-                            Icons.card_giftcard,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      Text("Greeting Card Subscription")
-                    ],
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Container(
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colors.black)),
-                            child: Icon(
-                              Icons.logout,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          "Logout",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        drawer: CustomMenuDrawer(),
         bottomNavigationBar: FFNavigationBar(
           theme: FFNavigationBarTheme(
             barBackgroundColor: Colors.white,
@@ -424,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(8.0),
                     margin: EdgeInsets.only(left: 10.0),
                     child: Text(
-                      "Welcome John!",
+                      "Welcome ${userDetails != null ? userDetails.name ?? "" : ""}!",
                       style: TextStyle(
                         fontSize: Utils(context).getMediaWidth() * 0.04,
                         fontWeight: FontWeight.bold,
@@ -432,8 +202,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   InkWell(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>IdeasListScreen(isBottom: false),));
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                IdeasListScreen(isBottom: false),
+                          ));
                     },
                     child: Row(
                       children: [
@@ -443,7 +218,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text(
                             "See All",
                             style: TextStyle(
-                                fontSize: Utils(context).getMediaWidth() * 0.035,
+                                fontSize:
+                                    Utils(context).getMediaWidth() * 0.035,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.blue),
                           ),
@@ -460,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 height: Utils(context).getMediaHeight() * 0.24,
                 child: ListView.builder(
-                  itemCount: 4,
+                  itemCount: ideasListResponse!=null?ideasListResponse.data.length:0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
                     return Container(
@@ -497,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: Utils(context).getMediaHeight() * 0.02,
                           ),
                           Text(
-                            "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print,",
+                            Utils(context).parseHtmlString(ideasListResponse.data[index].content.toString()).toString(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize:
@@ -530,8 +306,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ReminderListScreen()));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ReminderListScreen()));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -555,7 +334,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text(
                             "See All",
                             style: TextStyle(
-                                fontSize: Utils(context).getMediaWidth() * 0.035,
+                                fontSize:
+                                    Utils(context).getMediaWidth() * 0.035,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.blue),
                           ),
@@ -573,7 +353,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: Utils(context).getMediaHeight() * 0.26,
                 width: double.infinity,
                 child: ListView.builder(
-                    itemCount: 4,
+                    itemCount: remindersListsResponse!=null?remindersListsResponse.data.length:0,
                     controller: ScrollController(),
                     // physics: NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.horizontal,
@@ -597,7 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Love Anniversary",
+                              "${remindersListsResponse.data[index].name}",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -617,7 +397,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(50),
                               ),
                               child: Text(
-                                "June 28,2021",
+                                  DateFormat("MMM d,y").format(DateTime.parse(remindersListsResponse.data[index].date),),
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize:
@@ -628,7 +408,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: Utils(context).getMediaHeight() * 0.02,
                             ),
                             Text(
-                              "2 Days",
+                      "${DateTime.parse(remindersListsResponse.data[index].date).difference(DateTime.now()).inDays} days",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -651,8 +431,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     }),
               ),
               InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>FunnyCardListScreen(partnerName: "Jenny's"),));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            FunnyCardListScreen(partnerName: "Jenny's"),
+                      ));
                 },
                 child: Container(
                   width: Utils(context).getMediaWidth() * 0.5,
@@ -687,8 +472,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>TipsListScreen(),));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TipsListScreen(),
+                      ));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -712,7 +501,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text(
                             "See All",
                             style: TextStyle(
-                                fontSize: Utils(context).getMediaWidth() * 0.035,
+                                fontSize:
+                                    Utils(context).getMediaWidth() * 0.035,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.blue),
                           ),
@@ -729,7 +519,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 height: Utils(context).getMediaHeight() * 0.24,
                 child: ListView.builder(
-                  itemCount: 4,
+                  itemCount: tipsListResponse!=null?tipsListResponse.data.length:0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
                     return Container(
@@ -755,7 +545,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Best Date Ideas",
+                            "Best Date Tips",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -766,7 +556,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: Utils(context).getMediaHeight() * 0.02,
                           ),
                           Text(
-                            "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print,",
+                            Utils(context).parseHtmlString(tipsListResponse.data[index].content.toString()).toString(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize:
@@ -799,11 +589,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyWishList(),));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyWishList(),
+                      ));
                 },
                 child: Padding(
-                  padding: EdgeInsets.all(Utils(context).getMediaHeight() * 0.02),
+                  padding:
+                      EdgeInsets.all(Utils(context).getMediaHeight() * 0.02),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -842,8 +637,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: EdgeInsets.only(
                               top: MediaQuery.of(context).size.height * 0.02)),
                       InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>PartnerWishlist(partnerName: "Jenny's"),));
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PartnerWishlist(partnerName: "Jenny's"),
+                              ));
                         },
                         child: Container(
                           width: Utils(context).getMediaWidth() * 0.45,
@@ -1367,5 +1167,56 @@ class _HomeScreenState extends State<HomeScreen> {
         return displayHomeWidget(context);
     }
     ;
+  }
+
+
+  getApis() async{
+    await getReminder();
+    await getIdeasList();
+    await getTipsList();
+  }
+  getReminder() async {
+    try {
+      ListUserReminderResponse _remindersListsResponse = await Plugs(context)
+          .listUserReminderList(userId: userDetails.id.toString());
+      setState(() {
+        remindersListsResponse = _remindersListsResponse;
+      });
+    } catch (e) {
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("${e}"),
+      );
+      ;
+    }
+  }
+
+  getIdeasList() async {
+    try {
+      IdeasListResponse _ideasListResponse = await Plugs(context).getIdeasList(type: "Ideas");
+      setState(() {
+        ideasListResponse = _ideasListResponse;
+      });
+    } catch (e) {
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("${e}"),
+      );
+      ;
+    }
+  }
+  getTipsList() async {
+    try {
+      TipsListResponse _tipsListResponse = await Plugs(context).getTipsList(type: "tips");
+      setState(() {
+        tipsListResponse = _tipsListResponse;
+      });
+    } catch (e) {
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("${e}"),
+      );
+      ;
+    }
   }
 }

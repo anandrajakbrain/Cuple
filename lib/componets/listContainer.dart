@@ -1,9 +1,12 @@
+import 'package:cuple_app/model/notificationsListsResponse.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ListContainer extends StatefulWidget {
   bool isEven;
+NotificationListData notificationListData;
 
-  ListContainer({@required this.isEven});
+  ListContainer({@required this.isEven,this.notificationListData});
 
   @override
   _ListContainerState createState() => _ListContainerState();
@@ -24,13 +27,13 @@ class _ListContainerState extends State<ListContainer> {
       ),
       child: ListTile(
         title: Text(
-          "10:00AM 15 Jun,2021",
+          DateFormat.yMMMEd().format(DateTime.parse(widget.notificationListData.createdAt)),
           style: TextStyle(
               color: widget.isEven == true ? Colors.white70 : Colors.black54,
               fontSize: 14),
         ),
         subtitle: Text(
-          "The BoxDecoration class provides a variety of ways to draw a box. The box has a border, a body, and may cast a boxShadow. The shape of the box can be a circle or a rectangle. If it is a rectangle, then the borderRadius property controls the roundness of the corners.",
+          "${widget.notificationListData.msg}",
           style: TextStyle(
               color: widget.isEven == true ? Colors.white : Colors.black,
               fontSize: 17),

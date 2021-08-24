@@ -38,6 +38,7 @@ dependencies:
   circle_bottom_navigation:
   ff_navigation_bar:
   custom_switch:
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

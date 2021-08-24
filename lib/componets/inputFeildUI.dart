@@ -7,9 +7,10 @@ class RegisterInputField extends StatefulWidget {
   String formType;
   TextInputType TxtInputType;
   GlobalKey<FormState> formkey;
+  final getvalue;
 
   RegisterInputField(
-      {@required this.controller, @required this.labelName, this.TxtInputType,this.formType,this.formkey});
+      {@required this.controller, @required this.labelName, this.TxtInputType,this.formType,this.formkey,this.getvalue});
 
   @override
   _RegisterInputFieldState createState() => _RegisterInputFieldState();
@@ -31,7 +32,7 @@ class _RegisterInputFieldState extends State<RegisterInputField> {
       padding: EdgeInsets.all(8.0),
       child: TextFormField(
         keyboardType: widget.TxtInputType,
-        controller: widget.controller,
+        // controller: widget.controller,
         decoration: InputDecoration(
           labelText: widget.labelName,
           labelStyle: TextStyle(
@@ -74,12 +75,15 @@ class _RegisterInputFieldState extends State<RegisterInputField> {
           return null;
         },
         onChanged: (val){
+          widget.getvalue(val);
+        },
+        /*onChanged: (val){
           if (_formkey.currentState.validate()) {
             print("Validated");
           }else{
             print("Not Validated");
           }
-        },
+        },*/
       ),
     );
   }

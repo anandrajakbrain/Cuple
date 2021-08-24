@@ -1,13 +1,13 @@
 class VerifyOTPResponse {
-  int status;
+  bool success;
   String message;
   User user;
   String accessToken;
 
-  VerifyOTPResponse({this.status, this.message, this.user, this.accessToken});
+  VerifyOTPResponse({this.success, this.message, this.user, this.accessToken});
 
   VerifyOTPResponse.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
+    success = json['success'];
     message = json['message'];
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
     accessToken = json['access_token'];
@@ -15,7 +15,7 @@ class VerifyOTPResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
+    data['success'] = this.success;
     data['message'] = this.message;
     if (this.user != null) {
       data['user'] = this.user.toJson();

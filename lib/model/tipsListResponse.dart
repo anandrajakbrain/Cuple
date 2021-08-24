@@ -1,16 +1,16 @@
-class FunnycardsListsResponse {
+class TipsListResponse {
   bool success;
-  List<FunnyCardData> data;
+  List<TipsData> data;
   String message;
 
-  FunnycardsListsResponse({this.success, this.data, this.message});
+  TipsListResponse({this.success, this.data, this.message});
 
-  FunnycardsListsResponse.fromJson(Map<String, dynamic> json) {
+  TipsListResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
-      data = new List<FunnyCardData>();
+      data = new List<TipsData>();
       json['data'].forEach((v) {
-        data.add(new FunnyCardData.fromJson(v));
+        data.add(new TipsData.fromJson(v));
       });
     }
     message = json['message'];
@@ -27,43 +27,59 @@ class FunnycardsListsResponse {
   }
 }
 
-class FunnyCardData {
+class TipsData {
   int id;
-  String name;
+  int suggesionTypeId;
+  String category;
+  String content;
   String image;
+  Null link;
   String status;
   String createdAt;
   String updatedAt;
   Null deletedAt;
+  String suggesiontype;
 
-  FunnyCardData(
+  TipsData(
       {this.id,
-        this.name,
+        this.suggesionTypeId,
+        this.category,
+        this.content,
         this.image,
+        this.link,
         this.status,
         this.createdAt,
         this.updatedAt,
-        this.deletedAt});
+        this.deletedAt,
+        this.suggesiontype});
 
-  FunnyCardData.fromJson(Map<String, dynamic> json) {
+  TipsData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
+    suggesionTypeId = json['suggesion_type_id'];
+    category = json['category'];
+    content = json['content'];
     image = json['image'];
+    link = json['link'];
     status = json['status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    suggesiontype = json['suggesiontype'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['name'] = this.name;
+    data['suggesion_type_id'] = this.suggesionTypeId;
+    data['category'] = this.category;
+    data['content'] = this.content;
     data['image'] = this.image;
+    data['link'] = this.link;
     data['status'] = this.status;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['suggesiontype'] = this.suggesiontype;
     return data;
   }
 }

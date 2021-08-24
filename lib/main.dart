@@ -1,4 +1,6 @@
 import 'package:cuple_app/configuration/app_config.dart';
+import 'package:cuple_app/configuration/plug.dart';
+import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/screens/home_screen.dart';
 import 'package:cuple_app/screens/ideasListScreen.dart';
 import 'package:cuple_app/screens/login.dart';
@@ -75,6 +77,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+    @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
@@ -85,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return SplashScreen(
         seconds: 10,
-        navigateAfterSeconds: new LoginScreen(),
+        navigateAfterFuture: Utils(context).checkUser(),// new LoginScreen(),
         // title: new Text(
         //   APP_NAME,
         //   style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),

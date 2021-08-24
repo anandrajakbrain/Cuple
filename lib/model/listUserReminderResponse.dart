@@ -1,16 +1,16 @@
-class FunnycardsListsResponse {
+class ListUserReminderResponse {
   bool success;
-  List<FunnyCardData> data;
+  List<UserListReminderData> data;
   String message;
 
-  FunnycardsListsResponse({this.success, this.data, this.message});
+  ListUserReminderResponse({this.success, this.data, this.message});
 
-  FunnycardsListsResponse.fromJson(Map<String, dynamic> json) {
+  ListUserReminderResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
-      data = new List<FunnyCardData>();
+      data = new List<UserListReminderData>();
       json['data'].forEach((v) {
-        data.add(new FunnyCardData.fromJson(v));
+        data.add(new UserListReminderData.fromJson(v));
       });
     }
     message = json['message'];
@@ -27,43 +27,55 @@ class FunnycardsListsResponse {
   }
 }
 
-class FunnyCardData {
+class UserListReminderData {
   int id;
-  String name;
-  String image;
+  int userId;
+  int reminderId;
+  String date;
   String status;
-  String createdAt;
-  String updatedAt;
+  Null createdAt;
+  Null updatedAt;
   Null deletedAt;
+  String name;
+  String category;
 
-  FunnyCardData(
+  UserListReminderData(
       {this.id,
-        this.name,
-        this.image,
+        this.userId,
+        this.reminderId,
+        this.date,
         this.status,
         this.createdAt,
         this.updatedAt,
-        this.deletedAt});
+        this.deletedAt,
+        this.name,
+        this.category});
 
-  FunnyCardData.fromJson(Map<String, dynamic> json) {
+  UserListReminderData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
-    image = json['image'];
+    userId = json['user_id'];
+    reminderId = json['reminder_id'];
+    date = json['date'];
     status = json['status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    name = json['name'];
+    category = json['category'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['name'] = this.name;
-    data['image'] = this.image;
+    data['user_id'] = this.userId;
+    data['reminder_id'] = this.reminderId;
+    data['date'] = this.date;
     data['status'] = this.status;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['name'] = this.name;
+    data['category'] = this.category;
     return data;
   }
 }

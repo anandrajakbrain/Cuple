@@ -1,5 +1,8 @@
 import 'package:cuple_app/componets/backButton.dart';
+import 'package:cuple_app/componets/funnyCardContainer.dart';
 import 'package:cuple_app/configuration/app_config.dart';
+import 'package:cuple_app/configuration/plug.dart';
+import 'package:cuple_app/model/funnycardsListsResponse.dart';
 import 'package:flutter/material.dart';
 
 class FunnyCardListScreen extends StatefulWidget {
@@ -12,6 +15,23 @@ class FunnyCardListScreen extends StatefulWidget {
 }
 
 class _FunnyCardListScreenState extends State<FunnyCardListScreen> {
+  FunnycardsListsResponse funnycardsListsResponse;
+
+  fetch() async {
+    FunnycardsListsResponse _funnycardsListsResponse = await Plugs(context).getFunnyCards(type: "tips");
+
+    setState(() {
+      funnycardsListsResponse = _funnycardsListsResponse;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration(seconds: 2)).then((value) => fetch());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,27 +50,13 @@ class _FunnyCardListScreenState extends State<FunnyCardListScreen> {
         ),
         child: Center(
           child: GridView.builder(
-            itemCount: 10,
+              itemCount: funnycardsListsResponse != null ? funnycardsListsResponse.data.length : 0,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
               itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/funnyCardImg1.png"),
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey[300],
-                        blurRadius: 2,spreadRadius: 1,
-                      ),
-                    ],
-                  ),
-                );
-
+                return FunnyCardContainer(
+                    funnyCardData: funnycardsListsResponse.data[index]);
               }),
         ),
       ),
