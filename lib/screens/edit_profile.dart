@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/listContainer.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/notificationsListsResponse.dart';
+import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_screen.dart';
 import 'notificationListScreen.dart';
@@ -18,29 +22,57 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  NotificationsListsResponse notificationsListsResponse;
+  User updateUser;
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   var name = "";
   var email = "";
-  var mobile = "";
+  var phone = "";
   var dob = "";
 
-  fetch(var id) async {
-    NotificationsListsResponse _notificationsListsResponse =
-    await Plugs(context).getNotificationList(id, name: "");
+  fetch() async {
+    var _updateUser =
+    await Plugs(context).updateUserDetails(userDetails.id.toString(), name, email, phone, dob);
 
     setState(() {
-      notificationsListsResponse=_notificationsListsResponse;
+      updateUser=_updateUser;
+      if(updateUser != null){
+        updateUserLocal();
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen()));
+      }else{
+
+      }
     });
+  }
+
+  updateUserLocal()async{
+    SharedPreferences prf = await SharedPreferences.getInstance();
+    prf.setString("user", jsonEncode(updateUser.toJson()));
+    setState(() {
+      userDetails = updateUser;
+    });
+
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() {
+      nameController.text = userDetails.name;
+      emailController.text = userDetails.email;
+      mobileController.text = userDetails.phone;
+      dobController.text = userDetails.dob;
+      name = userDetails.name;
+      email = userDetails.email;
+      phone = userDetails.phone;
+      dob = userDetails.dob;
+    });
     //Future.delayed(Duration(seconds: 2)).then((value) => fetch(1));
   }
 
@@ -175,10 +207,10 @@ class _EditProfileState extends State<EditProfile> {
                   padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.035),
                 ),
                 TextFormField(
-                  controller: nameController,
+                  controller: emailController,
                   onChanged: (val){
                     setState(() {
-                      name = val;
+                      email = val;
                     });
                   },
                   decoration: InputDecoration(
@@ -198,10 +230,10 @@ class _EditProfileState extends State<EditProfile> {
                   padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.035),
                 ),
                 TextFormField(
-                  controller: nameController,
+                  controller: mobileController,
                   onChanged: (val){
                     setState(() {
-                      name = val;
+                      phone = val;
                     });
                   },
                   decoration: InputDecoration(
@@ -221,10 +253,10 @@ class _EditProfileState extends State<EditProfile> {
                   padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.035),
                 ),
                 TextFormField(
-                  controller: nameController,
+                  controller: dobController,
                   onChanged: (val){
                     setState(() {
-                      name = val;
+                      dob  = val;
                     });
                   },
                   decoration: InputDecoration(
@@ -245,10 +277,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => HomeScreen()));
+                    fetch();
                   },
                   child: Container(
                     child: Container(
