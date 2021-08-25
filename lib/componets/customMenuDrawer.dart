@@ -31,44 +31,52 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      height: Utils(context).getMediaHeight() * 0.11,
-                      width: Utils(context).getMediaHeight() * 0.11,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(colors: [
-                            Color(0XFF5E08B3),
-                            Color(0XFFE556EB),
-                          ])),
-                      child: FittedBox(child: Image.asset("assets/profile_user.jpg",fit: BoxFit.cover,)),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(
-                            left: Utils(context).getMediaWidth() * 0.03)),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${userDetails!=null?userDetails.name??"":""}',
-                          style: TextStyle(
+                FittedBox(
+                  child: Row(
+                    children: [
+                      Container(
+                        height: Utils(context).getMediaHeight() * 0.11,
+                        width: Utils(context).getMediaHeight() * 0.11,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(colors: [
+                              Color(0XFF5E08B3),
+                              Color(0XFFE556EB),
+                            ])),
+                        child: FittedBox(
+                            child: Image.asset(
+                          "assets/profile_user.jpg",
+                          fit: BoxFit.cover,
+                        )),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              left: Utils(context).getMediaWidth() * 0.03)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${userDetails != null ? userDetails.name ?? "" : ""}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300,
+                                fontSize:
+                                Utils(context).getMediaHeight() * 0.024),
+                          ),
+                          Text(
+                            '${userDetails != null ? userDetails.email ?? "" : ""}',
+                            overflow: TextOverflow.ellipsis,
+
+                            style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w300,
-                              fontSize:
-                              Utils(context).getMediaHeight() * 0.024),
-                        ),
-                        Text(
-                          '${userDetails!=null?userDetails.email??"":""}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w300,
-                            //fontSize: Utils(context).getMediaHeight() * 0.024
+                              //fontSize: Utils(context).getMediaHeight() * 0.024
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -150,8 +158,8 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => PartnerWishlist(
-                        partnerName: "Jenny",
-                      )));
+                            partnerName: "Jenny",
+                          )));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -180,10 +188,8 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SettingsScreen()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingsScreen()));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -236,8 +242,10 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()));
+
+              Utils(context).logout();
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => LoginScreen()));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),

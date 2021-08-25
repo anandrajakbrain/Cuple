@@ -56,6 +56,9 @@ class _MyWishListState extends State<MyWishList> {
                   isEven: true,
                   isDelete: true,
                   userWishListData: userWishListResponse.data[index],
+                  handlerCall: (){
+                    fetch();
+                  },
                 );
               }),
         ),

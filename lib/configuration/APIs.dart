@@ -1,6 +1,7 @@
 const String APP_BASE_URL="https://mydevfactory.com/~devproject/Cuple/public/api/";
 const String APP_ASSET_BASE_URL="https://mydevfactory.com/~devproject/Cuple/public/";
 const String LOGIN=APP_BASE_URL+"login";
+const String REGISTERUSER=APP_BASE_URL+"register";
 const String GET_OTP=APP_BASE_URL+"get-otp";
 const String VERIFY_OTP=APP_BASE_URL+"verify-otp";
 const String REMINDERS_LIST=APP_BASE_URL+"reminders-lists";
@@ -15,4 +16,5 @@ const String DELETE_USER_NOTIFICATION=APP_BASE_URL+"delete-user-notification";
 const String DELETE_ALL_USER_NOTIFICATION=APP_BASE_URL+"delete-user-allnotification";
 const String USER_WISHLIST=APP_BASE_URL+"wishlist?user_id=";
 const String ADD_WISH_LIST=APP_BASE_URL+"add-wishlist";
+const String DELETE_WISH_LIST=APP_BASE_URL+"delete-wishlist?id=";
 

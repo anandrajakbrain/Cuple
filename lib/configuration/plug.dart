@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/createNewReminderResponse.dart';
+import 'package:cuple_app/model/deleteWishListResponse.dart';
 import 'package:cuple_app/model/funnycardsListsResponse.dart';
 import 'package:cuple_app/model/getOTPResponse.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
 import 'package:cuple_app/model/loginResponse.dart';
 import 'package:cuple_app/model/notificationsListsResponse.dart';
+import 'package:cuple_app/model/registerUserResponse.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
 import 'package:cuple_app/model/userWishListResponse.dart';
@@ -38,6 +40,35 @@ class Plugs {
         print(response.body);
         Navigator.pop(context);
         return LoginResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      throw Exception(e);
+    }
+  }
+  Future<RegisterUserResponse> register(
+      {@required String email, @required String phone,@required String name}) async {
+    Utils(context).showProgressLoader();
+    var body = {
+      "email": email,
+      "phone": phone,
+      "name":name,
+      "image":"",
+      // "password":"0",
+    };
+    try {
+      http.Response response =
+          await http.post(REGISTERUSER, headers: getHeaders(), body: body);
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return RegisterUserResponse.fromJson(jsonDecode(response.body));
       } else {
         throw Exception(response.body);
       }
@@ -390,6 +421,32 @@ class Plugs {
         print(response.body);
         Navigator.pop(context);
         return UserWishListResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+  Future<DeleteWishListResponse> deleteUserWishList({String id}) async {
+    Utils(context).showProgressLoader();
+
+    try {
+      http.Response response = await http.delete(
+          DELETE_WISH_LIST + id,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return DeleteWishListResponse.fromJson(jsonDecode(response.body));
       } else {
         throw Exception(response.body);
       }

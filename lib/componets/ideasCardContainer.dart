@@ -31,8 +31,8 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
       child: GridTile(
         header: Container(
           padding: EdgeInsets.only(top: 10.0, bottom: 8.0),
-          child: Image.network(
-            APP_ASSET_BASE_URL+ widget.ideasData.image,
+          child: widget.ideasData.image!=null?Image.network(
+            "${APP_ASSET_BASE_URL+ widget.ideasData.image}",
             // fit: BoxFit.cover,
             height: Utils(context).getMediaHeight() * 0.14,
             width: 1,
@@ -44,6 +44,11 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
                 width: 1,
               );
             },
+          ):Image.asset(
+            "assets/ideaImg2.png",
+            // fit: BoxFit.cover,
+            height: Utils(context).getMediaHeight() * 0.14,
+            width: 1,
           ),
         ),
         child: SizedBox(),

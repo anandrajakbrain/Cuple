@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cuple_app/componets/alertComponents.dart';
 import 'package:cuple_app/componets/progressLoader.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
@@ -61,5 +62,29 @@ class Utils {
             // actions: [],
           );
         });
+  }
+  showAlert({
+    BuildContext context,
+    String title,
+    Widget child,
+    final handler = null,
+    bool isCancel = true,
+  }) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertComponets(
+            title: title,
+            child: child,
+            Handler: handler,
+            isCancel: isCancel,
+          );
+        });
+  }
+  logout() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.clear();
+    Navigator.pushAndRemoveUntil(
+        context, MaterialPageRoute(builder: (context) => LoginScreen()), (Route<dynamic> route) => false);
   }
 }

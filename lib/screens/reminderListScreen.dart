@@ -58,7 +58,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CreateNewReminder()));
+                        builder: (context) => CreateNewReminder())).then((value) => fetch());
               },
               label: const Text('Create New'),
             ),

@@ -1,6 +1,9 @@
 import 'package:cuple_app/componets/inputFeildUI.dart';
 import 'package:cuple_app/configuration/app_config.dart';
+import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/getOTPResponse.dart';
+import 'package:cuple_app/model/registerUserResponse.dart';
 import 'package:cuple_app/screens/otpVerficationScreen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController nameController,
       emailController,phoneController = new TextEditingController();
   var _formKey = GlobalKey<FormState>();
-
+String name,email,phone;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,14 +48,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: Utils(context).getMediaHeight() * 0.06,
                   ),
                   RegisterInputField(
-                      controller: nameController, labelName: "Name"),
+                      controller: nameController, labelName: "Name",getvalue: (value){
+                        setState(() {
+                          name=value;
+                        });
+                  },),
                   RegisterInputField(
-                      controller: emailController, labelName: "Email",TxtInputType: TextInputType.emailAddress,formType: "email",),
+                      controller: emailController, labelName: "Email",TxtInputType: TextInputType.emailAddress,formType: "email",getvalue: (value){
+                    setState(() {
+                      email=value;
+                    });
+                  },),
                   RegisterInputField(
                     controller: phoneController,
                     labelName: "Mobile Number",
                     TxtInputType: TextInputType.phone,
                     formType: "phone",
+                    getvalue: (value){
+                      setState(() {
+                        phone=value;
+                      });
+                    },
                   ),
                   SizedBox(
                     height: Utils(context).getMediaHeight() * 0.06,
@@ -60,6 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   InkWell(
                     onTap: () {
                       if (_formKey.currentState.validate()) {
+                        register();
                         // Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerificationScreen()));
                       }
                     },
@@ -197,5 +214,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+  register() async{
+    RegisterUserResponse registerUserResponse=await Plugs(context).register(email: email, phone: phone, name: name);
+    if(registerUserResponse.success==true){
+      GetOTPResponse getOTPResponse =
+      await Plugs(context).requestForOTP(name: email);
+      if(getOTPResponse.success==true){
+        print(getOTPResponse.data.otp);
+
+      /*  Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (context) => OtpVerificationScreen(getOTPResponse: getOTPResponse,name: name,),
+
+            ),(route) => false,);*/
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (context) => LoginScreen(),
+
+            ),(route) => false,);
+      }else{
+
+        Utils(context).showMessage(title: "Error",child: Text(getOTPResponse.message),);
+
+      }
+    }else{
+      Utils(context).showMessage(title: "Error",child: Text(registerUserResponse.message),);
+    }
   }
 }
