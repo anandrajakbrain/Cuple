@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
-        drawer: CustomMenuDrawer(),
+        drawer: CustomMenuDrawer(userDetails),
         bottomNavigationBar: FFNavigationBar(
           theme: FFNavigationBarTheme(
             barBackgroundColor: Colors.white,

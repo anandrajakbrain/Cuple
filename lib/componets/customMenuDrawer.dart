@@ -1,5 +1,6 @@
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/login.dart';
 import 'package:cuple_app/screens/myWishList.dart';
 import 'package:cuple_app/screens/partnerWishList.dart';
@@ -8,6 +9,8 @@ import 'package:cuple_app/screens/userProfile.dart';
 import 'package:flutter/material.dart';
 
 class CustomMenuDrawer extends StatefulWidget {
+  // final User userDetails;
+  CustomMenuDrawer(this.userDetails);
   @override
   _CustomMenuDrawerState createState() => _CustomMenuDrawerState();
 }
@@ -188,8 +191,11 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SettingsScreen()));
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SettingsScreen(widget.userDetails)));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),

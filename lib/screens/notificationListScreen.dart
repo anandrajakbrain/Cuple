@@ -28,14 +28,14 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
   }
 
   deleteAll(String ids) async {
-    var _notificationsListsResponse =
+    var _deleteAllResponse =
     await Plugs(context).deleteAllNotifications(delIds, name: "");
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => NotificationsListScreen()));
     setState(() {
-      deleteAllResponse=_notificationsListsResponse;
+      deleteAllResponse=_deleteAllResponse;
     });
   }
 
