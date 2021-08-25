@@ -1,4 +1,6 @@
+import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/model/notificationsListsResponse.dart';
+import 'package:cuple_app/screens/notificationListScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -13,6 +15,19 @@ NotificationListData notificationListData;
 }
 
 class _ListContainerState extends State<ListContainer> {
+  var deleteNotificationsListsResponse;
+
+  fetch(var id) async {
+    var _notificationsListsResponse =
+    await Plugs(context).deleteNotification(id, name: "");
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => NotificationsListScreen()));
+    setState(() {
+      deleteNotificationsListsResponse=_notificationsListsResponse;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +41,7 @@ class _ListContainerState extends State<ListContainer> {
         ],
       ),
       child: ListTile(
-        title: Text(
+        title: Text(widget.notificationListData.createdAt == null ? "24-08-2021 18:52" :
           DateFormat.yMMMEd().format(DateTime.parse(widget.notificationListData.createdAt)),
           style: TextStyle(
               color: widget.isEven == true ? Colors.white70 : Colors.black54,
@@ -44,7 +59,9 @@ class _ListContainerState extends State<ListContainer> {
               size: 35,
               color: widget.isEven == true ? Colors.white : Colors.black,
             ),
-            onPressed: () {}),
+            onPressed: () {
+              fetch(widget.notificationListData.id);
+            }),
       ),
     );
   }

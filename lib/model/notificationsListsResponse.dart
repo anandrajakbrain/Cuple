@@ -16,7 +16,7 @@ class NotificationsListsResponse {
     message = json['message'];
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson()  {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
     if (this.data != null) {
@@ -29,6 +29,7 @@ class NotificationsListsResponse {
 
 class NotificationListData {
   int id;
+  int userId;
   int notificationTypeId;
   String msg;
   String status;
@@ -39,6 +40,7 @@ class NotificationListData {
 
   NotificationListData(
       {this.id,
+        this.userId,
         this.notificationTypeId,
         this.msg,
         this.status,
@@ -49,25 +51,26 @@ class NotificationListData {
 
   NotificationListData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    notificationTypeId = json['notification_type_id'];
+    userId = json['user_id'];
+    notificationTypeId = json['notification_id'];
     msg = json['msg'];
     status = json['status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
-    notificationtype = json['notificationtype'];
+    notificationtype = json['type'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['notification_type_id'] = this.notificationTypeId;
+    data['notification_id'] = this.notificationTypeId;
     data['msg'] = this.msg;
     data['status'] = this.status;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
-    data['notificationtype'] = this.notificationtype;
+    data['type'] = this.notificationtype;
     return data;
   }
 }
