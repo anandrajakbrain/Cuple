@@ -14,21 +14,36 @@ class NotificationsListScreen extends StatefulWidget {
 
 class _NotificationsListScreenState extends State<NotificationsListScreen> {
   NotificationsListsResponse notificationsListsResponse;
+  var deleteAllResponse;
+  List ids = [];
+  String delIds = "";
 
-  fetch() async {
+  fetch(var id) async {
     NotificationsListsResponse _notificationsListsResponse =
-        await Plugs(context).getNotificationList(name: "");
+        await Plugs(context).getNotificationList(id, name: "");
 
  setState(() {
    notificationsListsResponse=_notificationsListsResponse;
  });
   }
 
+  deleteAll(String ids) async {
+    var _notificationsListsResponse =
+    await Plugs(context).deleteAllNotifications(delIds, name: "");
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => NotificationsListScreen()));
+    setState(() {
+      deleteAllResponse=_notificationsListsResponse;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 2)).then((value) => fetch());
+    Future.delayed(Duration(seconds: 2)).then((value) => fetch(1));
   }
 
   @override
@@ -49,7 +64,9 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
                 style: TextButton.styleFrom(
                   textStyle: const TextStyle(fontSize: 15),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  deleteAll(delIds);
+                },
                 child: const Text('Clear All'),
               ),
             ),
@@ -64,7 +81,11 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
           child: ListView.builder(
               itemCount:notificationsListsResponse!=null? notificationsListsResponse.data.length:0,
               itemBuilder: (context, index) {
-
+                if(index == 0)
+                  delIds += "delids[$index]=${notificationsListsResponse.data[index].id}";
+                else
+                  delIds += "&delids[$index]=${notificationsListsResponse.data[index].id}";
+                ids.add(notificationsListsResponse.data[index].id);
                 return ListContainer(isEven: index.isEven,notificationListData: notificationsListsResponse.data[index],);
               }),
         ),

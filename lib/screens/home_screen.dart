@@ -15,7 +15,9 @@ import 'package:cuple_app/model/listUserReminderResponse.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
+import 'package:cuple_app/screens/chat_screen.dart';
 import 'package:cuple_app/screens/createNewReminder.dart';
+import 'package:cuple_app/screens/edit_profile.dart';
 import 'package:cuple_app/screens/funnycardListScreen.dart';
 import 'package:cuple_app/screens/ideasListScreen.dart';
 import 'package:cuple_app/screens/login.dart';
@@ -148,6 +150,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           selectedIndex: selectedIndex,
           onSelectTab: (index) {
+            if(index == 2){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChatScreen()));
+            }
             setState(() {
               selectedIndex = index;
               controlWidget = getWidget(index: selectedIndex);
@@ -748,9 +756,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                             padding: EdgeInsets.only(
                                 top:
-                                    MediaQuery.of(context).size.height * 0.08)),
+                                    MediaQuery.of(context).size.height * 0.1)),
                         Text(
-                          "John Doe",
+                          "${userDetails.name}",
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.w500),
                         ),
@@ -759,7 +767,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 top:
                                     MediaQuery.of(context).size.height * 0.01)),
                         Text(
-                          "john@gmail.com",
+                          "${userDetails.email}",
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.w300),
                         ),
@@ -827,7 +835,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    ":\t\t01234567890",
+                                    ":\t\t${userDetails.phone}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -851,7 +859,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .height *
                                               0.02)),
                                   Text(
-                                    ":\t\t13 Jun, 1994",
+                                    ":\t\t${userDetails.dob}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -928,7 +936,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .height *
                                               0.02)),
                                   Text(
-                                    "Birth Date",
+                                    "Love Anniversary",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -951,7 +959,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .height *
                                               0.02)),
                                   Text(
-                                    ":\t\t13 Jun, 2014",
+                                    ":\t\t${userDetails.anniversaryDate}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -963,7 +971,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .height *
                                               0.02)),
                                   Text(
-                                    ":\t\t13 Jun, 1994",
+                                    ":\t\t${userDetails.firstDate}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -1099,24 +1107,32 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.01)),
-              Container(
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditProfile()));
+                },
                 child: Container(
-                  width: double.infinity,
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Color(0XFF1A93EE), Color(0XFF6F34DD)]),
-                      borderRadius: BorderRadius.circular(30)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "EDIT PROFILE",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w300),
-                      ),
-                    ],
+                  child: Container(
+                    width: double.infinity,
+                    padding:
+                        EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [Color(0XFF1A93EE), Color(0XFF6F34DD)]),
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "EDIT PROFILE",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w300),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -1127,21 +1143,26 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: Utils(context).getMediaHeight() * 0.16,
-              width: Utils(context).getMediaHeight() * 0.16,
+              height: MediaQuery.of(context).size.height * 0.17,
+              width: MediaQuery.of(context).size.height * 0.17,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(colors: [
-                    Color(0XFF5E08B3),
-                    Color(0XFFE556EB),
-                  ])),
+                  gradient: LinearGradient(
+                      colors: [
+                        Color(0XFF5E08B3),
+                        Color(0XFFE556EB),
+                      ]),
+                  shape: BoxShape.circle
+              ),
               child: Center(
-                child: Text(
-                  "Image",
-                  style: TextStyle(color: Colors.white),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * 0.1),
+                  child: Image.asset("assets/profile_user.jpg",fit: BoxFit.cover,
+                    height: MediaQuery.of(context).size.height * 0.15,
+                    width: MediaQuery.of(context).size.height * 0.15,
+                  ),
                 ),
               ),
-            )
+            ),
           ],
         )
       ],

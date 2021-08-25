@@ -112,8 +112,7 @@ class Plugs {
     }
   }
 
-  Future<NotificationsListsResponse> getNotificationList(
-      {@required String name }) async {
+  Future<NotificationsListsResponse> getNotificationList(var id, {@required String name }) async {
     Utils(context).showProgressLoader();
     var body = {
       "name": name,
@@ -122,7 +121,7 @@ class Plugs {
     };
     try {
       http.Response response =
-          await http.get(NOTIFICATION_LIST, headers: getHeaders(token: token));
+          await http.get(NOTIFICATION_LIST+"?user_id=$id", headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -142,6 +141,67 @@ class Plugs {
       // throw Exception(e);
     }
   }
+
+  Future<NotificationsListsResponse> deleteNotification(var id, {@required String name }) async {
+    Utils(context).showProgressLoader();
+    var body = {
+      "name": name,
+
+      // "password": password,
+    };
+    try {
+      http.Response response =
+      await http.delete(DELETE_USER_NOTIFICATION+"?user_id=$id", headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return jsonDecode(response.body);
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+
+  Future<NotificationsListsResponse> deleteAllNotifications(var delIds, {@required String name }) async {
+    Utils(context).showProgressLoader();
+    var body = {
+      "name": name,
+
+      // "password": password,
+    };
+    try {
+      http.Response response =
+      await http.delete(DELETE_ALL_USER_NOTIFICATION+"?$delIds", headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return jsonDecode(response.body);
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+
   Future<ListUserReminderResponse> listUserReminderList(
       {@required String userId }) async {
     Utils(context).showProgressLoader();

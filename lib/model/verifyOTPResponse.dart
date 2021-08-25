@@ -44,18 +44,18 @@ class User {
   String password;
   String chat;
   String nofication;
-  Null frequency;
-  Null questionnaire;
-  Null dateNights;
-  Null msgFrequency;
+  var frequency;
+  var questionnaire;
+  var dateNights;
+  var msgFrequency;
   String status;
   String otp;
-  Null forgotPasswordOtp;
-  Null lastLogin;
+  var forgotPasswordOtp;
+  var lastLogin;
   String rememberToken;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
+  var deletedAt;
 
   User(
       {this.id,
