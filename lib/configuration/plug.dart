@@ -112,6 +112,70 @@ class Plugs {
     }
   }
 
+  Future<LoginResponse> updateSettings(var userId, var chat, var notification, var frequency,
+    var questionnaire, var dateNights, var msgFrequency) async {
+    Utils(context).showProgressLoader();
+    var body = {
+      "user_id": userId,
+      "chat": chat,
+      "notification" : notification,
+      "frequency" : frequency,
+      "questionnaire" : questionnaire,
+      "date_nights" : dateNights,
+      "msg_frequency" : msgFrequency,
+    };
+    try {
+      http.Response response =
+      await http.post(USER_SETTINGS, headers: getHeaders(), body: body);
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return LoginResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      throw Exception(e);
+    }
+  }
+
+  Future<LoginResponse> updateUserDetails(var userId, var chat, var notification, var frequency,
+      var questionnaire, var dateNights, var msgFrequency) async {
+    Utils(context).showProgressLoader();
+    var body = {
+      "user_id": userId,
+      "chat": chat,
+      "notification" : notification,
+      "frequency" : frequency,
+      "questionnaire" : questionnaire,
+      "date_nights" : dateNights,
+      "msg_frequency" : msgFrequency,
+    };
+    try {
+      http.Response response =
+      await http.post(USER_SETTINGS, headers: getHeaders(), body: body);
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return LoginResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      throw Exception(e);
+    }
+  }
+
   Future<NotificationsListsResponse> getNotificationList(var id, {@required String name }) async {
     Utils(context).showProgressLoader();
     var body = {
@@ -151,7 +215,7 @@ class Plugs {
     };
     try {
       http.Response response =
-      await http.delete(DELETE_USER_NOTIFICATION+"?user_id=$id", headers: getHeaders(token: token));
+      await http.delete(DELETE_USER_NOTIFICATION+"?id=$id", headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);

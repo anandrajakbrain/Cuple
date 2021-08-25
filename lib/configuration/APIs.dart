@@ -13,4 +13,6 @@ const String FUNNY_CARD_LIST=APP_BASE_URL+"funnycards-lists";
 const String SUGGESION_TYPE_LIST=APP_BASE_URL+"suggesions-lists";
 const String DELETE_USER_NOTIFICATION=APP_BASE_URL+"delete-user-notification";
 const String DELETE_ALL_USER_NOTIFICATION=APP_BASE_URL+"delete-user-allnotification";
+const String USER_SETTINGS=APP_BASE_URL+"user-setting";
+const String UPDATE_USER=APP_BASE_URL+"update-user";
 
