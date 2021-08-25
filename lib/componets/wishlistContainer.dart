@@ -1,9 +1,12 @@
+import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/userWishListResponse.dart';
 import 'package:flutter/material.dart';
 
 class WishListContainer extends StatefulWidget {
   bool isEven;
 bool isDelete;
-  WishListContainer({@required this.isEven,this.isDelete=false});
+UserWishListData userWishListData;
+  WishListContainer({@required this.isEven,this.isDelete=false,this.userWishListData});
   @override
   _WishListContainerState createState() => _WishListContainerState();
 }
@@ -33,7 +36,7 @@ class _WishListContainerState extends State<WishListContainer> {
       ),
       child: ListTile(
         title: Text(
-          "This package includes 1332 icons of Ionicons v5.4.0. The naming convention is the same as the CSS.",
+          Utils(context).parseHtmlString(widget.userWishListData.content).toString(),
           style: TextStyle(
               color: widget.isEven == true ? Colors.white70 : Colors.black54,
             fontWeight: FontWeight.bold,

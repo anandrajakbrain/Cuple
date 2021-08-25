@@ -28,34 +28,34 @@ class VerifyOTPResponse {
 class User {
   int id;
   String name;
-  Null firstName;
-  Null lastName;
-  Null dob;
-  Null middleName;
-  Null phone;
+  String firstName;
+  String lastName;
+  String dob;
+  String middleName;
+  String phone;
   String email;
-  Null username;
-  Null firstDate;
-  Null anniversaryDate;
-  Null state;
-  Null city;
-  Null zip;
+  String username;
+  String firstDate;
+  String anniversaryDate;
+  String state;
+  String city;
+  String zip;
   String emailVerifiedAt;
   String password;
   String chat;
   String nofication;
-  Null frequency;
-  Null questionnaire;
-  Null dateNights;
-  Null msgFrequency;
+  String frequency;
+  String questionnaire;
+  String dateNights;
+  String msgFrequency;
   String status;
   String otp;
-  Null forgotPasswordOtp;
-  Null lastLogin;
+  String forgotPasswordOtp;
+  String lastLogin;
   String rememberToken;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
+  String deletedAt;
 
   User(
       {this.id,
