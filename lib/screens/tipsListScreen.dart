@@ -1,6 +1,7 @@
 import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
+import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/tipsCardContainer.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
@@ -51,13 +52,13 @@ class _TipsListScreenState extends State<TipsListScreen> {
       ),
       body: Container(
         child: Center(
-          child: GridView.builder(
+          child: tipsListResponse!=null?tipsListResponse.data.length>0?GridView.builder(
               itemCount: tipsListResponse!=null?tipsListResponse.data.length:0,
               gridDelegate:
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemBuilder: (BuildContext context, index) {
                 return TipsCardContainer(tipsData: tipsListResponse.data[index]);
-              }),
+              }):NoRecordFoundScreen():NoRecordFoundScreen(),
         ),
       ),
     );

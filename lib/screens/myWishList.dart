@@ -1,5 +1,6 @@
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/listContainer.dart';
+import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/wishlistContainer.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
@@ -47,7 +48,7 @@ class _MyWishListState extends State<MyWishList> {
         color: APP_BAR_COLOR,
         padding: EdgeInsets.all(8.0),
         child: Center(
-          child: ListView.builder(
+          child:userWishListResponse!=null? userWishListResponse.data.length>0?ListView.builder(
               itemCount: userWishListResponse != null
                   ? userWishListResponse.data.length
                   : 0,
@@ -60,7 +61,7 @@ class _MyWishListState extends State<MyWishList> {
                     fetch();
                   },
                 );
-              }),
+              }):NoRecordFoundScreen():NoRecordFoundScreen(),
         ),
       ),
     );

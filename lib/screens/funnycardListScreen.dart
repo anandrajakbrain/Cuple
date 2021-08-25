@@ -1,5 +1,6 @@
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/funnyCardContainer.dart';
+import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/model/funnycardsListsResponse.dart';
@@ -49,7 +50,7 @@ class _FunnyCardListScreenState extends State<FunnyCardListScreen> {
           color: APP_BAR_COLOR,
         ),
         child: Center(
-          child: GridView.builder(
+          child:funnycardsListsResponse!=null?funnycardsListsResponse.data.length>0 ?GridView.builder(
               itemCount: funnycardsListsResponse != null ? funnycardsListsResponse.data.length : 0,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -57,7 +58,7 @@ class _FunnyCardListScreenState extends State<FunnyCardListScreen> {
               itemBuilder: (context, index) {
                 return FunnyCardContainer(
                     funnyCardData: funnycardsListsResponse.data[index]);
-              }),
+              }):NoRecordFoundScreen():NoRecordFoundScreen(),
         ),
       ),
     );

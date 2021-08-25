@@ -1,4 +1,5 @@
 import 'package:cuple_app/componets/backButton.dart';
+import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/wishlistContainer.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +31,11 @@ class _PartnerWishlistState extends State<PartnerWishlist> {
         color: APP_BAR_COLOR,
         padding: EdgeInsets.all(8.0),
         child: Center(
-          child: ListView.builder(
-              itemCount: 10,
+          child:NoRecordFoundScreen(), /*ListView.builder(
+              itemCount: 0,
               itemBuilder: (context, index) {
                 return WishListContainer(isEven: true,isDelete: false,);
-              }),
+              }),*/
         ),
       ),
     );

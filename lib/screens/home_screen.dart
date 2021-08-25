@@ -481,6 +481,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Text(
                               "To Celebrate Anniversary",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize:

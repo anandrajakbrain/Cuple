@@ -1,6 +1,8 @@
 import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
+import 'package:cuple_app/componets/customMenuDrawer.dart';
 import 'package:cuple_app/componets/ideasCardContainer.dart';
+import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
@@ -9,25 +11,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'notificationListScreen.dart';
+
 class IdeasListScreen extends StatefulWidget {
   bool isBottom;
-  IdeasListScreen({@required this.isBottom=false});
+
+  IdeasListScreen({@required this.isBottom = false});
+
   @override
   _IdeasListScreenState createState() => _IdeasListScreenState();
 }
 
 class _IdeasListScreenState extends State<IdeasListScreen> {
-
-
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   IdeasListResponse ideasListResponse;
 
   fetch() async {
-    IdeasListResponse _ideasListResponse =
-    await Plugs(context).getIdeasList();
+    IdeasListResponse _ideasListResponse = await Plugs(context).getIdeasList();
 
     setState(() {
-      ideasListResponse=_ideasListResponse;
+      ideasListResponse = _ideasListResponse;
     });
   }
 
@@ -37,18 +40,23 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
     super.initState();
     Future.delayed(Duration(seconds: 2)).then((value) => fetch());
   }
+
   @override
   Widget build(BuildContext context) {
-    return  widget.isBottom?
-    Container(
-      height: Utils(context).getMediaHeight(),
-      child: Center(
-        child: GridView.builder(
-          itemCount: ideasListResponse!=null?ideasListResponse.data.length:0,
-            gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            itemBuilder: (BuildContext context, index) {
-              return IdeasCardContainer(ideasData:ideasListResponse.data[index] ); /*Container(
+    return widget.isBottom
+        ? Container(
+            height: Utils(context).getMediaHeight(),
+            child: Center(
+              child: GridView.builder(
+                  itemCount: ideasListResponse != null
+                      ? ideasListResponse.data.length
+                      : 0,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                  itemBuilder: (BuildContext context, index) {
+                    return IdeasCardContainer(
+                        ideasData: ideasListResponse.data[index]);
+                    /*Container(
                 height: Utils(context).getMediaHeight() * 0.6,
                 margin: EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
@@ -85,40 +93,62 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                   ),
                 ),
               );*/
-            }),
-      ),
-    ):
-    Scaffold(
-      appBar: AppBar(
-        leading: CustomMenuButton(),
-        backgroundColor: APP_BAR_COLOR,
-        title: Text(
-          "Ideas",
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: AppBarActionButton(
-              buttonIcon: Icon(
-                FontAwesomeIcons.bell,
-                color: Colors.black,
+                  }),
+            ),
+          )
+        : Scaffold(
+            key: _scaffoldKey,
+            appBar: AppBar(
+              leading: CustomMenuButton(
+                handler: () {
+                  _scaffoldKey.currentState.openDrawer();
+                },
+              ),
+              backgroundColor: APP_BAR_COLOR,
+              title: Text(
+                "Ideas",
+                style: TextStyle(color: Colors.black),
+              ),
+              actions: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NotificationsListScreen()));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: AppBarActionButton(
+                      buttonIcon: Icon(
+                        FontAwesomeIcons.bell,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            body: Container(
+              child: Center(
+                child: ideasListResponse != null
+                    ? ideasListResponse.data.length > 0
+                        ? GridView.builder(
+                            itemCount: ideasListResponse != null
+                                ? ideasListResponse.data.length
+                                : 0,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2),
+                            itemBuilder: (BuildContext context, index) {
+                              return IdeasCardContainer(
+                                  ideasData: ideasListResponse.data[index]);
+                            })
+                        : NoRecordFoundScreen()
+                    : NoRecordFoundScreen(),
               ),
             ),
-          ),
-        ],
-      ),
-      body: Container(
-        child: Center(
-          child: GridView.builder(
-            itemCount: ideasListResponse!=null?ideasListResponse.data.length:0,
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-              itemBuilder: (BuildContext context, index) {
-                return IdeasCardContainer(ideasData: ideasListResponse.data[index]);
-              }),
-        ),
-      ),
-    );
+            drawer: CustomMenuDrawer(userDetails),
+          );
   }
 }

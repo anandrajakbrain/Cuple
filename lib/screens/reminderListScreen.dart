@@ -1,6 +1,7 @@
 import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
+import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/reminderCard.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
@@ -83,7 +84,10 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                       ),
                     ),
                   )),
-              Flexible(
+              listUserReminderResponse!=null? listUserReminderResponse.data
+                  .where((element) => element.category == "Anniversary")
+                  .toList()
+                  .length>0?  Flexible(
                 child: GridView.builder(
                     itemCount:listUserReminderResponse!=null? listUserReminderResponse.data
                         .where((element) => element.category == "Anniversary")
@@ -108,7 +112,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                         },
                       );
                     }),
-              ),
+              ):NoRecordFoundScreen():NoRecordFoundScreen(),
               Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
@@ -122,7 +126,10 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                       ),
                     ),
                   )),
-              Flexible(
+              listUserReminderResponse!=null? (listUserReminderResponse.data
+                  .where((element) => element.category == "Celebration")
+                  .toList()
+                  .length>0) ?Flexible(
                 child: GridView.builder(
                     itemCount: listUserReminderResponse!=null? listUserReminderResponse.data
                         .where((element) => element.category == "Celebration")
@@ -145,7 +152,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                         },
                       );
                     }),
-              ),
+              ):NoRecordFoundScreen():NoRecordFoundScreen(),
             ],
           ),
         ),
