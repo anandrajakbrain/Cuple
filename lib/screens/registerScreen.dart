@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:cuple_app/componets/inputFeildUI.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/screens/otpVerficationScreen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:http/http.dart' as http;
 import 'login.dart';
 class RegisterScreen extends StatefulWidget {
   @override
@@ -15,6 +18,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController nameController,
       emailController,phoneController = new TextEditingController();
   var _formKey = GlobalKey<FormState>();
+  bool isLoggedIn = false;
+
+  void initiateFacebookLogin() async {
+    var facebookLogin = FacebookLogin();
+    var facebookLoginResult =
+    await facebookLogin.logInWithReadPermissions(['email']);
+    switch (facebookLoginResult.status) {
+      case FacebookLoginStatus.error:
+        print("Error");
+        onLoginStatusChanged(false);
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        print("CancelledByUser");
+        onLoginStatusChanged(false);
+        break;
+      case FacebookLoginStatus.loggedIn:
+        print("LoggedIn");
+
+        var graphResponse = await http.get(
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${facebookLoginResult
+                .accessToken.token}');
+
+        var profile = json.decode(graphResponse.body);
+        print(profile['name'].toString());
+
+        onLoginStatusChanged(true);
+        break;
+    }
+  }
+
+  void onLoginStatusChanged(bool isLoggedIn) {
+    setState(() {
+      this.isLoggedIn = isLoggedIn;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,6 +180,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         InkWell(
                           onTap: () {
                             print("Tap Work");
+                            initiateFacebookLogin();
                           },
                           child: Container(
                             child: Image.asset(

@@ -144,25 +144,22 @@ class Plugs {
     }
   }
 
-  Future<LoginResponse> updateUserDetails(var userId, var chat, var notification, var frequency,
-      var questionnaire, var dateNights, var msgFrequency) async {
+  Future<User> updateUserDetails(var userId, var name, var email, var phone, var dob) async {
     Utils(context).showProgressLoader();
     var body = {
-      "user_id": userId,
-      "chat": chat,
-      "notification" : notification,
-      "frequency" : frequency,
-      "questionnaire" : questionnaire,
-      "date_nights" : dateNights,
-      "msg_frequency" : msgFrequency,
+      "id": userId,
+      "name": name,
+      "email" : email,
+      "phone" : phone,
+      "dob" : dob,
     };
     try {
       http.Response response =
-      await http.post(USER_SETTINGS, headers: getHeaders(), body: body);
+      await http.post(UPDATE_USER, headers: getHeaders(), body: body);
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
-        return LoginResponse.fromJson(jsonDecode(response.body));
+        return User.fromJson(jsonDecode(response.body)["data"]);
       } else {
         throw Exception(response.body);
       }

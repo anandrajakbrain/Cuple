@@ -30,9 +30,9 @@ class User {
   String name;
   Null firstName;
   Null lastName;
-  Null dob;
+  var dob;
   Null middleName;
-  Null phone;
+  var phone;
   String email;
   Null username;
   Null firstDate;
