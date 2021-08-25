@@ -76,52 +76,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // print(userDetails.name);
-    return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          leading: GestureDetector(
-            onTap: () {
-              _scaffoldKey.currentState.openDrawer();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: APP_BAR_COLOR,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 2,
-                      spreadRadius: 1,
-                    )
-                  ],
-                ),
-                child: Icon(
-                  Icons.menu,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
-          backgroundColor: APP_BAR_COLOR,
-          title: Text(
-            "Home",
-            style: TextStyle(color: Colors.black),
-          ),
-          elevation: 0,
-          actions: [
-            InkWell(
+
+    if(userDetails.status=="Active"){
+
+      return Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            leading: GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationsListScreen()));
+                _scaffoldKey.currentState.openDrawer();
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     color: APP_BAR_COLOR,
                     shape: BoxShape.circle,
@@ -134,60 +101,143 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   child: Icon(
-                    Icons.notifications_none_outlined,
+                    Icons.menu,
                     color: Colors.black,
                   ),
                 ),
               ),
-            )
-          ],
-        ),
-        drawer: CustomMenuDrawer(userDetails),
-        bottomNavigationBar: FFNavigationBar(
-          theme: FFNavigationBarTheme(
-            barBackgroundColor: Colors.white,
-            selectedItemBorderColor: Color(0XFF1A93EE),
-            selectedItemBackgroundColor: Color(0XFF1A93EE),
-            selectedItemIconColor: Colors.white,
-            selectedItemLabelColor: Colors.black,
+            ),
+            backgroundColor: APP_BAR_COLOR,
+            title: Text(
+              "Home",
+              style: TextStyle(color: Colors.black),
+            ),
+            elevation: 0,
+            actions: [
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationsListScreen()));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: APP_BAR_COLOR,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 2,
+                          spreadRadius: 1,
+                        )
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.notifications_none_outlined,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
-          selectedIndex: selectedIndex,
-          onSelectTab: (index) {
-            if(index == 2){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ChatScreen()));
-            }
-            setState(() {
-              selectedIndex = index;
-              controlWidget = getWidget(index: selectedIndex);
-            });
-          },
-          items: [
-            FFNavigationBarItem(
-              iconData: Icons.home_outlined,
-              label: 'Home',
+          drawer: CustomMenuDrawer(userDetails),
+          bottomNavigationBar: FFNavigationBar(
+            theme: FFNavigationBarTheme(
+              barBackgroundColor: Colors.white,
+              selectedItemBorderColor: Color(0XFF1A93EE),
+              selectedItemBackgroundColor: Color(0XFF1A93EE),
+              selectedItemIconColor: Colors.white,
+              selectedItemLabelColor: Colors.black,
             ),
-            FFNavigationBarItem(
-              iconData: Icons.lightbulb_outline,
-              label: 'Idea',
+            selectedIndex: selectedIndex,
+            onSelectTab: (index) {
+              // if(index == 2){
+              //   Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => ChatScreen()));
+              // }
+              setState(() {
+                selectedIndex = index;
+                controlWidget = getWidget(index: selectedIndex);
+              });
+            },
+            items: [
+              FFNavigationBarItem(
+                iconData: Icons.home_outlined,
+                label: 'Home',
+              ),
+              FFNavigationBarItem(
+                iconData: Icons.lightbulb_outline,
+                label: 'Idea',
+              ),
+              FFNavigationBarItem(
+                iconData: Icons.mail_outline_outlined,
+                label: 'Message',
+              ),
+              FFNavigationBarItem(
+                iconData: Icons.account_circle_outlined,
+                label: 'Profile',
+              ),
+            ],
+          ),
+          body: SingleChildScrollView(
+            child: controlWidget ??
+                displayHomeWidget(
+                    context), //selectedIndex == 3 ? displayProfileWidget(context) : displayHomeWidget(context),
+          ));
+    }else{
+      return Scaffold(
+        backgroundColor: APP_BAR_COLOR,
+        body: Container(
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("User not verified yet by Admin \n please Wait ",textAlign: TextAlign.center,style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: Utils(context).getMediaWidth()*0.05),),
+
+                SizedBox(
+                  height: Utils(context).getMediaHeight()*0.06,
+                ),
+                InkWell(
+                  onTap: () {
+                  Utils(context).logout();
+                  },
+                  child: SizedBox(
+                    width: Utils(context).getMediaWidth() * 0.80,
+                    child: Container(
+                      padding: EdgeInsets.all(14.0),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [Color(0XFF1E8FED), Color(0XFF6341DF)]),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Log Out',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Utils(context).getMediaWidth() * 0.05,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            FFNavigationBarItem(
-              iconData: Icons.mail_outline_outlined,
-              label: 'Message',
-            ),
-            FFNavigationBarItem(
-              iconData: Icons.account_circle_outlined,
-              label: 'Profile',
-            ),
-          ],
+          ),
         ),
-        body: SingleChildScrollView(
-          child: controlWidget ??
-              displayHomeWidget(
-                  context), //selectedIndex == 3 ? displayProfileWidget(context) : displayHomeWidget(context),
-        ));
+      );
+    }
+
   }
 
   Widget displayHomeWidget(BuildContext context) {
@@ -1182,8 +1232,9 @@ class _HomeScreenState extends State<HomeScreen> {
           isBottom: true,
         );
         break;
-      // case 2:return TipsListScreen();
-      // break;
+      case 2:
+        return ChatScreen(isbottom: true,);
+      break;
       case 3:
         return displayProfileWidget(context);
         break;

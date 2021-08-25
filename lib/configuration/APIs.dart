@@ -5,6 +5,7 @@ const String REGISTERUSER=APP_BASE_URL+"register";
 const String GET_OTP=APP_BASE_URL+"get-otp";
 const String VERIFY_OTP=APP_BASE_URL+"verify-otp";
 const String REMINDERS_LIST=APP_BASE_URL+"reminders-lists";
+const String DELETE_USER_REMINDERS=APP_BASE_URL+"reminders-listsdelete-user-reminder?id=";
 const String NOTIFICATION_TYPE=APP_BASE_URL+"notificationtype-lists";
 const String NOTIFICATION_LIST=APP_BASE_URL+"lists-user-notifications";
 const String CREATE_USER_REMINDER=APP_BASE_URL+"create-user-reminder";
@@ -19,4 +20,6 @@ const String ADD_WISH_LIST=APP_BASE_URL+"add-wishlist";
 const String DELETE_WISH_LIST=APP_BASE_URL+"delete-wishlist?id=";
 const String USER_SETTINGS=APP_BASE_URL+"user-setting";
 const String UPDATE_USER=APP_BASE_URL+"update-user";
+const String SEND_MSG=APP_BASE_URL+"send-msg";
+const String GET_MSG=APP_BASE_URL+"get-msg?user_id=";
 

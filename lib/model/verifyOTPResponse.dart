@@ -44,18 +44,21 @@ class User {
   String password;
   String chat;
   String nofication;
-  var frequency;
-  var questionnaire;
-  var dateNights;
-  var msgFrequency;
+  String frequency;
+  String questionnaire;
+  String dateNights;
+  String msgFrequency;
   String status;
   String otp;
-  var forgotPasswordOtp;
-  var lastLogin;
+  String forgotPasswordOtp;
+  String lastLogin;
   String rememberToken;
   String createdAt;
   String updatedAt;
-  var deletedAt;
+  String deletedAt;
+  String picture;
+  String socialType;
+  int partnerid;
 
   User(
       {this.id,
@@ -87,7 +90,10 @@ class User {
         this.rememberToken,
         this.createdAt,
         this.updatedAt,
-        this.deletedAt});
+        this.deletedAt,
+        this.picture,
+        this.socialType,
+        this.partnerid});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -120,6 +126,9 @@ class User {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    picture = json['picture'];
+    socialType = json['social_type'];
+    partnerid = json['partnerid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -154,6 +163,9 @@ class User {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['picture'] = this.picture;
+    data['social_type'] = this.socialType;
+    data['partnerid'] = this.partnerid;
     return data;
   }
 }

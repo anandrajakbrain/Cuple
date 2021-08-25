@@ -5,6 +5,7 @@ import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/createNewReminderResponse.dart';
 import 'package:cuple_app/model/deleteWishListResponse.dart';
 import 'package:cuple_app/model/funnycardsListsResponse.dart';
+import 'package:cuple_app/model/getMsgResponse.dart';
 import 'package:cuple_app/model/getOTPResponse.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
@@ -12,6 +13,7 @@ import 'package:cuple_app/model/loginResponse.dart';
 import 'package:cuple_app/model/notificationsListsResponse.dart';
 import 'package:cuple_app/model/registerUserResponse.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
+import 'package:cuple_app/model/sendMsgResponse.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
 import 'package:cuple_app/model/userWishListResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
@@ -526,7 +528,89 @@ class Plugs {
       // throw Exception(e);
     }
   }
+  Future<DeleteWishListResponse> dELETEUSERREMINDERS({String id}) async {
+    Utils(context).showProgressLoader();
 
+    try {
+      http.Response response = await http.delete(
+          DELETE_USER_REMINDERS + id,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return DeleteWishListResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+  Future<SendMsgResponse> sendMsg({String to_id,String MSG}) async {
+    Utils(context).showProgressLoader();
+var body={
+  "from_id":userDetails.id.toString(),
+  "to_id":to_id,
+  "msg":MSG,
+};
+    try {
+      http.Response response = await http.post(
+          SEND_MSG ,
+          body: body,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return SendMsgResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+  Future<GetMsgResponse> getmsg({String Userid}) async {
+    // Utils(context).showProgressLoader();
+
+    try {
+      http.Response response = await http.get(
+          GET_MSG + Userid,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        // Navigator.pop(context);
+        return GetMsgResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      // Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
   Map<String, String> getHeaders({String token = null}) {
     return <String, String>{
       // 'content-type': 'application/json',

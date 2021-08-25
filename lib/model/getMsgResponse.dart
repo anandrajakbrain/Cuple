@@ -1,11 +1,11 @@
-class getMsgResponse {
+class GetMsgResponse {
   bool success;
   List<GetMsgData> data;
   String message;
 
-  getMsgResponse({this.success, this.data, this.message});
+  GetMsgResponse({this.success, this.data, this.message});
 
-  getMsgResponse.fromJson(Map<String, dynamic> json) {
+  GetMsgResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
       data = new List<GetMsgData>();

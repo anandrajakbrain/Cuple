@@ -103,6 +103,9 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                             .where(
                                 (element) => element.category == "Anniversary")
                             .toList()[index],
+                        handlerCall: (){
+                          fetch();
+                        },
                       );
                     }),
               ),
@@ -136,7 +139,11 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                       return ReminderCard(userListReminderData: listUserReminderResponse.data
                           .where(
                               (element) => element.category == "Celebration")
-                          .toList()[index]);
+                          .toList()[index],
+                        handlerCall: (){
+                          fetch();
+                        },
+                      );
                     }),
               ),
             ],

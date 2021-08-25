@@ -9,7 +9,7 @@ import 'package:cuple_app/screens/userProfile.dart';
 import 'package:flutter/material.dart';
 
 class CustomMenuDrawer extends StatefulWidget {
-  // final User userDetails;
+  final User userDetails;
   CustomMenuDrawer(this.userDetails);
   @override
   _CustomMenuDrawerState createState() => _CustomMenuDrawerState();

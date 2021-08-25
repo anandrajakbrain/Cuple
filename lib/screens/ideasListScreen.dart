@@ -87,7 +87,8 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
               );*/
             }),
       ),
-    ):Scaffold(
+    ):
+    Scaffold(
       appBar: AppBar(
         leading: CustomMenuButton(),
         backgroundColor: APP_BAR_COLOR,
