@@ -165,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         assert(user.user.uid == currentUser.uid);
         print(currentUser.email);
         VerifyOTPResponse verifyOTPResponse = await Plugs(context)
-            .loginWithSocialMedia("Google", currentUser.displayName, currentUser.email, "0000000000", currentUser.photoUrl);
+            .loginWithSocialMedia("Facebook", currentUser.displayName, currentUser.email, "0000000000", currentUser.photoUrl);
         if (verifyOTPResponse.success == true) {
           SharedPreferences prf=await SharedPreferences.getInstance();
           prf.setString("user", jsonEncode(verifyOTPResponse.user));
