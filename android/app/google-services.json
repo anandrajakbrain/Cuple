@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "243322550404",
+    "project_id": "cuple-194e1",
+    "storage_bucket": "cuple-194e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:243322550404:android:a2e89d6e8c9a66cfdb2ad1",
+        "android_client_info": {
+          "package_name": "com.myapp.cuple_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "243322550404-2hprf68dppnp0kt551m5nurn1nh7gg5v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAt3UMWYSaX8MSq6NK0Wy5xT-YpASH6kkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "243322550404-2hprf68dppnp0kt551m5nurn1nh7gg5v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "243322550404-15ji2ope8bf5dils2ja3k18s3o39pr2j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.myapp.cupleapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

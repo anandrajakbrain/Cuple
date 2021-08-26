@@ -23,4 +23,5 @@ const String UPDATE_USER=APP_BASE_URL+"update-user";
 const String SEND_MSG=APP_BASE_URL+"send-msg";
 const String GET_MSG=APP_BASE_URL+"get-msg?user_id=";
 const String GET_USER_PARTNER_DETAIL=APP_BASE_URL+"partner?user_id=";
+const String SOCIAL_LOGIN=APP_BASE_URL+"social-login";
 
