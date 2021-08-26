@@ -209,6 +209,35 @@ class Plugs {
     }
   }
 
+  Future<VerifyOTPResponse> loginWithSocialMedia(var socialType, var name, var email, var phone, var image) async {
+    Utils(context).showProgressLoader();
+    var body = {
+      "social_type": socialType,
+      "name": name,
+      "email" : email,
+      "phone" : phone,
+      "image" : image,
+    };
+    try {
+      http.Response response =
+      await http.post(SOCIAL_LOGIN, headers: getHeaders(), body: body);
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return VerifyOTPResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      throw Exception(e);
+    }
+  }
+
   Future<NotificationsListsResponse> getNotificationList(var id, {@required String name }) async {
     Utils(context).showProgressLoader();
     var body = {

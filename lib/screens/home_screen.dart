@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // print(userDetails.name);
 
-    if(userDetails.status=="Active"){
+    if(userDetails?.status=="Active"){
 
       return Scaffold(
           key: _scaffoldKey,

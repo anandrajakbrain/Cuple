@@ -6,53 +6,188 @@ import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/getOTPResponse.dart';
 import 'package:cuple_app/model/registerUserResponse.dart';
+import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/otpVerficationScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart' as fb;
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'home_screen.dart';
 import 'login.dart';
+import 'dart:convert' show json;
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:auth/auth.dart';
+
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  // Optional clientId
+  // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
+  scopes: <String>[
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ],
+);
+
+
 class RegisterScreen extends StatefulWidget {
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final fbLogin = fb.FacebookLogin();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController nameController,
       emailController,phoneController = new TextEditingController();
   var _formKey = GlobalKey<FormState>();
-String name,email,phone;
+  var user;
+  String name,email,phone;
   bool isLoggedIn = false;
+  GoogleSignInAccount _currentUser;
+  String _contactText = '';
 
-  void initiateFacebookLogin() async {
-    var facebookLogin = FacebookLogin();
-    var facebookLoginResult =
-    await facebookLogin.logInWithReadPermissions(['email']);
-    switch (facebookLoginResult.status) {
-      case FacebookLoginStatus.error:
-        print("Error");
-        onLoginStatusChanged(false);
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        print("CancelledByUser");
-        onLoginStatusChanged(false);
-        break;
-      case FacebookLoginStatus.loggedIn:
-        print("LoggedIn");
+  @override
+  void initState() {
+    super.initState();
+    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+      setState(() {
+        _currentUser = account;
+      });
+      if (_currentUser != null) {
+        _handleGetContact(_currentUser);
+      }
+    });
+    _googleSignIn.signInSilently();
+  }
 
-        var graphResponse = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${facebookLoginResult
-                .accessToken.token}');
+  login(GoogleSignInAccount user) async {
+    VerifyOTPResponse verifyOTPResponse = await Plugs(context)
+        .loginWithSocialMedia("Google", user.displayName, user.email, "0000000000", user.photoUrl);
+    if (verifyOTPResponse.success == true) {
+      SharedPreferences prf=await SharedPreferences.getInstance();
+      prf.setString("user", jsonEncode(verifyOTPResponse.user));
+      prf.setString("token", verifyOTPResponse.accessToken);
 
-        var profile = json.decode(graphResponse.body);
-        print(profile['name'].toString());
+      print(verifyOTPResponse.toJson());
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    }else{
+      Utils(context).showMessage(title: "Error",child: Text(verifyOTPResponse.message),);
+    }
 
-        onLoginStatusChanged(true);
-        break;
+
+  }
+
+  Future<void> _handleGetContact(GoogleSignInAccount user) async {
+    setState(() {
+      _contactText = "Loading contact info...";
+    });
+    final http.Response response = await http.get(
+      Uri.parse('https://people.googleapis.com/v1/people/me/connections'
+          '?requestMask.includeField=person.names'),
+      headers: await user.authHeaders,
+    );
+    if (response.statusCode != 200) {
+      setState(() {
+        _contactText = "People API gave a ${response.statusCode} "
+            "response. Check logs for details.";
+      });
+      print('People API ${response.statusCode} response: ${response.body}');
+      return;
+    }
+    final Map<String, dynamic> data = json.decode(response.body);
+    final String namedContact = _pickFirstNamedContact(data);
+    setState(() {
+      if (namedContact != null) {
+        _contactText = "I see you know $namedContact!";
+      } else {
+        _contactText = "No contacts to display.";
+      }
+    });
+  }
+
+  String _pickFirstNamedContact(Map<String, dynamic> data) {
+    final List<dynamic> connections = data['connections'];
+    final Map<String, dynamic> contact = connections?.firstWhere(
+          (dynamic contact) => contact['names'] != null,
+      orElse: () => null,
+    );
+    if (contact != null) {
+      final Map<String, dynamic> name = contact['names'].firstWhere(
+            (dynamic name) => name['displayName'] != null,
+        orElse: () => null,
+      );
+      if (name != null) {
+        return name['displayName'];
+      }
+    }
+    return null;
+  }
+
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn().then((value){
+        print(value.photoUrl+"************************************************");
+        login(value);
+        setState(() {
+          _currentUser = value;
+          _handleGetContact(value);
+        });
+      });
+    } catch (error) {
+      print(error.toString()+"***********************************************");
     }
   }
 
-  void onLoginStatusChanged(bool isLoggedIn) {
+  Future<void> _handleSignOut() => _googleSignIn.disconnect();
+
+
+  Future < FirebaseUser > facebookLogin(BuildContext context) async {
+    FirebaseUser currentUser;
+    // fbLogin.loginBehavior = FacebookLoginBehavior.webViewOnly;
+    // if you remove above comment then facebook login will take username and pasword for login in Webview
+    try {
+      final fb.FacebookLoginResult facebookLoginResult = await fbLogin
+          .logInWithReadPermissions(['email', 'public_profile']);
+      if (facebookLoginResult.status == fb.FacebookLoginStatus.loggedIn) {
+        fb.FacebookAccessToken facebookAccessToken = facebookLoginResult
+            .accessToken;
+        final AuthCredential credential = FacebookAuthProvider.getCredential(
+            accessToken: facebookAccessToken.token);
+        final AuthResult user = await auth.signInWithCredential(credential);
+        assert(user.user.email != null);
+        assert(user.user.displayName != null);
+        assert(!user.user.isAnonymous);
+        assert(await user.user.getIdToken() != null);
+        currentUser = await auth.currentUser();
+        assert(user.user.uid == currentUser.uid);
+        print(currentUser.email);
+        VerifyOTPResponse verifyOTPResponse = await Plugs(context)
+            .loginWithSocialMedia("Google", currentUser.displayName, currentUser.email, "0000000000", currentUser.photoUrl);
+        if (verifyOTPResponse.success == true) {
+          SharedPreferences prf=await SharedPreferences.getInstance();
+          prf.setString("user", jsonEncode(verifyOTPResponse.user));
+          prf.setString("token", verifyOTPResponse.accessToken);
+
+          print(verifyOTPResponse.toJson());
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        }else{
+          Utils(context).showMessage(title: "Error",child: Text(verifyOTPResponse.message),);
+        }
+        return currentUser;
+      }
+    }catch (e) {
+      print(e);
+      return currentUser;
+    }
+  }
+
+
+
+    void onLoginStatusChanged(bool isLoggedIn) {
     setState(() {
       this.isLoggedIn = isLoggedIn;
     });
@@ -182,6 +317,7 @@ String name,email,phone;
                         InkWell(
                           onTap: () {
                             print("Tap Work");
+                            _handleSignIn();
                           },
                           child: Container(
                             child: Image.asset(
@@ -198,7 +334,7 @@ String name,email,phone;
                         InkWell(
                           onTap: () {
                             print("Tap Work");
-                            initiateFacebookLogin();
+                            facebookLogin(context);
                           },
                           child: Container(
                             child: Image.asset(
