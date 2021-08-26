@@ -7,6 +7,7 @@ import 'package:cuple_app/model/deleteWishListResponse.dart';
 import 'package:cuple_app/model/funnycardsListsResponse.dart';
 import 'package:cuple_app/model/getMsgResponse.dart';
 import 'package:cuple_app/model/getOTPResponse.dart';
+import 'package:cuple_app/model/getUserPartnerDetailsResponse.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
 import 'package:cuple_app/model/loginResponse.dart';
@@ -22,6 +23,7 @@ import 'package:http/http.dart' as http;
 
 User userDetails;
 String token;
+PartnerData partnerData;
 
 class Plugs {
   BuildContext context;
@@ -101,7 +103,7 @@ class Plugs {
         print(_getOTP);
         return GetOTPResponse.fromJson(jsonDecode(response.body));
       } else {
-        throw Exception(jsonDecode(response.body));
+        throw Exception(jsonDecode(response.body)['message']['error']);
       }
     } catch (e, s) {
       Navigator.pop(context);
@@ -499,6 +501,32 @@ class Plugs {
       // throw Exception(e);
     }
   }
+  Future<UserWishListResponse> getPartnerWishList({String partnerID}) async {
+    Utils(context).showProgressLoader();
+
+    try {
+      http.Response response = await http.get(
+          USER_WISHLIST + partnerID.toString(),
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return UserWishListResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
   Future<DeleteWishListResponse> deleteUserWishList({String id}) async {
     Utils(context).showProgressLoader();
 
@@ -593,6 +621,34 @@ var body={
         print(response.body);
         // Navigator.pop(context);
         return GetMsgResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      // Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+
+
+  Future<GetUserPartnerDetailsResponse> getUserPartnerDetails({String Userid}) async {
+    // Utils(context).showProgressLoader();
+
+    try {
+      http.Response response = await http.get(
+          GET_USER_PARTNER_DETAIL + Userid,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        // Navigator.pop(context);
+        return GetUserPartnerDetailsResponse.fromJson(jsonDecode(response.body));
       } else {
         throw Exception(response.body);
       }

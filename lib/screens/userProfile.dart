@@ -5,6 +5,7 @@ import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'edit_profile.dart';
 //
@@ -363,7 +364,7 @@ class _UserProfileState extends State<UserProfile> {
                                                   .height *
                                                   0.02)),
                                       Text(
-                                        ":\t\t${userDetails.dob}",
+                                        ":\t\t${userDetails.dob!=null?DateFormat("d MMM, y").format(DateTime.parse(userDetails.dob)):''}",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w300),
@@ -463,7 +464,7 @@ class _UserProfileState extends State<UserProfile> {
                                                   .height *
                                                   0.02)),
                                       Text(
-                                        ":\t\t${userDetails.anniversaryDate}",
+                                        ":\t\t${userDetails.anniversaryDate??""}",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w300),
@@ -475,7 +476,7 @@ class _UserProfileState extends State<UserProfile> {
                                                   .height *
                                                   0.02)),
                                       Text(
-                                        ":\t\t${userDetails.firstDate}",
+                                        ":\t\t${userDetails.firstDate??""}",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w300),

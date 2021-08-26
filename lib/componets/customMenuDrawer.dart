@@ -161,7 +161,7 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => PartnerWishlist(
-                            partnerName: "Jenny",
+                            partnerName: partnerData!=null?partnerData.name:'',
                           )));
             },
             child: Padding(
@@ -183,7 +183,7 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                         ),
                       ),
                     ),
-                    Text("Jeny's Wish List")
+                    Text("${partnerData!=null?partnerData.name:'Partner'} Wish List")
                   ],
                 ),
               ),

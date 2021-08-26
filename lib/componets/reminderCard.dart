@@ -29,8 +29,9 @@ class _ReminderCardState extends State<ReminderCard> {
                 textStyle: const TextStyle(fontSize: 20),
               ),
               onPressed: () async{
+                print(widget.userListReminderData.id);
                 DeleteWishListResponse deleteWishListResponse =
-                    await Plugs(context).deleteUserWishList(
+                    await Plugs(context).dELETEUSERREMINDERS(
                     id: widget.userListReminderData.id.toString());
                 Navigator.pop(context);
                 widget.handlerCall();

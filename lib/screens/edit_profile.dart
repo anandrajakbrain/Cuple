@@ -264,6 +264,7 @@ class _EditProfileState extends State<EditProfile> {
                       labelStyle: TextStyle(
                           color: Colors.grey
                       ),
+                      hintText: "yyyy-MM-dd",
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey,
                               style: BorderStyle.solid,

@@ -10,6 +10,7 @@ import 'package:cuple_app/componets/reminderCard.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/getUserPartnerDetailsResponse.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
@@ -49,18 +50,15 @@ class _HomeScreenState extends State<HomeScreen> {
   ListUserReminderResponse remindersListsResponse;
   IdeasListResponse ideasListResponse;
   TipsListResponse tipsListResponse;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 2)).then((value){ getuserDetails().then((value){
-      getApis();
-
-    });
-
-
-
-
+    Future.delayed(Duration(seconds: 2)).then((value) {
+      getuserDetails().then((value) {
+        getApis();
+      });
     });
   }
 
@@ -76,19 +74,54 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // print(userDetails.name);
-
-    if(userDetails.status=="Active"){
-
-      return Scaffold(
-          key: _scaffoldKey,
-          appBar: AppBar(
-            leading: GestureDetector(
+if(userDetails!=null) {
+  if (userDetails.status == "Active") {
+    return Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () {
+              _scaffoldKey.currentState.openDrawer();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: APP_BAR_COLOR,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 2,
+                      spreadRadius: 1,
+                    )
+                  ],
+                ),
+                child: Icon(
+                  Icons.menu,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+          backgroundColor: APP_BAR_COLOR,
+          title: Text(
+            "Home",
+            style: TextStyle(color: Colors.black),
+          ),
+          elevation: 0,
+          actions: [
+            InkWell(
               onTap: () {
-                _scaffoldKey.currentState.openDrawer();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationsListScreen()));
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
+                  padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     color: APP_BAR_COLOR,
                     shape: BoxShape.circle,
@@ -101,143 +134,121 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   child: Icon(
-                    Icons.menu,
+                    Icons.notifications_none_outlined,
                     color: Colors.black,
                   ),
                 ),
               ),
+            )
+          ],
+        ),
+        drawer: CustomMenuDrawer(userDetails),
+        bottomNavigationBar: FFNavigationBar(
+          theme: FFNavigationBarTheme(
+            barBackgroundColor: Colors.white,
+            selectedItemBorderColor: Color(0XFF1A93EE),
+            selectedItemBackgroundColor: Color(0XFF1A93EE),
+            selectedItemIconColor: Colors.white,
+            selectedItemLabelColor: Colors.black,
+          ),
+          selectedIndex: selectedIndex,
+          onSelectTab: (index) {
+            // if(index == 2){
+            //   Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (context) => ChatScreen()));
+            // }
+            setState(() {
+              selectedIndex = index;
+              controlWidget = getWidget(index: selectedIndex);
+            });
+          },
+          items: [
+            FFNavigationBarItem(
+              iconData: Icons.home_outlined,
+              label: 'Home',
             ),
-            backgroundColor: APP_BAR_COLOR,
-            title: Text(
-              "Home",
-              style: TextStyle(color: Colors.black),
+            FFNavigationBarItem(
+              iconData: Icons.lightbulb_outline,
+              label: 'Idea',
             ),
-            elevation: 0,
-            actions: [
+            FFNavigationBarItem(
+              iconData: Icons.mail_outline_outlined,
+              label: 'Message',
+            ),
+            FFNavigationBarItem(
+              iconData: Icons.account_circle_outlined,
+              label: 'Profile',
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: controlWidget ??
+              displayHomeWidget(
+                  context), //selectedIndex == 3 ? displayProfileWidget(context) : displayHomeWidget(context),
+        ));
+  } else {
+    return Scaffold(
+      backgroundColor: APP_BAR_COLOR,
+      body: Container(
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "User not verified yet by Admin \n please Wait ",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                    fontSize: Utils(context).getMediaWidth() * 0.05),
+              ),
+              SizedBox(
+                height: Utils(context).getMediaHeight() * 0.06,
+              ),
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NotificationsListScreen()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: APP_BAR_COLOR,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 2,
-                          spreadRadius: 1,
-                        )
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.notifications_none_outlined,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          drawer: CustomMenuDrawer(userDetails),
-          bottomNavigationBar: FFNavigationBar(
-            theme: FFNavigationBarTheme(
-              barBackgroundColor: Colors.white,
-              selectedItemBorderColor: Color(0XFF1A93EE),
-              selectedItemBackgroundColor: Color(0XFF1A93EE),
-              selectedItemIconColor: Colors.white,
-              selectedItemLabelColor: Colors.black,
-            ),
-            selectedIndex: selectedIndex,
-            onSelectTab: (index) {
-              // if(index == 2){
-              //   Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) => ChatScreen()));
-              // }
-              setState(() {
-                selectedIndex = index;
-                controlWidget = getWidget(index: selectedIndex);
-              });
-            },
-            items: [
-              FFNavigationBarItem(
-                iconData: Icons.home_outlined,
-                label: 'Home',
-              ),
-              FFNavigationBarItem(
-                iconData: Icons.lightbulb_outline,
-                label: 'Idea',
-              ),
-              FFNavigationBarItem(
-                iconData: Icons.mail_outline_outlined,
-                label: 'Message',
-              ),
-              FFNavigationBarItem(
-                iconData: Icons.account_circle_outlined,
-                label: 'Profile',
-              ),
-            ],
-          ),
-          body: SingleChildScrollView(
-            child: controlWidget ??
-                displayHomeWidget(
-                    context), //selectedIndex == 3 ? displayProfileWidget(context) : displayHomeWidget(context),
-          ));
-    }else{
-      return Scaffold(
-        backgroundColor: APP_BAR_COLOR,
-        body: Container(
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("User not verified yet by Admin \n please Wait ",textAlign: TextAlign.center,style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: Utils(context).getMediaWidth()*0.05),),
-
-                SizedBox(
-                  height: Utils(context).getMediaHeight()*0.06,
-                ),
-                InkWell(
-                  onTap: () {
                   Utils(context).logout();
-                  },
-                  child: SizedBox(
-                    width: Utils(context).getMediaWidth() * 0.80,
-                    child: Container(
-                      padding: EdgeInsets.all(14.0),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Color(0XFF1E8FED), Color(0XFF6341DF)]),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Log Out',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: Utils(context).getMediaWidth() * 0.05,
-                            fontWeight: FontWeight.bold,
-                          ),
+                },
+                child: SizedBox(
+                  width: Utils(context).getMediaWidth() * 0.80,
+                  child: Container(
+                    padding: EdgeInsets.all(14.0),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Color(0XFF1E8FED), Color(0XFF6341DF)]),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Log Out',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Utils(context).getMediaWidth() * 0.05,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      );
-    }
-
+      ),
+    );
+  }
+}else{
+  return Scaffold(
+    body: Container(
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    ),
+  );
+}
   }
 
   Widget displayHomeWidget(BuildContext context) {
@@ -269,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           MaterialPageRoute(
                             builder: (context) =>
                                 IdeasListScreen(isBottom: false),
-                          ));
+                          )).then((value) => getApis());
                     },
                     child: Row(
                       children: [
@@ -297,7 +308,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 height: Utils(context).getMediaHeight() * 0.24,
                 child: ListView.builder(
-                  itemCount: ideasListResponse!=null?ideasListResponse.data.length:0,
+                  itemCount: ideasListResponse != null
+                      ? ideasListResponse.data.length
+                      : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
                     return Container(
@@ -334,7 +347,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: Utils(context).getMediaHeight() * 0.02,
                           ),
                           Text(
-                            Utils(context).parseHtmlString(ideasListResponse.data[index].content.toString()).toString(),
+                            Utils(context)
+                                .parseHtmlString(ideasListResponse
+                                    .data[index].content
+                                    .toString())
+                                .toString(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize:
@@ -369,9 +386,10 @@ class _HomeScreenState extends State<HomeScreen> {
               InkWell(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ReminderListScreen()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ReminderListScreen()))
+                      .then((value) => getApis());
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -414,7 +432,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: Utils(context).getMediaHeight() * 0.26,
                 width: double.infinity,
                 child: ListView.builder(
-                    itemCount: remindersListsResponse!=null?remindersListsResponse.data.length:0,
+                    itemCount: remindersListsResponse != null
+                        ? remindersListsResponse.data.length
+                        : 0,
                     controller: ScrollController(),
                     // physics: NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.horizontal,
@@ -458,7 +478,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 borderRadius: BorderRadius.circular(50),
                               ),
                               child: Text(
-                                  DateFormat("MMM d,y").format(DateTime.parse(remindersListsResponse.data[index].date),),
+                                DateFormat("MMM d,y").format(
+                                  DateTime.parse(
+                                      remindersListsResponse.data[index].date),
+                                ),
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize:
@@ -469,7 +492,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: Utils(context).getMediaHeight() * 0.02,
                             ),
                             Text(
-                      "${DateTime.parse(remindersListsResponse.data[index].date).difference(DateTime.now()).inDays} days",
+                              "${DateTime.parse(remindersListsResponse.data[index].date).difference(DateTime.now()).inDays} days",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -498,8 +521,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            FunnyCardListScreen(partnerName: "Jenny's"),
-                      ));
+                            FunnyCardListScreen(partnerName: partnerData!=null?partnerData.name:'Partner'),
+                      )).then((value) => getApis());
                 },
                 child: Container(
                   width: Utils(context).getMediaWidth() * 0.5,
@@ -525,9 +548,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      Text(
-                        "Funny Cards for Jeny",
-                        style: TextStyle(color: Colors.white),
+                      Expanded(
+                        child: Text(
+                          "Funny Cards for ${partnerData!=null?partnerData.name:'Partner'}",
+                          softWrap: true,
+                          
+                          style: TextStyle(color: Colors.white),
+                        ),
                       )
                     ],
                   ),
@@ -539,7 +566,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => TipsListScreen(),
-                      ));
+                      )).then((value) => getApis());
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -581,7 +608,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 height: Utils(context).getMediaHeight() * 0.24,
                 child: ListView.builder(
-                  itemCount: tipsListResponse!=null?tipsListResponse.data.length:0,
+                  itemCount: tipsListResponse != null
+                      ? tipsListResponse.data.length
+                      : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
                     return Container(
@@ -618,7 +647,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: Utils(context).getMediaHeight() * 0.02,
                           ),
                           Text(
-                            Utils(context).parseHtmlString(tipsListResponse.data[index].content.toString()).toString(),
+                            Utils(context)
+                                .parseHtmlString(tipsListResponse
+                                    .data[index].content
+                                    .toString())
+                                .toString(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize:
@@ -656,7 +689,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => MyWishList(),
-                      ));
+                      )).then((value) => getApis());
                 },
                 child: Padding(
                   padding:
@@ -704,7 +737,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    PartnerWishlist(partnerName: "Jenny's"),
+                                    PartnerWishlist(partnerName: partnerData!=null?partnerData.name:'Partner'),
                               ));
                         },
                         child: Container(
@@ -731,9 +764,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                              Text(
-                                "Jeny's Wish List",
-                                style: TextStyle(color: Colors.white),
+                              Expanded(
+                                child: Text(
+                                  "${partnerData!=null?partnerData.name:'Partner'} Wish List",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               )
                             ],
                           ),
@@ -768,7 +803,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Text(
-                      "Couple Gift Suggestions for Jeny",
+                      "Couple Gift Suggestions for ${partnerData!=null?partnerData.name:''}",
                       style: TextStyle(color: Colors.white),
                     )
                   ],
@@ -809,8 +844,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Padding(
                             padding: EdgeInsets.only(
-                                top:
-                                    MediaQuery.of(context).size.height * 0.1)),
+                                top: MediaQuery.of(context).size.height * 0.1)),
                         Text(
                           "${userDetails.name}",
                           style: TextStyle(
@@ -1013,7 +1047,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .height *
                                               0.02)),
                                   Text(
-                                    ":\t\t${userDetails.anniversaryDate}",
+                                    ":\t\t${userDetails.anniversaryDate ?? ''}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -1025,7 +1059,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .height *
                                               0.02)),
                                   Text(
-                                    ":\t\t${userDetails.firstDate}",
+                                    ":\t\t${userDetails.firstDate ?? ''}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -1162,17 +1196,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.01)),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EditProfile()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditProfile()))
+                      .then((value) => getApis());
                 },
                 child: Container(
                   child: Container(
                     width: double.infinity,
-                    padding:
-                        EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
+                    padding: EdgeInsets.all(
+                        MediaQuery.of(context).size.height * 0.02),
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
                             colors: [Color(0XFF1A93EE), Color(0XFF6F34DD)]),
@@ -1200,17 +1235,18 @@ class _HomeScreenState extends State<HomeScreen> {
               height: MediaQuery.of(context).size.height * 0.17,
               width: MediaQuery.of(context).size.height * 0.17,
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                        Color(0XFF5E08B3),
-                        Color(0XFFE556EB),
-                      ]),
-                  shape: BoxShape.circle
-              ),
+                  gradient: LinearGradient(colors: [
+                    Color(0XFF5E08B3),
+                    Color(0XFFE556EB),
+                  ]),
+                  shape: BoxShape.circle),
               child: Center(
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * 0.1),
-                  child: Image.asset("assets/profile_user.jpg",fit: BoxFit.cover,
+                  borderRadius: BorderRadius.circular(
+                      MediaQuery.of(context).size.height * 0.1),
+                  child: Image.asset(
+                    "assets/profile_user.jpg",
+                    fit: BoxFit.cover,
                     height: MediaQuery.of(context).size.height * 0.15,
                     width: MediaQuery.of(context).size.height * 0.15,
                   ),
@@ -1234,8 +1270,10 @@ class _HomeScreenState extends State<HomeScreen> {
         );
         break;
       case 2:
-        return ChatScreen(isbottom: true,);
-      break;
+        return ChatScreen(
+          isbottom: true,
+        );
+        break;
       case 3:
         return displayProfileWidget(context);
         break;
@@ -1245,12 +1283,13 @@ class _HomeScreenState extends State<HomeScreen> {
     ;
   }
 
-
-  getApis() async{
+  getApis() async {
     await getReminder();
     await getIdeasList();
     await getTipsList();
+    await getpartnerDetails();
   }
+
   getReminder() async {
     try {
       ListUserReminderResponse _remindersListsResponse = await Plugs(context)
@@ -1269,7 +1308,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getIdeasList() async {
     try {
-      IdeasListResponse _ideasListResponse = await Plugs(context).getIdeasList(type: "Ideas");
+      IdeasListResponse _ideasListResponse =
+          await Plugs(context).getIdeasList(type: "Ideas");
       setState(() {
         ideasListResponse = _ideasListResponse;
       });
@@ -1281,12 +1321,35 @@ class _HomeScreenState extends State<HomeScreen> {
       ;
     }
   }
+
   getTipsList() async {
     try {
-      TipsListResponse _tipsListResponse = await Plugs(context).getTipsList(type: "tips");
+      TipsListResponse _tipsListResponse =
+          await Plugs(context).getTipsList(type: "tips");
       setState(() {
         tipsListResponse = _tipsListResponse;
       });
+    } catch (e) {
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("${e}"),
+      );
+      ;
+    }
+  }
+
+  getpartnerDetails() async {
+    try {
+      if (userDetails.partnerid != 0) {
+        GetUserPartnerDetailsResponse _getUserPartnerDetailsResponse =
+            await Plugs(context)
+                .getUserPartnerDetails(Userid: userDetails.id.toString());
+        if(_getUserPartnerDetailsResponse.success==true) {
+          setState(() {
+            partnerData = _getUserPartnerDetailsResponse.data;
+          });
+        }
+      }
     } catch (e) {
       Utils(context).showMessage(
         title: "Error",
