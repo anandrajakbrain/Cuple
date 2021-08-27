@@ -44,7 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   fetch() async {
     var _userSettingsResponse =
-    await Plugs(context).updateSettings(widget.userDetails.id.toString(),
+    await Plugs(context).updateSettings(userDetails.id.toString(),
         chatToggleStatus ? "on" : "off",
         notificationToggleStatus ? "on" : "off",
         frequency, questionnaire, dateNights, msgFrequency);
@@ -183,7 +183,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       });
                       fetch();
                     },
-                    items: <String>['anytime', 'aaaa', 'ssss', 'ffff']
+                    items: <String>['anytime', 'ones in a week', 'every week', 'monthly']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -221,7 +221,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       });
                       fetch();
                     },
-                    items: <String>['every 3 week', 'aaaa', 'ssss', 'dddd']
+                    items: <String>['every 3 week', 'one in week', 'every week', 'anytime']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -259,7 +259,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       });
                       fetch();
                     },
-                    items: <String>['weekly', 'aaaa', 'ssss', 'ffff']
+                    items: <String>['weekly', 'monthly', 'daily', 'yearly']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,

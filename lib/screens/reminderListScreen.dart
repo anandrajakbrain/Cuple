@@ -39,6 +39,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: APP_BAR_COLOR,
       appBar: AppBar(
         leading: CustomBackButton(),
         backgroundColor: APP_BAR_COLOR,

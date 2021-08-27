@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 2)).then((value) {
+    Future.delayed(Duration(seconds: 1)).then((value) {
       getuserDetails().then((value) {
         getApis();
       });

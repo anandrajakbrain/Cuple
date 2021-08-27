@@ -155,7 +155,7 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                         ),
                       ),
-                      Column(
+                     /* Column(
                         //crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -178,7 +178,7 @@ class _EditProfileState extends State<EditProfile> {
                             ],
                           ),
                         ],
-                      )
+                      )*/
                     ],
                   ),
                 ),

@@ -28,7 +28,7 @@ class _MyWishListState extends State<MyWishList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 2)).then((value) => fetch());
+    Future.delayed(Duration(seconds: 1)).then((value) => fetch());
   }
 
   @override

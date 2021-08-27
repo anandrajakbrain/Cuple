@@ -280,14 +280,14 @@ class _ChatScreenState extends State<ChatScreen> {
                             top: Utils(context).getMediaHeight() * 0.035)),
                     ListView.builder(
                         shrinkWrap: true,
-                        itemCount: msgs.length,
+                        itemCount:  getMsgResponse.data.length,
                         itemBuilder: (context, index) {
                           return Container(
                             width: Utils(context).getMediaWidth() * 0.7,
                             padding: EdgeInsets.all(
                                 Utils(context).getMediaHeight() * 0.01),
                             child: Row(
-                              mainAxisAlignment: index % 2 == 0
+                              mainAxisAlignment:  getMsgResponse.data[index].toId==userDetails.id
                                   ? MainAxisAlignment.start
                                   : MainAxisAlignment.end,
                               children: [
@@ -305,7 +305,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         ),
                                       )
                                     : Container(),
-                                index % 2 == 0
+                                getMsgResponse.data[index].toId==userDetails.id
                                     ? Padding(
                                         padding: EdgeInsets.only(
                                             left: Utils(context)
@@ -314,22 +314,22 @@ class _ChatScreenState extends State<ChatScreen> {
                                       )
                                     : Container(),
                                 Column(
-                                  crossAxisAlignment: index % 2 == 0
+                                  crossAxisAlignment:  getMsgResponse.data[index].toId==userDetails.id
                                       ? CrossAxisAlignment.start
                                       : CrossAxisAlignment.end,
                                   children: [
                                     Container(
                                         decoration: BoxDecoration(
-                                            color: index % 2 == 0
+                                            color:  getMsgResponse.data[index].toId==userDetails.id
                                                 ? Colors.purpleAccent
                                                 : Colors.deepPurpleAccent,
                                             borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(10),
                                                 topRight: Radius.circular(10),
-                                                bottomLeft: index % 2 == 0
+                                                bottomLeft:  getMsgResponse.data[index].toId==userDetails.id
                                                     ? Radius.circular(0)
                                                     : Radius.circular(10),
-                                                bottomRight: index % 2 == 0
+                                                bottomRight:  getMsgResponse.data[index].toId==userDetails.id
                                                     ? Radius.circular(10)
                                                     : Radius.circular(0))),
                                         padding: EdgeInsets.all(
@@ -339,7 +339,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: Row(
                                           children: [
                                             Text(
-                                              "${msgs[index]}",
+                                              "${ getMsgResponse.data[index].msg}",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: Utils(context)
@@ -355,7 +355,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                           ],
                                         )),
                                     Text(
-                                      "10:00 PM | 24 Jun, 2021",
+                                      "${DateFormat().format(DateTime.parse( getMsgResponse.data[index].createdAt))}",
                                       style: TextStyle(
                                           color: Colors.grey,
                                           fontSize:
@@ -364,7 +364,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ),
                                   ],
                                 ),
-                                index % 2 != 0
+                                getMsgResponse.data[index].toId!=userDetails.id
                                     ? Padding(
                                         padding: EdgeInsets.only(
                                             left: Utils(context)
@@ -372,7 +372,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 0.015),
                                       )
                                     : Container(),
-                                index % 2 != 0
+                                getMsgResponse.data[index].toId!=userDetails.id
                                     ? Flexible(
                                         child: ClipRRect(
                                           borderRadius:

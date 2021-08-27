@@ -154,14 +154,15 @@ class Plugs {
     var questionnaire, var dateNights, var msgFrequency) async {
     Utils(context).showProgressLoader();
     var body = {
-      "user_id": userId,
-      "chat": chat,
-      "notification" : notification,
-      "frequency" : frequency,
-      "questionnaire" : questionnaire,
-      "date_nights" : dateNights,
-      "msg_frequency" : msgFrequency,
+      "user_id": userId.toString(),
+      "chat": chat.toString(),
+      "notification" : notification.toString(),
+      "frequency" : frequency!=null?frequency:'',
+      "questionnaire" : questionnaire!=null?questionnaire:'',
+       "date_nights" : dateNights!=null?dateNights:'',
+     "msg_frequency" : msgFrequency!=null? msgFrequency:'',
     };
+    print(body);
     try {
       http.Response response =
       await http.post(USER_SETTINGS, headers: getHeaders(), body: body);
