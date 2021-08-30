@@ -187,12 +187,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
 
 
-    void onLoginStatusChanged(bool isLoggedIn) {
+  void onLoginStatusChanged(bool isLoggedIn) {
     setState(() {
       this.isLoggedIn = isLoggedIn;
     });
   }
 
+  /*static final fb.FacebookLogin facebookSignIn = new fb.FacebookLogin();
+
+  String _message = 'Log in/out by pressing the buttons below.';
+
+  Future<Null> _login() async {
+    final fb.FacebookLoginResult result =
+    await facebookSignIn.logIn(['email']);
+
+    switch (result.status) {
+      case fb.FacebookLoginStatus.loggedIn:
+        final fb.FacebookAccessToken accessToken = result.accessToken;
+        _showMessage('''
+         Logged in!
+         
+         Token: ${accessToken.token}
+         User id: ${accessToken.userId}
+         Expires: ${accessToken.expires}
+         Permissions: ${accessToken.permissions}
+         Declined permissions: ${accessToken.declinedPermissions}
+         ''');
+        break;
+      case fb.FacebookLoginStatus.cancelledByUser:
+        _showMessage('Login cancelled by the user.');
+        break;
+      case fb.FacebookLoginStatus.error:
+        _showMessage('Something went wrong with the login process.\n'
+            'Here\'s the error Facebook gave us: ${result.errorMessage}');
+        break;
+    }
+  }
+
+  Future<Null> _logOut() async {
+    await facebookSignIn.logOut();
+    _showMessage('Logged out.');
+  }
+
+  void _showMessage(String message) {
+    setState(() {
+      _message = message;
+      print(message);
+    });
+  }*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -222,13 +264,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: Utils(context).getMediaHeight() * 0.06,
                   ),
                   RegisterInputField(
-                      controller: nameController, labelName: "Name",getvalue: (value){
-                        setState(() {
-                          name=value;
-                        });
+                    controller: nameController, labelName: "Name",getvalue: (value){
+                    setState(() {
+                      name=value;
+                    });
                   },),
                   RegisterInputField(
-                      controller: emailController, labelName: "Email",TxtInputType: TextInputType.emailAddress,formType: "email",getvalue: (value){
+                    controller: emailController, labelName: "Email",TxtInputType: TextInputType.emailAddress,formType: "email",getvalue: (value){
                     setState(() {
                       email=value;
                     });
@@ -283,7 +325,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Expanded(
                       child: new Container(
                           margin:
-                              const EdgeInsets.only(left: 10.0, right: 15.0),
+                          const EdgeInsets.only(left: 10.0, right: 15.0),
                           child: Divider(
                             color: Colors.grey,
                             height: 50,
@@ -298,7 +340,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Expanded(
                       child: new Container(
                           margin:
-                              const EdgeInsets.only(left: 15.0, right: 10.0),
+                          const EdgeInsets.only(left: 15.0, right: 10.0),
                           child: Divider(
                             color: Colors.grey,
                             height: 50,
@@ -399,14 +441,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if(getOTPResponse.success==true){
         print(getOTPResponse.data.otp);
 
-      /*  Navigator.pushAndRemoveUntil(context,
+        /*  Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (context) => OtpVerificationScreen(getOTPResponse: getOTPResponse,name: name,),
 
             ),(route) => false,);*/
         Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (context) => LoginScreen(),
+          MaterialPageRoute(builder: (context) => LoginScreen(),
 
-            ),(route) => false,);
+          ),(route) => false,);
       }else{
 
         Utils(context).showMessage(title: "Error",child: Text(getOTPResponse.message),);
