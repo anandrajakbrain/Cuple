@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/utils.dart';
@@ -18,8 +19,10 @@ import 'package:cuple_app/model/sendMsgResponse.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
 import 'package:cuple_app/model/userWishListResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
+import 'package:cuple_app/screens/updateUserResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 User userDetails;
 String token;
@@ -202,6 +205,65 @@ class Plugs {
       } else {
         throw Exception(response.body);
       }
+    } catch (e, s) {
+      Navigator.pop(context);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      throw Exception(e);
+    }
+  }
+  Future<UpdateUserResponse> updateUserDetailsWithFormData(var userId, var name, var email, var phone, var dob,File image,String mAnniversary,String lAnniversary) async {
+    Utils(context).showProgressLoader();
+    var body = {
+      "id": userId,
+      "name": name,
+      "email" : email,
+      "phone" : phone,
+      "dob" : dob,
+    };
+    var uri=Uri.parse(UPDATE_USER);
+    var request=new http.MultipartRequest("POST", uri);
+    try {
+      request.fields['id']=userId.toString();
+      request.fields['name']=name.toString();
+      request.fields['email']=email.toString();
+      request.fields['phone']=phone.toString();
+      request.fields['dob']=dob.toString();
+      if(mAnniversary!=null){
+        request.fields['anniversaryDate']=mAnniversary.toString();
+      }
+      if(lAnniversary!=null){
+        request.fields['firstDate']=lAnniversary.toString();
+      }
+      print("Request Parameter");
+print(request.fields);
+      if (image != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          "image",
+          image.path,
+          contentType: MediaType('application', "octet-stream"),
+        ));
+      }
+request.headers.addAll(getHeaders(token: token));
+      var reqestReturn=await request.send();
+      var response=await http.Response.fromStream(reqestReturn);
+if(reqestReturn.statusCode==200){
+  Navigator.pop(context);
+  return UpdateUserResponse.fromJson(jsonDecode(response.body));
+}else{
+  throw Exception(jsonDecode(response.body)['message']);
+}
+     /* http.Response response =
+      await http.post(UPDATE_USER, headers: getHeaders(), body: body);
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return User.fromJson(jsonDecode(response.body)["data"]);
+      } else {
+        throw Exception(response.body);
+      }*/
     } catch (e, s) {
       Navigator.pop(context);
       Utils(context).showMessage(

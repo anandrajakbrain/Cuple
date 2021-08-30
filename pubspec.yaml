@@ -44,6 +44,7 @@ dependencies:
   google_sign_in: ^4.4.4
   firebase_core:
   auth:
+  image_picker: ^0.6.6+5
 
 
 dev_dependencies:

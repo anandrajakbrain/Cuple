@@ -1,15 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/listContainer.dart';
+import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/notificationsListsResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
+import 'package:cuple_app/screens/updateUserResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_screen.dart';
@@ -17,46 +22,91 @@ import 'notificationListScreen.dart';
 
 class EditProfile extends StatefulWidget {
   @override
-  _EditProfileState createState() =>
-      _EditProfileState();
+  _EditProfileState createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
   User updateUser;
+  UpdateUserResponse updateUserResponse;
+  DateTime selectedDate = DateTime.now();
+  TextEditingController dateInputController = new TextEditingController();
+  File _image;
+  final picker = ImagePicker();
+
+  Future<void> _selectDate(BuildContext context, String type) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1967, 8),
+        lastDate: DateTime(2121, 1));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        if (type == 'dob') {
+          dateInputController.text = DateFormat("MMM d,y").format(picked);
+          dobController.text = DateFormat("MMM d,y").format(picked);
+          dob = DateFormat("y-MM-d").format(picked);
+        } else if (type == "anniversary") {
+          marriageAnniversary.text = DateFormat("y-MM-d").format(picked);
+        } else if (type == "love Anniversary") {
+          loveAnniversary.text = DateFormat("y-MM-d").format(picked);
+        }
+      });
+  }
+
+  Future getImage({ImageSource imageSource}) async {
+    final pickedFile = await picker.getImage(source: imageSource);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No Image Selected');
+      }
+    });
+  }
+
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController dobController = TextEditingController();
+  TextEditingController marriageAnniversary = TextEditingController();
+  TextEditingController loveAnniversary = TextEditingController();
+
   var name = "";
   var email = "";
   var phone = "";
   var dob = "";
 
   fetch() async {
-    var _updateUser =
-    await Plugs(context).updateUserDetails(userDetails.id.toString(), name, email, phone, dob);
+    UpdateUserResponse _updateUserResponse = await Plugs(context)
+        .updateUserDetailsWithFormData(
+            userDetails.id.toString(),
+            name,
+            email,
+            phone,
+            dob,
+            _image,
+            marriageAnniversary.text.toString(),
+            loveAnniversary.text.toString());
 
     setState(() {
-      updateUser=_updateUser;
-      if(updateUser != null){
+      updateUserResponse = _updateUserResponse;
+      if (updateUserResponse != null) {
         updateUserLocal();
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomeScreen()));
-      }else{
-
-      }
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      } else {}
     });
   }
 
-  updateUserLocal()async{
+  updateUserLocal() async {
     SharedPreferences prf = await SharedPreferences.getInstance();
-    prf.setString("user", jsonEncode(updateUser.toJson()));
+    print("Update User Data");
+    print(updateUserResponse.data.toJson());
+    prf.setString("user", jsonEncode(updateUserResponse.data.toJson()));
     setState(() {
-      userDetails = updateUser;
+      userDetails = updateUserResponse.data;
     });
-
   }
 
   @override
@@ -72,12 +122,15 @@ class _EditProfileState extends State<EditProfile> {
       email = userDetails.email;
       phone = userDetails.phone;
       dob = userDetails.dob;
+      marriageAnniversary.text = userDetails.anniversaryDate;
+      loveAnniversary.text = userDetails.firstDate;
     });
     //Future.delayed(Duration(seconds: 2)).then((value) => fetch(1));
   }
 
   @override
   Widget build(BuildContext context) {
+    print("User Pickture: ${userDetails.picture}");
     return Scaffold(
       backgroundColor: APP_PRIMARY_COLOR,
       appBar: AppBar(
@@ -137,154 +190,267 @@ class _EditProfileState extends State<EditProfile> {
                           height: MediaQuery.of(context).size.height * 0.17,
                           width: MediaQuery.of(context).size.height * 0.17,
                           decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [
-                                    Color(0XFF5E08B3),
-                                    Color(0XFFE556EB),
-                                  ]),
-                              shape: BoxShape.circle
-                          ),
+                              gradient: LinearGradient(colors: [
+                                Color(0XFF5E08B3),
+                                Color(0XFFE556EB),
+                              ]),
+                              shape: BoxShape.circle),
                           child: Center(
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * 0.1),
-                              child: Image.asset("assets/profile_user.jpg",fit: BoxFit.cover,
-                                height: MediaQuery.of(context).size.height * 0.15,
-                                width: MediaQuery.of(context).size.height * 0.15,
-                              ),
+                              borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.height * 0.1),
+                              child: _image != null
+                                  ? Image.file(
+                                      _image,
+                                      fit: BoxFit.cover,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.15,
+                                      width:
+                                          MediaQuery.of(context).size.height *
+                                              0.15,
+                                    )
+                                  : userDetails.picture != "0"
+                                      ? Image.network(
+                                          APP_ASSET_BASE_URL +
+                                              userDetails.picture,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.15,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.15,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Image.asset(
+                                              "assets/profile_user.jpg",
+                                              fit: BoxFit.cover,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.15,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.15,
+                                            );
+                                          },
+                                        )
+                                      : Image.asset(
+                                          "assets/profile_user.jpg",
+                                          fit: BoxFit.cover,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.15,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.15,
+                                        ),
                             ),
                           ),
                         ),
                       ),
-                     /* Column(
+                      Column(
                         //crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Row(mainAxisAlignment: MainAxisAlignment.center,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                height: MediaQuery.of(context).size.height * 0.05,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.05,
                                 decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                      colors: [Color(0XFF1A93EE), Color(0XFF6F34DD)]),
-                                  shape: BoxShape.circle
-                                ),
+                                    gradient: LinearGradient(colors: [
+                                      Color(0XFF1A93EE),
+                                      Color(0XFF6F34DD)
+                                    ]),
+                                    shape: BoxShape.circle),
                                 child: Center(
-                                  child: IconButton(onPressed: (){},
-                                      icon: Icon(Icons.camera_alt, color: Colors.white,
-                                      size: MediaQuery.of(context).size.height * 0.025,)
-                                  ),
+                                  child: IconButton(
+                                      onPressed: () async {
+                                        getImage(
+                                            imageSource: ImageSource.gallery);
+                                      },
+                                      icon: Icon(
+                                        Icons.camera_alt,
+                                        color: Colors.white,
+                                        size:
+                                            MediaQuery.of(context).size.height *
+                                                0.025,
+                                      )),
                                 ),
                               ),
                             ],
                           ),
                         ],
-                      )*/
+                      )
                     ],
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(top: Utils(context).getMediaHeight() * 0.035)),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: Utils(context).getMediaHeight() * 0.035)),
                 TextFormField(
                   controller: nameController,
-                  onChanged: (val){
+                  onChanged: (val) {
                     setState(() {
                       name = val;
                     });
                   },
                   decoration: InputDecoration(
                       labelText: 'Name',
-                      labelStyle: TextStyle(
-                          color: Colors.grey
-                      ),
+                      labelStyle: TextStyle(color: Colors.grey),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey,
+                          borderSide: BorderSide(
+                              color: Colors.grey,
                               style: BorderStyle.solid,
-                              width: 1
-                          )
-                      )
-                  ),
+                              width: 1))),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.035),
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.035),
                 ),
                 TextFormField(
                   controller: emailController,
-                  onChanged: (val){
+                  onChanged: (val) {
                     setState(() {
                       email = val;
                     });
                   },
                   decoration: InputDecoration(
                       labelText: 'Email',
-                      labelStyle: TextStyle(
-                          color: Colors.grey
-                      ),
+                      labelStyle: TextStyle(color: Colors.grey),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey,
+                          borderSide: BorderSide(
+                              color: Colors.grey,
                               style: BorderStyle.solid,
-                              width: 1
-                          )
-                      )
-                  ),
+                              width: 1))),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.035),
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.035),
                 ),
                 TextFormField(
                   controller: mobileController,
-                  onChanged: (val){
+                  onChanged: (val) {
                     setState(() {
                       phone = val;
                     });
                   },
                   decoration: InputDecoration(
                       labelText: 'Mobile Number',
-                      labelStyle: TextStyle(
-                          color: Colors.grey
-                      ),
+                      labelStyle: TextStyle(color: Colors.grey),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey,
+                          borderSide: BorderSide(
+                              color: Colors.grey,
                               style: BorderStyle.solid,
-                              width: 1
-                          )
-                      )
-                  ),
+                              width: 1))),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.035),
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.035),
                 ),
-                TextFormField(
-                  controller: dobController,
-                  onChanged: (val){
-                    setState(() {
-                      dob  = val;
-                    });
+                InkWell(
+                  onTap: () {
+                    _selectDate(context, 'dob');
                   },
-                  decoration: InputDecoration(
-                      labelText: 'Birth Date',
-                      labelStyle: TextStyle(
-                          color: Colors.grey
-                      ),
-                      hintText: "yyyy-MM-dd",
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey,
-                              style: BorderStyle.solid,
-                              width: 1
-                          )
-                      )
+                  child: Container(
+                    child: TextFormField(
+                      enabled: false,
+                      controller: dobController,
+                      onChanged: (val) {
+                        setState(() {
+                          dob = val;
+                        });
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Birth Date',
+                          labelStyle: TextStyle(color: Colors.grey),
+                          hintText: "yyyy-MM-dd",
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  style: BorderStyle.solid,
+                                  width: 1))),
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.055),
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.035),
+                ),
+                InkWell(
+                  onTap: () {
+                    _selectDate(context, 'anniversary');
+                  },
+                  child: Container(
+                    child: TextFormField(
+                      enabled: false,
+                      controller: marriageAnniversary,
+                      onChanged: (val) {
+                        setState(() {
+                          dob = val;
+                        });
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Marriage Anniversary',
+                          labelStyle: TextStyle(color: Colors.grey),
+                          hintText: "yyyy-MM-dd",
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  style: BorderStyle.solid,
+                                  width: 1))),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.035),
+                ),
+                InkWell(
+                  onTap: () {
+                    _selectDate(context, "love Anniversary");
+                  },
+                  child: Container(
+                    child: TextFormField(
+                      enabled: false,
+                      controller: loveAnniversary,
+                      onChanged: (val) {
+                        setState(() {
+                          dob = val;
+                        });
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Love Anniversary',
+                          labelStyle: TextStyle(color: Colors.grey),
+                          hintText: "yyyy-MM-dd",
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  style: BorderStyle.solid,
+                                  width: 1))),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.055),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     fetch();
                   },
                   child: Container(
                     child: Container(
                       width: double.infinity,
-                      padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
+                      padding: EdgeInsets.all(
+                          MediaQuery.of(context).size.height * 0.02),
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
                               colors: [Color(0XFF1A93EE), Color(0XFF6F34DD)]),
@@ -295,7 +461,8 @@ class _EditProfileState extends State<EditProfile> {
                           Text(
                             "SAVE",
                             style: TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.w300),
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300),
                           ),
                         ],
                       ),

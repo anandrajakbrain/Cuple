@@ -1,8 +1,10 @@
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
+import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/listUserReminderResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -222,6 +224,15 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+  ListUserReminderResponse listUserReminderResponse;
+  fetch() async {
+    ListUserReminderResponse _listUserReminderResponse = await Plugs(context)
+        .listUserReminderList(userId: userDetails.id.toString());
+
+    setState(() {
+      listUserReminderResponse = _listUserReminderResponse;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -661,7 +672,24 @@ class _UserProfileState extends State<UserProfile> {
                   child: Center(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * 0.1),
-                      child: Image.asset("assets/profile_user.jpg",fit: BoxFit.cover,
+                      child: userDetails.picture != "0"
+                          ? Image.network(
+                        APP_ASSET_BASE_URL + userDetails.picture,
+                        fit: BoxFit.cover,
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        width: MediaQuery.of(context).size.height * 0.15,
+                        errorBuilder: (context, error, straktress) {
+                          return Image.asset(
+                            "assets/profile_user.jpg",
+                            fit: BoxFit.cover,
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            width: MediaQuery.of(context).size.height * 0.15,
+                          );
+                        },
+                      )
+                          : Image.asset(
+                        "assets/profile_user.jpg",
+                        fit: BoxFit.cover,
                         height: MediaQuery.of(context).size.height * 0.15,
                         width: MediaQuery.of(context).size.height * 0.15,
                       ),

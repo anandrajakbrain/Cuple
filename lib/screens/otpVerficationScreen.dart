@@ -171,8 +171,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       prf.setString("token", verifyOTPResponse.accessToken);
 
       print(verifyOTPResponse.toJson());
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      Navigator.pushAndRemoveUntil(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()),
+            (route) => false,
+      );
     }else{
       Utils(context).showMessage(title: "Error",child: Text(verifyOTPResponse.message),);
     }

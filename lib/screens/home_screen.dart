@@ -6,7 +6,9 @@ import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
 import 'package:cuple_app/componets/customMenuDrawer.dart';
+import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/reminderCard.dart';
+import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
@@ -74,181 +76,181 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // print(userDetails.name);
-if(userDetails!=null) {
-  if (userDetails.status == "Active") {
-    return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          leading: GestureDetector(
-            onTap: () {
-              _scaffoldKey.currentState.openDrawer();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: APP_BAR_COLOR,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 2,
-                      spreadRadius: 1,
-                    )
-                  ],
-                ),
-                child: Icon(
-                  Icons.menu,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
-          backgroundColor: APP_BAR_COLOR,
-          title: Text(
-            "Home",
-            style: TextStyle(color: Colors.black),
-          ),
-          elevation: 0,
-          actions: [
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationsListScreen()));
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: APP_BAR_COLOR,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 2,
-                        spreadRadius: 1,
-                      )
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.notifications_none_outlined,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-        drawer: CustomMenuDrawer(userDetails),
-        bottomNavigationBar: FFNavigationBar(
-          theme: FFNavigationBarTheme(
-            barBackgroundColor: Colors.white,
-            selectedItemBorderColor: Color(0XFF1A93EE),
-            selectedItemBackgroundColor: Color(0XFF1A93EE),
-            selectedItemIconColor: Colors.white,
-            selectedItemLabelColor: Colors.black,
-          ),
-          selectedIndex: selectedIndex,
-          onSelectTab: (index) {
-            // if(index == 2){
-            //   Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) => ChatScreen()));
-            // }
-            setState(() {
-              selectedIndex = index;
-              controlWidget = getWidget(index: selectedIndex);
-            });
-          },
-          items: [
-            FFNavigationBarItem(
-              iconData: Icons.home_outlined,
-              label: 'Home',
-            ),
-            FFNavigationBarItem(
-              iconData: Icons.lightbulb_outline,
-              label: 'Idea',
-            ),
-            FFNavigationBarItem(
-              iconData: Icons.mail_outline_outlined,
-              label: 'Message',
-            ),
-            FFNavigationBarItem(
-              iconData: Icons.account_circle_outlined,
-              label: 'Profile',
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: controlWidget ??
-              displayHomeWidget(
-                  context), //selectedIndex == 3 ? displayProfileWidget(context) : displayHomeWidget(context),
-        ));
-  } else {
-    return Scaffold(
-      backgroundColor: APP_BAR_COLOR,
-      body: Container(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "User not verified yet by Admin \n please Wait ",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                    fontSize: Utils(context).getMediaWidth() * 0.05),
-              ),
-              SizedBox(
-                height: Utils(context).getMediaHeight() * 0.06,
-              ),
-              InkWell(
+    if (userDetails != null) {
+      if (userDetails.status == "Active") {
+        return Scaffold(
+            key: _scaffoldKey,
+            appBar: AppBar(
+              leading: GestureDetector(
                 onTap: () {
-                  Utils(context).logout();
+                  _scaffoldKey.currentState.openDrawer();
                 },
-                child: SizedBox(
-                  width: Utils(context).getMediaWidth() * 0.80,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    padding: EdgeInsets.all(14.0),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Color(0XFF1E8FED), Color(0XFF6341DF)]),
-                      borderRadius: BorderRadius.circular(25.0),
+                      color: APP_BAR_COLOR,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 2,
+                          spreadRadius: 1,
+                        )
+                      ],
                     ),
-                    child: Center(
-                      child: Text(
-                        'Log Out',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: Utils(context).getMediaWidth() * 0.05,
-                          fontWeight: FontWeight.bold,
+                    child: Icon(
+                      Icons.menu,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+              backgroundColor: APP_BAR_COLOR,
+              title: Text(
+                "Home",
+                style: TextStyle(color: Colors.black),
+              ),
+              elevation: 0,
+              actions: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NotificationsListScreen()));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: APP_BAR_COLOR,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 2,
+                            spreadRadius: 1,
+                          )
+                        ],
+                      ),
+                      child: Icon(
+                        Icons.notifications_none_outlined,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            drawer: CustomMenuDrawer(userDetails),
+            bottomNavigationBar: FFNavigationBar(
+              theme: FFNavigationBarTheme(
+                barBackgroundColor: Colors.white,
+                selectedItemBorderColor: Color(0XFF1A93EE),
+                selectedItemBackgroundColor: Color(0XFF1A93EE),
+                selectedItemIconColor: Colors.white,
+                selectedItemLabelColor: Colors.black,
+              ),
+              selectedIndex: selectedIndex,
+              onSelectTab: (index) {
+                // if(index == 2){
+                //   Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => ChatScreen()));
+                // }
+                setState(() {
+                  selectedIndex = index;
+                  controlWidget = getWidget(index: selectedIndex);
+                });
+              },
+              items: [
+                FFNavigationBarItem(
+                  iconData: Icons.home_outlined,
+                  label: 'Home',
+                ),
+                FFNavigationBarItem(
+                  iconData: Icons.lightbulb_outline,
+                  label: 'Idea',
+                ),
+                FFNavigationBarItem(
+                  iconData: Icons.mail_outline_outlined,
+                  label: 'Message',
+                ),
+                FFNavigationBarItem(
+                  iconData: Icons.account_circle_outlined,
+                  label: 'Profile',
+                ),
+              ],
+            ),
+            body: SingleChildScrollView(
+              child: controlWidget ??
+                  displayHomeWidget(
+                      context), //selectedIndex == 3 ? displayProfileWidget(context) : displayHomeWidget(context),
+            ));
+      } else {
+        return Scaffold(
+          backgroundColor: APP_BAR_COLOR,
+          body: Container(
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "User not verified yet by Admin \n please Wait ",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Utils(context).getMediaWidth() * 0.05),
+                  ),
+                  SizedBox(
+                    height: Utils(context).getMediaHeight() * 0.06,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Utils(context).logout();
+                    },
+                    child: SizedBox(
+                      width: Utils(context).getMediaWidth() * 0.80,
+                      child: Container(
+                        padding: EdgeInsets.all(14.0),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [Color(0XFF1E8FED), Color(0XFF6341DF)]),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Log Out',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Utils(context).getMediaWidth() * 0.05,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
+          ),
+        );
+      }
+    } else {
+      return Scaffold(
+        body: Container(
+          child: Center(
+            child: CircularProgressIndicator(),
           ),
         ),
-      ),
-    );
-  }
-}else{
-  return Scaffold(
-    body: Container(
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
-    ),
-  );
-}
+      );
+    }
   }
 
   Widget displayHomeWidget(BuildContext context) {
@@ -520,8 +522,10 @@ if(userDetails!=null) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            FunnyCardListScreen(partnerName: partnerData!=null?partnerData.name:'Partner'),
+                        builder: (context) => FunnyCardListScreen(
+                            partnerName: partnerData != null
+                                ? partnerData.name
+                                : 'Partner'),
                       )).then((value) => getApis());
                 },
                 child: Container(
@@ -550,9 +554,8 @@ if(userDetails!=null) {
                       ),
                       Expanded(
                         child: Text(
-                          "Funny Cards for ${partnerData!=null?partnerData.name:'Partner'}",
+                          "Funny Cards for ${partnerData != null ? partnerData.name : 'Partner'}",
                           softWrap: true,
-                          
                           style: TextStyle(color: Colors.white),
                         ),
                       )
@@ -736,8 +739,10 @@ if(userDetails!=null) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    PartnerWishlist(partnerName: partnerData!=null?partnerData.name:'Partner'),
+                                builder: (context) => PartnerWishlist(
+                                    partnerName: partnerData != null
+                                        ? partnerData.name
+                                        : 'Partner'),
                               ));
                         },
                         child: Container(
@@ -766,7 +771,7 @@ if(userDetails!=null) {
                               ),
                               Expanded(
                                 child: Text(
-                                  "${partnerData!=null?partnerData.name:'Partner'} Wish List",
+                                  "${partnerData != null ? partnerData.name : 'Partner'} Wish List",
                                   style: TextStyle(color: Colors.white),
                                 ),
                               )
@@ -803,7 +808,7 @@ if(userDetails!=null) {
                       ),
                     ),
                     Text(
-                      "Couple Gift Suggestions for ${partnerData!=null?partnerData.name:''}",
+                      "Couple Gift Suggestions for ${partnerData != null ? partnerData.name : ''}",
                       style: TextStyle(color: Colors.white),
                     )
                   ],
@@ -1244,12 +1249,27 @@ if(userDetails!=null) {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(
                       MediaQuery.of(context).size.height * 0.1),
-                  child: Image.asset(
-                    "assets/profile_user.jpg",
-                    fit: BoxFit.cover,
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.height * 0.15,
-                  ),
+                  child: userDetails.picture != "0"
+                      ? Image.network(
+                          APP_ASSET_BASE_URL + userDetails.picture,
+                          fit: BoxFit.cover,
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          width: MediaQuery.of(context).size.height * 0.15,
+                          errorBuilder: (context, error, straktress) {
+                            return Image.asset(
+                              "assets/profile_user.jpg",
+                              fit: BoxFit.cover,
+                              height: MediaQuery.of(context).size.height * 0.15,
+                              width: MediaQuery.of(context).size.height * 0.15,
+                            );
+                          },
+                        )
+                      : Image.asset(
+                          "assets/profile_user.jpg",
+                          fit: BoxFit.cover,
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          width: MediaQuery.of(context).size.height * 0.15,
+                        ),
                 ),
               ),
             ),
@@ -1270,9 +1290,15 @@ if(userDetails!=null) {
         );
         break;
       case 2:
+        if(partnerData!=null){
         return ChatScreen(
-          isbottom: true,
-        );
+          isbottom: true,);
+            }else{
+          return Container(
+              height: Utils(context).getMediaHeight()*0.70,
+              child: Center(child: NoRecordFoundScreen(msg: "Please Select Partner First",)));
+        }
+
         break;
       case 3:
         return displayProfileWidget(context);
@@ -1344,7 +1370,7 @@ if(userDetails!=null) {
         GetUserPartnerDetailsResponse _getUserPartnerDetailsResponse =
             await Plugs(context)
                 .getUserPartnerDetails(Userid: userDetails.id.toString());
-        if(_getUserPartnerDetailsResponse.success==true) {
+        if (_getUserPartnerDetailsResponse.success == true) {
           setState(() {
             partnerData = _getUserPartnerDetailsResponse.data;
           });

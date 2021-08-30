@@ -22,10 +22,10 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool notificationToggleStatus = false;
   bool chatToggleStatus = false;
-  var frequency = "One";
-  var questionnaire = "One";
-  var dateNights = "One";
-  var msgFrequency = "One";
+  var frequency = "Once a week";
+  var questionnaire = "weekly";
+  var dateNights = "one in week";
+  var msgFrequency = "Once a week";
 
   var userSettingsResponse;
 
@@ -119,7 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     });
                     fetch();
                   },
-                  items: <String>['once- 14 days before', 'aaaa', 'ssss', 'dddd']
+                  items: <String>['once- 14 days before','Once a week', ' Once a month']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -183,7 +183,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       });
                       fetch();
                     },
-                    items: <String>['anytime', 'ones in a week', 'every week', 'monthly']
+                    items: <String>['Anytime', 'Once a week', 'Once a month','ones in a week']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,

@@ -1,3 +1,4 @@
+import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
@@ -46,11 +47,27 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                               Color(0XFF5E08B3),
                               Color(0XFFE556EB),
                             ])),
-                        child: FittedBox(
-                            child: Image.asset(
+                        child: userDetails.picture != "0"
+                            ? Image.network(
+                          APP_ASSET_BASE_URL + userDetails.picture,
+                          fit: BoxFit.cover,
+                          // height: MediaQuery.of(context).size.height * 0.15,
+                          // width: MediaQuery.of(context).size.height * 0.15,
+                          errorBuilder: (context, error, straktress) {
+                            return Image.asset(
+                              "assets/profile_user.jpg",
+                              fit: BoxFit.cover,
+                              // height: MediaQuery.of(context).size.height * 0.15,
+                              // width: MediaQuery.of(context).size.height * 0.15,
+                            );
+                          },
+                        )
+                            : Image.asset(
                           "assets/profile_user.jpg",
                           fit: BoxFit.cover,
-                        )),
+                          // height: MediaQuery.of(context).size.height * 0.15,
+                          // width: MediaQuery.of(context).size.height * 0.15,
+                        ),
                       ),
                       Padding(
                           padding: EdgeInsets.only(
