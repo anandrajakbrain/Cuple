@@ -233,6 +233,21 @@ class _UserProfileState extends State<UserProfile> {
       listUserReminderResponse = _listUserReminderResponse;
     });
   }
+  fetchReminder() async {
+    ListUserReminderResponse _listUserReminderResponse = await Plugs(context)
+        .listUserReminderList(userId: userDetails.id.toString());
+
+    setState(() {
+      listUserReminderResponse = _listUserReminderResponse;
+    });
+  }
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // Future.delayed(Duration(seconds: 1)).then((value) => fetchReminder());
+
+  }
   @override
   Widget build(BuildContext context) {
     return  Scaffold(

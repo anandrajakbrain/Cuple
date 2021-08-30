@@ -232,10 +232,10 @@ class Plugs {
       request.fields['phone']=phone.toString();
       request.fields['dob']=dob.toString();
       if(mAnniversary!=null){
-        request.fields['anniversaryDate']=mAnniversary.toString();
+        request.fields['anniversary_date']=mAnniversary.toString();
       }
       if(lAnniversary!=null){
-        request.fields['firstDate']=lAnniversary.toString();
+        request.fields['first_date']=lAnniversary.toString();
       }
       print("Request Parameter");
 print(request.fields);
