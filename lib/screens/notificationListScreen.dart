@@ -43,7 +43,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 2)).then((value) => fetch(1));
+    Future.delayed(Duration(seconds: 0)).then((value) => fetch(1));
   }
 
   @override
