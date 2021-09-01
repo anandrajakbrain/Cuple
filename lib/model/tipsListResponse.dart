@@ -33,7 +33,7 @@ class TipsData {
   String category;
   String content;
   String image;
-  Null link;
+  String link;
   String status;
   String createdAt;
   String updatedAt;

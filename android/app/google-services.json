@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "243322550404",
-    "project_id": "cuple-194e1",
-    "storage_bucket": "cuple-194e1.appspot.com"
+    "project_number": "302025275650",
+    "project_id": "cuple-b5558",
+    "storage_bucket": "cuple-b5558.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:243322550404:android:a2e89d6e8c9a66cfdb2ad1",
+        "mobilesdk_app_id": "1:302025275650:android:5999c6b1ffabe56dbeea1b",
         "android_client_info": {
           "package_name": "com.myapp.cuple_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "243322550404-rl4qd3te7vq69g30ogcpr8pul6iqgu3g.apps.googleusercontent.com",
+          "client_id": "302025275650-hjq8gkiojjbumc1d2ehb1pl0028tm7b7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.myapp.cuple_app",
@@ -22,28 +22,21 @@
           }
         },
         {
-          "client_id": "243322550404-2hprf68dppnp0kt551m5nurn1nh7gg5v.apps.googleusercontent.com",
+          "client_id": "302025275650-30ff4ps2rrcb5su7gsejl5g3o8tgm10a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAt3UMWYSaX8MSq6NK0Wy5xT-YpASH6kkc"
+          "current_key": "AIzaSyCZtn-h94U9U_BH9vB3bFePvzo-6ln01AA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "243322550404-2hprf68dppnp0kt551m5nurn1nh7gg5v.apps.googleusercontent.com",
+              "client_id": "105069085558908925547",
               "client_type": 3
-            },
-            {
-              "client_id": "243322550404-15ji2ope8bf5dils2ja3k18s3o39pr2j.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.myapp.cupleapp"
-              }
             }
           ]
         }
