@@ -49,6 +49,7 @@ class User {
   String dateNights;
   String msgFrequency;
   String status;
+  var gender;
   String otp;
   String forgotPasswordOtp;
   String lastLogin;
@@ -93,7 +94,9 @@ class User {
         this.deletedAt,
         this.picture,
         this.socialType,
-        this.partnerid});
+        this.partnerid,
+      this.gender,
+      });
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -129,6 +132,7 @@ class User {
     picture = json['picture'];
     socialType = json['social_type'];
     partnerid = json['partnerid'];
+    gender = json['gender'];
   }
 
   Map<String, dynamic> toJson() {
@@ -166,6 +170,7 @@ class User {
     data['picture'] = this.picture;
     data['social_type'] = this.socialType;
     data['partnerid'] = this.partnerid;
+    data['gender'] = this.gender;
     return data;
   }
 }

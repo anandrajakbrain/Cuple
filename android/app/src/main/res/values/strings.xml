@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">cuple</string>
-    <string name="facebook_app_id">973422270105130</string>
-    <string name="fb_login_protocol_scheme">fb973422270105130</string>
+    <string name="app_name">cupleApp</string>
+    <string name="facebook_app_id">1173530183136152</string>
+    <string name="fb_login_protocol_scheme">fb1173530183136152</string>
 </resources>

@@ -33,9 +33,9 @@ class UserListReminderData {
   int reminderId;
   String date;
   String status;
-  Null createdAt;
-  Null updatedAt;
-  Null deletedAt;
+  var createdAt;
+  var updatedAt;
+  var deletedAt;
   String name;
   String category;
 

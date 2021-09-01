@@ -34,7 +34,7 @@ class RemindersListData {
   String status;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
+  var deletedAt;
 
   RemindersListData(
       {this.id,

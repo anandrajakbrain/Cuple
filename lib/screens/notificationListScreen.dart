@@ -1,5 +1,6 @@
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/listContainer.dart';
+import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
@@ -21,12 +22,39 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
   String delIds = "";
 
   fetch(var id) async {
-    NotificationsListsResponse _notificationsListsResponse =
+
+    Utils(context).checkInternet().then((value) async {
+      if(value==true){
+
+        NotificationsListsResponse _notificationsListsResponse =
         await Plugs(context).getNotificationList(id, name: "");
 
-    setState(() {
-      notificationsListsResponse = _notificationsListsResponse;
+        setState(() {
+          notificationsListsResponse = _notificationsListsResponse;
+        });
+
+      }
+
+
+      else {
+        Utils(context).showAlert(
+            context: context,
+            title: "",
+            child: Container(
+                height: 100, width: 100, child: NoInternetConnectionScreen()),
+            handler: () {
+              Navigator.pop(context);
+              fetch(userDetails.id.toString());
+            },
+            isCancel: false);
+      }
+
+
     });
+
+
+
+
   }
 
   deleteAll(String ids) async {
@@ -43,7 +71,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 0)).then((value) => fetch(1));
+    Future.delayed(Duration(seconds: 0)).then((value) => fetch(userDetails.id.toString()));
   }
 
   @override
@@ -99,7 +127,10 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
                         );
                       })
                   : NoRecordFoundScreen(msg: "No Notification Found",)
-              : NoRecordFoundScreen(msg: "No Notification Found",),
+              : NoRecordFoundScreen(
+            icon: FontAwesomeIcons.fileDownload,
+            msg: "Please Wait",
+          ),
         ),
       ),
     );

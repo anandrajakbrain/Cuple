@@ -1,11 +1,14 @@
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/listContainer.dart';
+import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/wishlistContainer.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
+import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/userWishListResponse.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MyWishList extends StatefulWidget {
   @override
@@ -16,12 +19,38 @@ class _MyWishListState extends State<MyWishList> {
   UserWishListResponse userWishListResponse;
 
   fetch() async {
-    UserWishListResponse _userWishListResponse =
+
+    Utils(context).checkInternet().then((value) async {
+      if(value==true){
+
+        UserWishListResponse _userWishListResponse =
         await Plugs(context).getUserWishList();
 
-    setState(() {
-      userWishListResponse = _userWishListResponse;
+        setState(() {
+          userWishListResponse = _userWishListResponse;
+        });
+
+      }
+
+
+      else {
+        Utils(context).showAlert(
+            context: context,
+            title: "",
+            child: Container(
+                height: 100, width: 100, child: NoInternetConnectionScreen()),
+            handler: () {
+              Navigator.pop(context);
+              fetch();
+            },
+            isCancel: false);
+      }
+
+
     });
+
+
+
   }
 
   @override
@@ -61,7 +90,10 @@ class _MyWishListState extends State<MyWishList> {
                     fetch();
                   },
                 );
-              }):NoRecordFoundScreen():NoRecordFoundScreen(),
+              }):NoRecordFoundScreen():NoRecordFoundScreen(
+            icon: FontAwesomeIcons.fileDownload,
+            msg: "Please Wait",
+          ),
         ),
       ),
     );

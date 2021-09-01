@@ -33,7 +33,7 @@ class GetMsgData {
   int toId;
   String msg;
   String createdAt;
-  Null updatedAt;
+  var updatedAt;
   String fromUserName;
   String toUserName;
 

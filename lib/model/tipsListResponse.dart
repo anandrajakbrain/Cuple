@@ -33,11 +33,11 @@ class TipsData {
   String category;
   String content;
   String image;
-  Null link;
+  var link;
   String status;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
+  var deletedAt;
   String suggesiontype;
 
   TipsData(

@@ -33,7 +33,7 @@ class SuggesiontypeListsData {
   String status;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
+  var deletedAt;
 
   SuggesiontypeListsData(
       {this.id,

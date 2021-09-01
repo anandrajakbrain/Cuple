@@ -32,6 +32,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController dateInputController = new TextEditingController();
   File _image;
   final picker = ImagePicker();
+  String gender;
 
   Future<void> _selectDate(BuildContext context, String type) async {
     final DateTime picked = await showDatePicker(
@@ -87,23 +88,36 @@ class _EditProfileState extends State<EditProfile> {
             dob,
             _image,
             marriageAnniversary.text.toString(),
-            loveAnniversary.text.toString());
+            loveAnniversary.text.toString(),
+            gender);
 
     setState(() {
       updateUserResponse = _updateUserResponse;
       if (updateUserResponse != null) {
-        updateUserLocal();
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
-      } else {}
+        if (updateUserResponse.success == true) {
+          updateUserLocal();
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        } else {
+          Utils(context).showMessage(
+              title: "Error",
+              child: Text("${updateUserResponse.message}"),
+              isCancel: true);
+        }
+      } else {
+        Utils(context).showMessage(
+            title: "Error",
+            child: Text("Something Went Wrong"),
+            isCancel: true);
+      }
     });
   }
 
   updateUserLocal() async {
     SharedPreferences prf = await SharedPreferences.getInstance();
-    print("Update User Data");
-    print(updateUserResponse.data.toJson());
-    prf.setString("user", jsonEncode(updateUserResponse.data.toJson()));
+    // print("Update User Data");
+    // print(updateUserResponse.data.toJson());
+    prf.setString("user", jsonEncode(updateUserResponse.data));
     setState(() {
       userDetails = updateUserResponse.data;
     });
@@ -124,6 +138,7 @@ class _EditProfileState extends State<EditProfile> {
       dob = userDetails.dob;
       marriageAnniversary.text = userDetails.anniversaryDate;
       loveAnniversary.text = userDetails.firstDate;
+      gender = userDetails.gender;
     });
     //Future.delayed(Duration(seconds: 2)).then((value) => fetch(1));
   }
@@ -379,6 +394,44 @@ class _EditProfileState extends State<EditProfile> {
                                   width: 1))),
                     ),
                   ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.035),
+                ),
+                DropdownButtonFormField(
+                  value: gender,
+                  items: ["Male", "Female"]
+                      .map((e) => DropdownMenuItem(
+                            child: Text(e),
+                            value: e,
+                          ))
+                      .toList(),
+                  decoration: InputDecoration(
+                    labelText: "Gender",
+                    labelStyle: TextStyle(
+                      fontSize: Utils(context).getMediaWidth() * 0.059,
+                      color: Colors.grey[500],
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      borderSide: BorderSide(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      borderSide: BorderSide(
+                        color: Colors.grey[300],
+                        // width: 2.0,
+                      ),
+                    ),
+                  ),
+                  onChanged: (text) {
+                    setState(() {
+                      gender = text;
+                    });
+                  },
                 ),
                 Padding(
                   padding: EdgeInsets.only(

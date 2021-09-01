@@ -1,6 +1,7 @@
 import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
+import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/tipsCardContainer.dart';
 import 'package:cuple_app/configuration/app_config.dart';
@@ -21,12 +22,38 @@ class _TipsListScreenState extends State<TipsListScreen> {
   TipsListResponse tipsListResponse;
 
   fetch() async {
-    TipsListResponse _tipsListResponse =
-    await Plugs(context).getTipsList(type: "tips");
+    Utils(context).checkInternet().then((value) async {
+      if(value==true){
 
-    setState(() {
-      tipsListResponse=_tipsListResponse;
+        TipsListResponse _tipsListResponse =
+        await Plugs(context).getTipsList(type: "tips");
+
+        setState(() {
+          tipsListResponse=_tipsListResponse;
+        });
+
+
+      }
+
+
+      else {
+        Utils(context).showAlert(
+            context: context,
+            title: "",
+            child: Container(
+                height: 100, width: 100, child: NoInternetConnectionScreen()),
+            handler: () {
+              Navigator.pop(context);
+              fetch();
+            },
+            isCancel: false);
+      }
+
+
     });
+
+
+
   }
 
   @override
@@ -58,7 +85,7 @@ class _TipsListScreenState extends State<TipsListScreen> {
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemBuilder: (BuildContext context, index) {
                 return TipsCardContainer(tipsData: tipsListResponse.data[index]);
-              }):NoRecordFoundScreen():NoRecordFoundScreen(),
+              }):NoRecordFoundScreen():NoRecordFoundScreen(icon: FontAwesomeIcons.fileDownload,msg: "Please Wait",),
         ),
       ),
     );

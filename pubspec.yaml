@@ -45,6 +45,9 @@ dependencies:
   firebase_core:
   auth:
   image_picker: ^0.6.6+5
+  flutter_svg: ^0.22.0
+  data_connection_checker: ^0.3.4
+  flutter_facebook_auth: ^2.0.1
 
 
 dev_dependencies:

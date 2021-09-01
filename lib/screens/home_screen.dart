@@ -6,12 +6,14 @@ import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
 import 'package:cuple_app/componets/customMenuDrawer.dart';
+import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/reminderCard.dart';
 import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/createNewReminderResponse.dart';
 import 'package:cuple_app/model/getUserPartnerDetailsResponse.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
@@ -39,6 +41,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -362,21 +365,48 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             height: Utils(context).getMediaHeight() * 0.02,
                           ),
-                          Container(
-                            padding: EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                Color(0XFF2487EC),
-                                Color(0XFF663DDF),
-                              ]),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: Text(
-                              "BOOK FOR US",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize:
-                                      Utils(context).getMediaWidth() * 0.03),
+                          InkWell(
+                            onTap: () async{
+
+                              try {
+                                var body = {
+                                  "user_id": userDetails.id.toString(),
+                                  "suggesion_id": ideasListResponse.data[index].id.toString(),
+                                };
+                                Utils(context).showProgressLoader();
+                                http.Response response =
+                                await http.post(
+                                    SUGGESSION_BOOK, headers: Plugs(context).getHeaders(), body: body);
+                                if (response.statusCode == 200) {
+                                  print(response.body);
+                                  Navigator.pop(context);
+                                  Utils(context).showMessage(title: "Success",child: Text(jsonDecode(response.body)['message']));
+                                  // return CreateNewReminderResponse.fromJson(
+                                  //     jsonDecode(response.body));
+                                } else {
+                                  throw Exception(jsonDecode(response.body)['message']);
+                                }
+                              }catch(e,s){
+                                Navigator.pop(context);
+                                Utils(context).showMessage(title: "error",child: Text(e));
+                              }
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(colors: [
+                                  Color(0XFF2487EC),
+                                  Color(0XFF663DDF),
+                                ]),
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: Text(
+                                "BOOK FOR US",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize:
+                                        Utils(context).getMediaWidth() * 0.03),
+                              ),
                             ),
                           ),
                         ],
@@ -940,7 +970,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .height *
                                               0.02)),
                                   Text(
-                                    ":\t\tMale",
+                                    ":\t\t${userDetails.gender??""}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -1290,13 +1320,17 @@ class _HomeScreenState extends State<HomeScreen> {
         );
         break;
       case 2:
-        if(partnerData!=null){
-        return ChatScreen(
-          isbottom: true,);
-            }else{
+        if (partnerData != null) {
+          return ChatScreen(
+            isbottom: true,
+          );
+        } else {
           return Container(
-              height: Utils(context).getMediaHeight()*0.70,
-              child: Center(child: NoRecordFoundScreen(msg: "Please Select Partner First",)));
+              height: Utils(context).getMediaHeight() * 0.70,
+              child: Center(
+                  child: NoRecordFoundScreen(
+                msg: "Please Select Partner First",
+              )));
         }
 
         break;
@@ -1310,10 +1344,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getApis() async {
-    await getReminder();
-    await getIdeasList();
-    await getTipsList();
-    await getpartnerDetails();
+    Utils(context).checkInternet().then((value) async {
+      if (value == true) {
+        await getReminder();
+        await getIdeasList();
+        await getTipsList();
+        await getpartnerDetails();
+      } else {
+        Utils(context).showAlert(
+          context: context,
+            title: "",
+            child: Container(
+                height: 250, width: 150, child: NoInternetConnectionScreen()),handler: (){
+              Navigator.pop(context);
+              getApis();
+        },
+        isCancel: false);
+      }
+    });
   }
 
   getReminder() async {

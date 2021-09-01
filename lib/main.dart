@@ -1,3 +1,4 @@
+import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
@@ -13,6 +14,7 @@ import 'package:cuple_app/screens/reminderListScreen.dart';
 import 'package:cuple_app/screens/settings_screen.dart';
 import 'package:cuple_app/screens/tipsListScreen.dart';
 import 'package:cuple_app/screens/userProfile.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 
@@ -80,9 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
-    @override
+
+  @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
@@ -90,19 +92,21 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+    // if (Utils(context).checkInternet() == true) {
+      return SplashScreen(
+          seconds: 15,
+          navigateAfterFuture: Utils(context).checkUser(),
+          // new LoginScreen(),
+          // title: new Text(
+          //   APP_NAME,
+          //   style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          // ),
+          // image: new Image.asset('assets/img1.png'),
+          backgroundColor: Colors.white,
+          imageBackground: AssetImage("assets/img1.png"),
+          styleTextUnderTheLoader: new TextStyle(),
+          photoSize: 150,
+          loaderColor: Colors.red);
 
-    return SplashScreen(
-        seconds: 10,
-        navigateAfterFuture: Utils(context).checkUser(),// new LoginScreen(),
-        // title: new Text(
-        //   APP_NAME,
-        //   style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-        // ),
-        // image: new Image.asset('assets/img1.png'),
-        backgroundColor: Colors.white,
-        imageBackground: AssetImage("assets/img1.png"),
-        styleTextUnderTheLoader: new TextStyle(),
-        photoSize: 150,
-        loaderColor: Colors.red);
   }
 }

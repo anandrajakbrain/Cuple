@@ -1,6 +1,7 @@
 import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
+import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/reminderCard.dart';
 import 'package:cuple_app/configuration/app_config.dart';
@@ -28,12 +29,38 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
   }
 
   fetch() async {
-    ListUserReminderResponse _listUserReminderResponse = await Plugs(context)
-        .listUserReminderList(userId: userDetails.id.toString());
+    Utils(context).checkInternet().then((value) async {
+      if(value==true){
 
-    setState(() {
-      listUserReminderResponse = _listUserReminderResponse;
+
+        ListUserReminderResponse _listUserReminderResponse = await Plugs(context)
+            .listUserReminderList(userId: userDetails.id.toString());
+
+        setState(() {
+          listUserReminderResponse = _listUserReminderResponse;
+        });
+
+      }
+
+
+      else {
+        Utils(context).showAlert(
+            context: context,
+            title: "",
+            child: Container(
+                height: 100, width: 100, child: NoInternetConnectionScreen()),
+            handler: () {
+              Navigator.pop(context);
+              fetch();
+            },
+            isCancel: false);
+      }
+
+
     });
+
+
+
   }
 
   @override
@@ -113,7 +140,10 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                         },
                       );
                     }),
-              ):NoRecordFoundScreen():NoRecordFoundScreen(),
+              ):NoRecordFoundScreen():NoRecordFoundScreen(
+                icon: FontAwesomeIcons.fileDownload,
+                msg: "Please Wait",
+              ),
               Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
@@ -153,7 +183,10 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                         },
                       );
                     }),
-              ):NoRecordFoundScreen():NoRecordFoundScreen(),
+              ):NoRecordFoundScreen():NoRecordFoundScreen(
+                icon: FontAwesomeIcons.fileDownload,
+                msg: "Please Wait",
+              ),
             ],
           ),
         ),

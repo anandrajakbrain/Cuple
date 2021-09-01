@@ -1,10 +1,13 @@
 import 'package:cuple_app/componets/backButton.dart';
+import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/wishlistContainer.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
+import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/userWishListResponse.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PartnerWishlist extends StatefulWidget {
   String partnerName="Jenny's";
@@ -16,15 +19,39 @@ class PartnerWishlist extends StatefulWidget {
 class _PartnerWishlistState extends State<PartnerWishlist> {
   UserWishListResponse userWishListResponse;
   fetch() async {
-    if(partnerData!=null) {
-      UserWishListResponse _userWishListResponse =
-      await Plugs(context).getPartnerWishList(
-          partnerID: partnerData.id.toString());
+    Utils(context).checkInternet().then((value) async {
+      if(value==true){
 
-      setState(() {
-        userWishListResponse = _userWishListResponse;
-      });
-    }
+
+        if(partnerData!=null) {
+          UserWishListResponse _userWishListResponse =
+          await Plugs(context).getPartnerWishList(
+              partnerID: partnerData.id.toString());
+
+          setState(() {
+            userWishListResponse = _userWishListResponse;
+          });
+        }
+      }
+
+
+      else {
+        Utils(context).showAlert(
+            context: context,
+            title: "",
+            child: Container(
+                height: 100, width: 100, child: NoInternetConnectionScreen()),
+            handler: () {
+              Navigator.pop(context);
+              fetch();
+            },
+            isCancel: false);
+      }
+
+
+    });
+
+
   }
 
   @override
@@ -57,7 +84,10 @@ class _PartnerWishlistState extends State<PartnerWishlist> {
               itemCount: userWishListResponse.data.length,
               itemBuilder: (context, index) {
                 return WishListContainer(isEven: true,isDelete: false,userWishListData: userWishListResponse.data[index],);
-              }):NoRecordFoundScreen():NoRecordFoundScreen(),
+              }):NoRecordFoundScreen():NoRecordFoundScreen(
+            icon: FontAwesomeIcons.fileDownload,
+            msg: "Please Wait",
+          ),
         ),
       ),
     );

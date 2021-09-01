@@ -2,6 +2,7 @@ import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
 import 'package:cuple_app/componets/customMenuDrawer.dart';
 import 'package:cuple_app/componets/ideasCardContainer.dart';
+import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
@@ -27,11 +28,37 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
   IdeasListResponse ideasListResponse;
 
   fetch() async {
-    IdeasListResponse _ideasListResponse = await Plugs(context).getIdeasList();
+    Utils(context).checkInternet().then((value) async {
+      if(value==true){
 
-    setState(() {
-      ideasListResponse = _ideasListResponse;
+        IdeasListResponse _ideasListResponse = await Plugs(context).getIdeasList();
+
+        setState(() {
+          ideasListResponse = _ideasListResponse;
+        });
+
+      }
+
+
+      else {
+        Utils(context).showAlert(
+            context: context,
+            title: "",
+            child: Container(
+                height: 100, width: 100, child: NoInternetConnectionScreen()),
+            handler: () {
+              Navigator.pop(context);
+              fetch();
+            },
+            isCancel: false);
+      }
+
+
     });
+
+
+
+
   }
 
   @override
@@ -47,16 +74,19 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
         ? Container(
             height: Utils(context).getMediaHeight(),
             child: Center(
-              child: GridView.builder(
-                  itemCount: ideasListResponse != null
-                      ? ideasListResponse.data.length
-                      : 0,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  itemBuilder: (BuildContext context, index) {
-                    return IdeasCardContainer(
-                        ideasData: ideasListResponse.data[index]);
-                    /*Container(
+              child: ideasListResponse != null
+                  ? ideasListResponse.data.length > 0
+                      ? GridView.builder(
+                          itemCount: ideasListResponse != null
+                              ? ideasListResponse.data.length
+                              : 0,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2),
+                          itemBuilder: (BuildContext context, index) {
+                            return IdeasCardContainer(
+                                ideasData: ideasListResponse.data[index]);
+                            /*Container(
                 height: Utils(context).getMediaHeight() * 0.6,
                 margin: EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
@@ -93,7 +123,14 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                   ),
                 ),
               );*/
-                  }),
+                          })
+                      : NoRecordFoundScreen(
+                          msg: "No Record Found",
+                        )
+                  : NoRecordFoundScreen(
+                      icon: FontAwesomeIcons.fileDownload,
+                      msg: "Please Wait",
+                    ),
             ),
           )
         : Scaffold(
@@ -145,7 +182,10 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                                   ideasData: ideasListResponse.data[index]);
                             })
                         : NoRecordFoundScreen()
-                    : NoRecordFoundScreen(),
+                    : NoRecordFoundScreen(
+                        icon: FontAwesomeIcons.fileDownload,
+                        msg: "Please Wait",
+                      ),
               ),
             ),
             drawer: CustomMenuDrawer(userDetails),

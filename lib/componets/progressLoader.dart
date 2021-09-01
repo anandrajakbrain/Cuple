@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomProgressLoader extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class _CustomProgressLoaderState extends State<CustomProgressLoader> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: CircularProgressIndicator(),
+      child:  SvgPicture.asset("assets/hearts.svg")//CircularProgressIndicator(),
     );
   }
 }

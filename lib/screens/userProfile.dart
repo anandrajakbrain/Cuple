@@ -378,7 +378,7 @@ class _UserProfileState extends State<UserProfile> {
                                                   .height *
                                                   0.02)),
                                       Text(
-                                        ":\t\tMale",
+                                        ":\t\t${userDetails.gender??""}",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w300),
@@ -390,7 +390,7 @@ class _UserProfileState extends State<UserProfile> {
                                                   .height *
                                                   0.02)),
                                       Text(
-                                        ":\t\t${userDetails.dob!=null?DateFormat("d MMM, y").format(DateTime.parse(userDetails.dob)):''}",
+                                        ":\t\t${userDetails.dob!=null? userDetails.dob: ''} ",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w300),

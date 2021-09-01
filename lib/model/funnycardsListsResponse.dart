@@ -34,7 +34,7 @@ class FunnyCardData {
   String status;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
+  var deletedAt;
 
   FunnyCardData(
       {this.id,

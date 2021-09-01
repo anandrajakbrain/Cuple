@@ -33,7 +33,7 @@ class NotificationListTypeData {
   String status;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
+  var deletedAt;
 
   NotificationListTypeData(
       {this.id,

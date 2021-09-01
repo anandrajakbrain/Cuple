@@ -60,13 +60,14 @@ class Plugs {
     }
   }
   Future<RegisterUserResponse> register(
-      {@required String email, @required String phone,@required String name}) async {
+      {@required String email, @required String phone,@required String name,String gender}) async {
     Utils(context).showProgressLoader();
     var body = {
       "email": email,
       "phone": phone,
       "name":name,
       "image":"",
+      "gender":gender,
       // "password":"0",
     };
     try {
@@ -214,7 +215,7 @@ class Plugs {
       throw Exception(e);
     }
   }
-  Future<UpdateUserResponse> updateUserDetailsWithFormData(var userId, var name, var email, var phone, var dob,File image,String mAnniversary,String lAnniversary) async {
+  Future<UpdateUserResponse> updateUserDetailsWithFormData(var userId, var name, var email, var phone, var dob,File image,String mAnniversary,String lAnniversary,String gender) async {
     Utils(context).showProgressLoader();
     var body = {
       "id": userId,
@@ -231,6 +232,7 @@ class Plugs {
       request.fields['email']=email.toString();
       request.fields['phone']=phone.toString();
       request.fields['dob']=dob.toString();
+      request.fields['gender']=gender.toString();
       if(mAnniversary!=null){
         request.fields['anniversary_date']=mAnniversary.toString();
       }
@@ -251,6 +253,8 @@ request.headers.addAll(getHeaders(token: token));
       var response=await http.Response.fromStream(reqestReturn);
 if(reqestReturn.statusCode==200){
   Navigator.pop(context);
+  print("<-------------------------------------->Updated Data Respopnse<----------------------------------->");
+  print(jsonDecode(response.body));
   return UpdateUserResponse.fromJson(jsonDecode(response.body));
 }else{
   throw Exception(jsonDecode(response.body)['message']);

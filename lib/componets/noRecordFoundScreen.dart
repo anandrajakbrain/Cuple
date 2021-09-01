@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class NoRecordFoundScreen extends StatefulWidget {
   String msg;
-  NoRecordFoundScreen({this.msg="No Record Found"});
+  IconData icon;
+  NoRecordFoundScreen({this.icon=FontAwesomeIcons.thermometerEmpty,this.msg="No Record Found"});
   @override
   _NoRecordFoundScreenState createState() => _NoRecordFoundScreenState();
 }
@@ -16,7 +17,7 @@ class _NoRecordFoundScreenState extends State<NoRecordFoundScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(FontAwesomeIcons.thermometerEmpty,size: Utils(context).getMediaWidth()*0.08,),
+          Icon(widget.icon,size: Utils(context).getMediaWidth()*0.08,),
 
           SizedBox(height: 10,),  Text(
             "${widget.msg}",

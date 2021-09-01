@@ -6,6 +6,7 @@ import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/home_screen.dart';
 import 'package:cuple_app/screens/login.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,5 +87,10 @@ class Utils {
     pref.clear();
     Navigator.pushAndRemoveUntil(
         context, MaterialPageRoute(builder: (context) => LoginScreen()), (Route<dynamic> route) => false);
+  }
+  Future <bool> checkInternet() async{
+    bool result=await DataConnectionChecker().hasConnection;
+    print("Has Connection $result");
+    return result;
   }
 }
