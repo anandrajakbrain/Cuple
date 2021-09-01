@@ -60,6 +60,7 @@ class User {
   String picture;
   String socialType;
   int partnerid;
+  var uploaded;
 
   User(
       {this.id,
@@ -96,6 +97,7 @@ class User {
         this.socialType,
         this.partnerid,
       this.gender,
+        this.uploaded,
       });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -133,6 +135,7 @@ class User {
     socialType = json['social_type'];
     partnerid = json['partnerid'];
     gender = json['gender'];
+    uploaded = json['uploaded'];
   }
 
   Map<String, dynamic> toJson() {
@@ -171,6 +174,7 @@ class User {
     data['social_type'] = this.socialType;
     data['partnerid'] = this.partnerid;
     data['gender'] = this.gender;
+    data['uploaded'] = this.uploaded;
     return data;
   }
 }

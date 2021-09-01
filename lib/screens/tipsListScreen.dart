@@ -41,7 +41,7 @@ class _TipsListScreenState extends State<TipsListScreen> {
             context: context,
             title: "",
             child: Container(
-                height: 100, width: 100, child: NoInternetConnectionScreen()),
+                height: 250, width: 150, child: NoInternetConnectionScreen()),
             handler: () {
               Navigator.pop(context);
               fetch();

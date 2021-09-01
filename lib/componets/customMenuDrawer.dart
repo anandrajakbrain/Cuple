@@ -49,7 +49,7 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                             ])),
                         child: userDetails.picture != "0"
                             ? Image.network(
-                          APP_ASSET_BASE_URL + userDetails.picture,
+                          userDetails.uploaded!=null? APP_ASSET_BASE_URL + userDetails.picture:userDetails.picture,
                           fit: BoxFit.cover,
                           // height: MediaQuery.of(context).size.height * 0.15,
                           // width: MediaQuery.of(context).size.height * 0.15,

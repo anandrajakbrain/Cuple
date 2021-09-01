@@ -227,8 +227,7 @@ class _EditProfileState extends State<EditProfile> {
                                     )
                                   : userDetails.picture != "0"
                                       ? Image.network(
-                                          APP_ASSET_BASE_URL +
-                                              userDetails.picture,
+                                userDetails.uploaded!=null? APP_ASSET_BASE_URL + userDetails.picture:userDetails.picture,
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height *

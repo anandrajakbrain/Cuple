@@ -230,10 +230,20 @@ class Plugs {
       request.fields['id']=userId.toString();
       request.fields['name']=name.toString();
       request.fields['email']=email.toString();
-      request.fields['phone']=phone.toString();
-      request.fields['dob']=dob.toString();
-      request.fields['gender']=gender.toString();
-      if(mAnniversary!=null){
+
+
+
+
+
+      if(phone!=null){
+        request.fields['phone']=phone.toString();
+      }
+      if(gender!=null){
+        request.fields['gender']=gender.toString();
+      }
+      if(dob!=null){
+        request.fields['dob']=dob.toString();
+      }if(mAnniversary!=null){
         request.fields['anniversary_date']=mAnniversary.toString();
       }
       if(lAnniversary!=null){

@@ -66,7 +66,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
+Widget nextWidget=Container(
+  color: APP_BAR_COLOR,
+);
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -74,14 +76,22 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+
     });
   }
+getWidget() async{
+    Widget temp;
+    temp=await Utils(context).checkUser();
+    setState(() {
+      nextWidget=temp;
+    });
 
+}
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getWidget();
   }
 
   @override
@@ -94,8 +104,9 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     // if (Utils(context).checkInternet() == true) {
       return SplashScreen(
-          seconds: 15,
-          navigateAfterFuture: Utils(context).checkUser(),
+          seconds: 20,
+          navigateAfterSeconds: nextWidget,
+          // navigateAfterFuture: Utils(context).checkUser(),
           // new LoginScreen(),
           // title: new Text(
           //   APP_NAME,

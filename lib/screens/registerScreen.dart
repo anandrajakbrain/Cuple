@@ -175,7 +175,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
-  Future<FirebaseUser> facebookLogin(BuildContext context) async {
+
   Future signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
@@ -196,55 +196,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
   //------------------------------------------------------------------------------------------------------
 
-  Future < FirebaseUser > facebookLogin(BuildContext context) async {
-    FirebaseUser currentUser;
-    // fbLogin.loginBehavior = FacebookLoginBehavior.webViewOnly;
-    // if you remove above comment then facebook login will take username and pasword for login in Webview
-    try {
-      final fb.FacebookLoginResult facebookLoginResult =
-          await fbLogin.logInWithReadPermissions(['email', 'public_profile']);
-      if (facebookLoginResult.status == fb.FacebookLoginStatus.loggedIn) {
-        fb.FacebookAccessToken facebookAccessToken =
-            facebookLoginResult.accessToken;
-      final FacebookLoginResult facebookLoginResult = await fbLogin
-          .logIn();
-      if (facebookLoginResult.status == FacebookLoginStatus.Success) {
-        FacebookAccessToken facebookAccessToken = facebookLoginResult
-            .accessToken;
-        final AuthCredential credential = FacebookAuthProvider.getCredential(
-            accessToken: facebookAccessToken.token);
-        final AuthResult user = await auth.signInWithCredential(credential);
-        assert(user.user.email != null);
-        assert(user.user.displayName != null);
-        assert(!user.user.isAnonymous);
-        assert(await user.user.getIdToken() != null);
-        currentUser = await auth.currentUser();
-        assert(user.user.uid == currentUser.uid);
-        print(currentUser.email);
-        VerifyOTPResponse verifyOTPResponse = await Plugs(context)
-            .loginWithSocialMedia("Facebook", currentUser.displayName,
-                currentUser.email, "0000000000", currentUser.photoUrl);
-        if (verifyOTPResponse.success == true) {
-          SharedPreferences prf = await SharedPreferences.getInstance();
-          prf.setString("user", jsonEncode(verifyOTPResponse.user));
-          prf.setString("token", verifyOTPResponse.accessToken);
-
-          print(verifyOTPResponse.toJson());
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
-        } else {
-          Utils(context).showMessage(
-            title: "Error",
-            child: Text(verifyOTPResponse.message),
-          );
-        }
-        return currentUser;
-      }
-    } catch (e) {
-      print(e);
-      return currentUser;
-    }
-  }
 
   void onLoginStatusChanged(bool isLoggedIn) {
     setState(() {
@@ -294,47 +245,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       print(message);
     });
   }*/
-  signInWithFacebook() async {
-    final fb = FacebookLogin();
-    // Log in
-    final res = await fb.logIn(permissions: [
-      FacebookPermission.publicProfile,
-      FacebookPermission.email,
-    ]);
 
-    // Check result status
-    switch (res.status) {
-      case FacebookLoginStatus.Success:
-      // The user is suceessfully logged in
-      // Send access token to server for validation and auth
-        final FacebookAccessToken accessToken = res.accessToken;
-        final AuthCredential authCredential = FacebookAuthProvider.getCredential(accessToken: accessToken.token);
-        final result = await FirebaseAuth.instance.signInWithCredential(authCredential);
-
-        // Get profile data from facebook for use in the app
-        final profile = await fb.getUserProfile();
-        print('Hello, ${profile.name}! You ID: ${profile.userId}');
-
-        // Get user profile image url
-        //final imageUrl = await getProfileImageUrl(width: 100);
-        //print('Your profile image: $imageUrl');
-
-        // fetch user email
-        final email = await fb.getUserEmail();
-        // But user can decline permission
-        if (email != null) print('And your email is $email');
-
-        break;
-
-      case FacebookLoginStatus.Cancel:
-      // In case the user cancels the login process
-        break;
-      case FacebookLoginStatus.Error:
-      // Login procedure failed
-        print('Error while log in: ${res.error}');
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

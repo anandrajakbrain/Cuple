@@ -39,7 +39,6 @@ dependencies:
   ff_navigation_bar:
   custom_switch:
   intl: ^0.17.0
-  flutter_facebook_auth:
   firebase_auth:
   google_sign_in:
   firebase_core:
@@ -48,6 +47,7 @@ dependencies:
   flutter_svg: ^0.22.0
   data_connection_checker: ^0.3.4
   flutter_facebook_auth: ^2.0.1
+  flutter_facebook_login: ^1.1.1
 
 
 dev_dependencies:
