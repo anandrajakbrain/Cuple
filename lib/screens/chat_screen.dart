@@ -77,11 +77,11 @@ class _ChatScreenState extends State<ChatScreen> {
                             padding: EdgeInsets.all(
                                 Utils(context).getMediaHeight() * 0.01),
                             child: Row(
-                              mainAxisAlignment: getMsgResponse.data[index].toId==userDetails.id.toString()
+                              mainAxisAlignment: getMsgResponse.data[index].toId.toString()==userDetails.id.toString()
                                   ? MainAxisAlignment.start
                                   : MainAxisAlignment.end,
                               children: [
-                                getMsgResponse.data[index].toId==userDetails.id.toString()
+                                getMsgResponse.data[index].toId.toString()==userDetails.id.toString()
                                     ? Flexible(
                                         child: ClipRRect(
                                           borderRadius:
@@ -95,7 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         ),
                                       )
                                     : Container(),
-                                getMsgResponse.data[index].toId==userDetails.id.toString()
+                                getMsgResponse.data[index].toId.toString()==userDetails.id.toString()
                                     ? Padding(
                                         padding: EdgeInsets.only(
                                             left: Utils(context)
@@ -104,22 +104,22 @@ class _ChatScreenState extends State<ChatScreen> {
                                       )
                                     : Container(),
                                 Column(
-                                  crossAxisAlignment:getMsgResponse.data[index].toId==userDetails.id.toString()
+                                  crossAxisAlignment:getMsgResponse.data[index].toId.toString()==userDetails.id.toString()
                                       ? CrossAxisAlignment.start
                                       : CrossAxisAlignment.end,
                                   children: [
                                     Container(
                                         decoration: BoxDecoration(
-                                            color: getMsgResponse.data[index].toId==userDetails.id.toString()
+                                            color: getMsgResponse.data[index].toId.toString()==userDetails.id.toString()
                                                 ? Colors.purpleAccent
                                                 : Colors.deepPurpleAccent,
                                             borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(10),
                                                 topRight: Radius.circular(10),
-                                                bottomLeft: getMsgResponse.data[index].toId==userDetails.id.toString()
+                                                bottomLeft: getMsgResponse.data[index].toId.toString()==userDetails.id.toString()
                                                     ? Radius.circular(0)
                                                     : Radius.circular(10),
-                                                bottomRight: getMsgResponse.data[index].toId==userDetails.id.toString()
+                                                bottomRight: getMsgResponse.data[index].toId.toString()==userDetails.id.toString()
                                                     ? Radius.circular(10)
                                                     : Radius.circular(0))),
                                         padding: EdgeInsets.all(
@@ -154,7 +154,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ),
                                   ],
                                 ),
-                                getMsgResponse.data[index].toId!=userDetails.id.toString()
+                                getMsgResponse.data[index].toId.toString()!=userDetails.id.toString()
                                     ? Padding(
                                         padding: EdgeInsets.only(
                                             left: Utils(context)
@@ -162,7 +162,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 0.015),
                                       )
                                     : Container(),
-                                getMsgResponse.data[index].toId!=userDetails.id.toString()
+                                getMsgResponse.data[index].toId.toString()!=userDetails.id.toString()
                                     ? Flexible(
                                         child: ClipRRect(
                                           borderRadius:

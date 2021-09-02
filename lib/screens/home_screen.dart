@@ -158,6 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               selectedIndex: selectedIndex,
               onSelectTab: (index) {
+                print(userDetails.id);
                 // if(index == 2){
                 //   Navigator.push(
                 //       context,
@@ -1320,7 +1321,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
         break;
       case 2:
-        if (partnerData != null) {
+        if (partnerData == null) {
           return ChatScreen(
             isbottom: true,
           );
