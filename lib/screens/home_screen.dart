@@ -50,6 +50,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  String _title = "Home";
   int selectedIndex = 0;
   Widget controlWidget;
   ListUserReminderResponse remindersListsResponse;
@@ -111,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               backgroundColor: APP_BAR_COLOR,
               title: Text(
-                "Home",
+                "$_title",
                 style: TextStyle(color: Colors.black),
               ),
               elevation: 0,
@@ -167,6 +168,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 // }
                 setState(() {
                   selectedIndex = index;
+                  if(selectedIndex == 1)
+                    _title = "Date Ideas";
+                  else if(selectedIndex == 3)
+                    _title = "Profile";
+                  else
+                    _title = "Home";
                   controlWidget = getWidget(index: selectedIndex);
                 });
               },
@@ -431,7 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(8.0),
                       margin: EdgeInsets.only(left: 10.0),
                       child: Text(
-                        "Reminders",
+                        "Dates to Remember",
                         style: TextStyle(
                           fontSize: Utils(context).getMediaWidth() * 0.04,
                           fontWeight: FontWeight.bold,
@@ -609,7 +616,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(8.0),
                       margin: EdgeInsets.only(left: 10.0),
                       child: Text(
-                        "Tips",
+                        "Love Tips",
                         style: TextStyle(
                           fontSize: Utils(context).getMediaWidth() * 0.04,
                           fontWeight: FontWeight.bold,

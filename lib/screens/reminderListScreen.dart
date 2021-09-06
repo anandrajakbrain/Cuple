@@ -71,7 +71,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
         leading: CustomBackButton(),
         backgroundColor: APP_BAR_COLOR,
         title: Text(
-          "Reminders",
+          "Dates to Remember",
           style: TextStyle(color: Colors.black),
         ),
         elevation: 0,

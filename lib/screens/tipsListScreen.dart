@@ -69,7 +69,7 @@ class _TipsListScreenState extends State<TipsListScreen> {
         leading: CustomBackButton(),
         backgroundColor: APP_BAR_COLOR,
         title: Text(
-          "Tips",
+          "Love Tips",
           style: TextStyle(color: Colors.black),
         ),
         actions: [
