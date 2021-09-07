@@ -79,13 +79,15 @@ class _TipsListScreenState extends State<TipsListScreen> {
       ),
       body: Container(
         child: Center(
-          child: tipsListResponse!=null?tipsListResponse.data.length>0?GridView.builder(
+          child: tipsListResponse!=null?tipsListResponse.data.length>0?
+          GridView.builder(
               itemCount: tipsListResponse!=null?tipsListResponse.data.length:0,
               gridDelegate:
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemBuilder: (BuildContext context, index) {
-                return TipsCardContainer(tipsData: tipsListResponse.data[index]);
-              }):NoRecordFoundScreen():NoRecordFoundScreen(icon: FontAwesomeIcons.fileDownload,msg: "Please Wait",),
+                return tipsListResponse.data[index].id == 2 ? TipsCardContainer(tipsData: tipsListResponse.data[index]) : Container();
+              }):NoRecordFoundScreen():NoRecordFoundScreen(icon: FontAwesomeIcons.fileDownload,msg: "Please Wait",
+          ),
         ),
       ),
     );

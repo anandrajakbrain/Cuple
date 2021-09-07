@@ -25,7 +25,7 @@ class _CreateNewReminderState extends State<CreateNewReminder> {
   RemindersListData remindersListData;
   DateTime selectedDate = DateTime.now();
 
-  getReminderName(String type) async {
+  getReminderName(int type) async {
     setState(() {
       remindersListsResponse = null;
       remindersListData = null;
@@ -197,7 +197,7 @@ class _CreateNewReminderState extends State<CreateNewReminder> {
                 InkWell(
                   onTap: () async {
                     if (_formKey.currentState.validate()) {
-creteReminder();
+                      creteReminder();
 
                       // Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerificationScreen()));
                     }

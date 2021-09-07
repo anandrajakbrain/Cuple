@@ -68,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.delayed(Duration(seconds: 1)).then((value) {
       getuserDetails().then((value) {
         getApis();
+        fetchReminders();
       });
     });
   }
@@ -211,7 +212,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   if(selectedIndex == 1)
                     _title = "Date Ideas";
                   else if(selectedIndex == 3) {
-                    fetchReminders();
                     _title = "Profile";
                   }
                   else
@@ -367,7 +367,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return Container(
+                    return ideasListResponse.data[index].id == 1 ? Container(
                       padding: EdgeInsets.all(
                           Utils(context).getMediaHeight() * 0.02),
                       width: Utils(context).getMediaWidth() * 0.8,
@@ -460,7 +460,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                    );
+                    ) : Container();
                   },
                 ),
               ),
@@ -695,7 +695,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return Container(
+                    return tipsListResponse.data[index].id == 2 ? Container(
                       padding: EdgeInsets.all(
                           Utils(context).getMediaHeight() * 0.02),
                       width: Utils(context).getMediaWidth() * 0.8,
@@ -761,7 +761,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                    );
+                    ) : Container();
                   },
                 ),
               ),
