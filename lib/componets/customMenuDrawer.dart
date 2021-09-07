@@ -5,7 +5,9 @@ import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/login.dart';
 import 'package:cuple_app/screens/myWishList.dart';
 import 'package:cuple_app/screens/partnerWishList.dart';
+import 'package:cuple_app/screens/searchPartnerScreen.dart';
 import 'package:cuple_app/screens/settings_screen.dart';
+import 'package:cuple_app/screens/tutorialListScreen.dart';
 import 'package:cuple_app/screens/userProfile.dart';
 import 'package:flutter/material.dart';
 
@@ -145,6 +147,36 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
           InkWell(
             onTap: () {
               Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SearchPartnerScreen()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Container(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey[400])),
+                        child: Icon(
+                          Icons.group,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    Text("Search My Partner")
+                  ],
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
                   MaterialPageRoute(builder: (context) => MyWishList()));
             },
             child: Padding(
@@ -234,6 +266,39 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                       ),
                     ),
                     Text("Settings")
+                  ],
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TutorialListScreen()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Container(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey[400])),
+                        child: Icon(
+                          Icons.lightbulb_outline_rounded,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    Text("Erotic Ideas"),
                   ],
                 ),
               ),
