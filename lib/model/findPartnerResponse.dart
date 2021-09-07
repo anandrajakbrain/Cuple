@@ -1,69 +1,134 @@
-class VerifyOTPResponse {
+class FindPartnerResponse {
   bool success;
+  Alldata alldata;
   String message;
-  User user;
-  String accessToken;
 
-  VerifyOTPResponse({this.success, this.message, this.user, this.accessToken});
+  FindPartnerResponse({this.success, this.alldata, this.message});
 
-  VerifyOTPResponse.fromJson(Map<String, dynamic> json) {
+  FindPartnerResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
+    alldata =
+    json['alldata'] != null ? new Alldata.fromJson(json['alldata']) : null;
     message = json['message'];
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
-    accessToken = json['access_token'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.user != null) {
-      data['user'] = this.user.toJson();
+    if (this.alldata != null) {
+      data['alldata'] = this.alldata.toJson();
     }
-    data['access_token'] = this.accessToken;
+    data['message'] = this.message;
     return data;
   }
 }
 
-class User {
+class Alldata {
+  int currentPage;
+  List<FindPartnerData> data;
+  String firstPageUrl;
+  int from;
+  int lastPage;
+  String lastPageUrl;
+  Null nextPageUrl;
+  String path;
+  int perPage;
+  Null prevPageUrl;
+  int to;
+  int total;
+
+  Alldata(
+      {this.currentPage,
+        this.data,
+        this.firstPageUrl,
+        this.from,
+        this.lastPage,
+        this.lastPageUrl,
+        this.nextPageUrl,
+        this.path,
+        this.perPage,
+        this.prevPageUrl,
+        this.to,
+        this.total});
+
+  Alldata.fromJson(Map<String, dynamic> json) {
+    currentPage = json['current_page'];
+    if (json['data'] != null) {
+      data = new List<FindPartnerData>();
+      json['data'].forEach((v) {
+        data.add(new FindPartnerData.fromJson(v));
+      });
+    }
+    firstPageUrl = json['first_page_url'];
+    from = json['from'];
+    lastPage = json['last_page'];
+    lastPageUrl = json['last_page_url'];
+    nextPageUrl = json['next_page_url'];
+    path = json['path'];
+    perPage = json['per_page'];
+    prevPageUrl = json['prev_page_url'];
+    to = json['to'];
+    total = json['total'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['current_page'] = this.currentPage;
+    if (this.data != null) {
+      data['data'] = this.data.map((v) => v.toJson()).toList();
+    }
+    data['first_page_url'] = this.firstPageUrl;
+    data['from'] = this.from;
+    data['last_page'] = this.lastPage;
+    data['last_page_url'] = this.lastPageUrl;
+    data['next_page_url'] = this.nextPageUrl;
+    data['path'] = this.path;
+    data['per_page'] = this.perPage;
+    data['prev_page_url'] = this.prevPageUrl;
+    data['to'] = this.to;
+    data['total'] = this.total;
+    return data;
+  }
+}
+
+class FindPartnerData {
   int id;
   String name;
-  String firstName;
-  String lastName;
-  String dob;
-  String middleName;
+  var firstName;
+  var lastName;
+  var dob;
+  var middleName;
   String phone;
   String email;
-  String username;
-  String firstDate;
-  String anniversaryDate;
-  String state;
-  String city;
-  String zip;
-  String emailVerifiedAt;
+  var gender;
+  var username;
+  var firstDate;
+  var anniversaryDate;
+  var state;
+  var city;
+  var zip;
+  var emailVerifiedAt;
   String password;
   String chat;
   String nofication;
-  String frequency;
-  String questionnaire;
-  String dateNights;
-  String msgFrequency;
+  var frequency;
+  var questionnaire;
+  var dateNights;
+  var msgFrequency;
   String status;
-  var gender;
-  String otp;
-  String forgotPasswordOtp;
-  String lastLogin;
+  var otp;
+  var forgotPasswordOtp;
+  var lastLogin;
   String rememberToken;
   String createdAt;
   String updatedAt;
-  String deletedAt;
+  var deletedAt;
   String picture;
-  String socialType;
-  int partnerid;
+  var socialType;
   var uploaded;
   String premium;
 
-  User(
+  FindPartnerData(
       {this.id,
         this.name,
         this.firstName,
@@ -72,6 +137,7 @@ class User {
         this.middleName,
         this.phone,
         this.email,
+        this.gender,
         this.username,
         this.firstDate,
         this.anniversaryDate,
@@ -96,13 +162,10 @@ class User {
         this.deletedAt,
         this.picture,
         this.socialType,
-        this.partnerid,
-      this.gender,
         this.uploaded,
-        this.premium,
-      });
+        this.premium});
 
-  User.fromJson(Map<String, dynamic> json) {
+  FindPartnerData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     firstName = json['first_name'];
@@ -111,6 +174,7 @@ class User {
     middleName = json['middle_name'];
     phone = json['phone'];
     email = json['email'];
+    gender = json['gender'];
     username = json['username'];
     firstDate = json['first_date'];
     anniversaryDate = json['anniversary_date'];
@@ -135,8 +199,6 @@ class User {
     deletedAt = json['deleted_at'];
     picture = json['picture'];
     socialType = json['social_type'];
-    partnerid = json['partnerid'];
-    gender = json['gender'];
     uploaded = json['uploaded'];
     premium = json['premium'];
   }
@@ -151,6 +213,7 @@ class User {
     data['middle_name'] = this.middleName;
     data['phone'] = this.phone;
     data['email'] = this.email;
+    data['gender'] = this.gender;
     data['username'] = this.username;
     data['first_date'] = this.firstDate;
     data['anniversary_date'] = this.anniversaryDate;
@@ -175,8 +238,6 @@ class User {
     data['deleted_at'] = this.deletedAt;
     data['picture'] = this.picture;
     data['social_type'] = this.socialType;
-    data['partnerid'] = this.partnerid;
-    data['gender'] = this.gender;
     data['uploaded'] = this.uploaded;
     data['premium'] = this.premium;
     return data;

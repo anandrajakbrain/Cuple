@@ -1,6 +1,8 @@
 import 'package:cuple_app/componets/partnerSearchProfileCard.dart';
 import 'package:cuple_app/configuration/app_config.dart';
+import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/findPartnerResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +14,7 @@ class SearchPartnerScreen extends StatefulWidget {
 class _SearchPartnerScreenState extends State<SearchPartnerScreen> {
   var _formKey = GlobalKey<FormState>();
   String searchPartner;
+  FindPartnerResponse findPartnerResponse;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,9 @@ class _SearchPartnerScreenState extends State<SearchPartnerScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: Utils(context).getMediaHeight()*0.06,),
+              SizedBox(
+                height: Utils(context).getMediaHeight() * 0.06,
+              ),
               Text(
                 "Find Your Partner",
                 style: TextStyle(
@@ -89,6 +94,7 @@ class _SearchPartnerScreenState extends State<SearchPartnerScreen> {
                   if (_formKey.currentState.validate()) {
                     // register();
                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerificationScreen()));
+                    getPartner();
                   }
                 },
                 child: SizedBox(
@@ -116,9 +122,20 @@ class _SearchPartnerScreenState extends State<SearchPartnerScreen> {
               Container(
                 height: Utils(context).getMediaHeight() * 0.60,
                 child: ListView.builder(
-                    itemCount: 6,
+                    itemCount: findPartnerResponse != null
+                        ? findPartnerResponse.alldata.data.length
+                        : 0,
                     itemBuilder: (context, index) {
-                      return PartnerProfileCard();
+                      return PartnerProfileCard(
+                        findPartnerData:
+                            findPartnerResponse.alldata.data[index],
+                        callback: (){
+                          setState(() {
+                            findPartnerResponse.alldata.data.removeAt(index);
+                          });
+
+                        },
+                      );
                     }),
               ),
             ],
@@ -126,5 +143,13 @@ class _SearchPartnerScreenState extends State<SearchPartnerScreen> {
         ),
       ),
     );
+  }
+
+  getPartner() async {
+    FindPartnerResponse _findPartnerResponse =
+        await Plugs(context).findPartner(search_key: searchPartner);
+    setState(() {
+      findPartnerResponse = _findPartnerResponse;
+    });
   }
 }

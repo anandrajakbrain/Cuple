@@ -25,4 +25,8 @@ const String GET_MSG=APP_BASE_URL+"get-msg?user_id=";
 const String GET_USER_PARTNER_DETAIL=APP_BASE_URL+"partner?user_id=";
 const String SOCIAL_LOGIN=APP_BASE_URL+"social-login";
 const String SUGGESSION_BOOK=APP_BASE_URL+"suggesion-book";
+const String FIND_PARTNER=APP_BASE_URL+"find/partner";
+const String SEND_PARTNER_REQUEST=APP_BASE_URL+"send-partner-request";
+const String CANCEL_PARTNER_REQUEST=APP_BASE_URL+"cancel-partner-request?match_id=";
+const String GET_PARTNER_REQUEST=APP_BASE_URL+"get-partner-request?uid=";
 

@@ -5,9 +5,11 @@ import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/createNewReminderResponse.dart';
 import 'package:cuple_app/model/deleteWishListResponse.dart';
+import 'package:cuple_app/model/findPartnerResponse.dart';
 import 'package:cuple_app/model/funnycardsListsResponse.dart';
 import 'package:cuple_app/model/getMsgResponse.dart';
 import 'package:cuple_app/model/getOTPResponse.dart';
+import 'package:cuple_app/model/getPartnerRequestResponse.dart';
 import 'package:cuple_app/model/getUserPartnerDetailsResponse.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
@@ -16,7 +18,9 @@ import 'package:cuple_app/model/notificationsListsResponse.dart';
 import 'package:cuple_app/model/registerUserResponse.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
 import 'package:cuple_app/model/sendMsgResponse.dart';
+import 'package:cuple_app/model/sendPartnerRequestResponse.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
+import 'package:cuple_app/model/tutorialsListsResponse.dart';
 import 'package:cuple_app/model/userWishListResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/updateUserResponse.dart';
@@ -78,7 +82,14 @@ class Plugs {
         Navigator.pop(context);
         return RegisterUserResponse.fromJson(jsonDecode(response.body));
       } else {
-        throw Exception(response.body);
+        var temp=jsonDecode(response.body);
+        if(temp['message'].containsKey("email")){
+          throw Exception(temp['message']['email'][0]);
+        }else if(temp['message'].containsKey("phone")) {
+          throw Exception(temp['message']['phone'][0]);
+        }else{
+          throw Exception(temp['message']);
+        }
       }
     } catch (e, s) {
       Navigator.pop(context);
@@ -500,6 +511,32 @@ if(reqestReturn.statusCode==200){
     }
   }
 
+  Future<TutorialsListsResponse> getTutorialList() async {
+    Utils(context).showProgressLoader();
+
+    try {
+      http.Response response =
+          await http.get(TUTORIALS_LIST, headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return TutorialsListsResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+
   Future<FunnycardsListsResponse> getFunnyCards({@required String type}) async {
     Utils(context).showProgressLoader();
 
@@ -778,5 +815,126 @@ var body={
       'accept': 'application/json; charset=UTF-8',
       if (token != null) "authorization": "Bearer " + token
     };
+  }
+
+
+
+
+  /*------------------------------------PARTNER---------------------*/
+  Future<FindPartnerResponse> findPartner({String search_key}) async {
+    Utils(context).showProgressLoader();
+
+    try {
+      var body={
+        "search_key":search_key,
+      };
+      http.Response response = await http.post(
+          FIND_PARTNER,
+          body: body,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return FindPartnerResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+  Future<SendPartnerRequestResponse> sendPartnerRequest({String userId,String friendId}) async {
+    Utils(context).showProgressLoader();
+
+    try {
+
+      http.Response response = await http.post(
+          SEND_PARTNER_REQUEST+"?from_id=$userId&to_id=$friendId",
+          // body: body,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return SendPartnerRequestResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+  Future<SendPartnerRequestResponse> cancelPartnerRequest({String matchId}) async {
+    Utils(context).showProgressLoader();
+
+    try {
+
+      http.Response response = await http.delete(
+          CANCEL_PARTNER_REQUEST+matchId,
+          // body: body,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return SendPartnerRequestResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+  Future<GetPartnerRequestResponse> getFriendRequest() async {
+    Utils(context).showProgressLoader();
+
+    try {
+      /*var body={
+        "search_key":search_key,
+      };*/
+      http.Response response = await http.post(
+          GET_PARTNER_REQUEST+userDetails.id.toString(),
+          // body: body,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return GetPartnerRequestResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
   }
 }

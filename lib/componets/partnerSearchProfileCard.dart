@@ -1,8 +1,17 @@
 import 'package:cuple_app/componets/friendRequestCard.dart';
+import 'package:cuple_app/configuration/APIs.dart';
+import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/findPartnerResponse.dart';
+import 'package:cuple_app/model/sendPartnerRequestResponse.dart';
 import 'package:flutter/material.dart';
 
 class PartnerProfileCard extends StatefulWidget {
+  FindPartnerData findPartnerData;
+  final callback;
+
+  PartnerProfileCard({@required this.findPartnerData, @required this.callback});
+
   @override
   _PartnerProfileCardState createState() => _PartnerProfileCardState();
 }
@@ -25,22 +34,29 @@ class _PartnerProfileCardState extends State<PartnerProfileCard> {
       padding: EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Align(
-            child: Container(
-              child: Icon(Icons.close_rounded),
-              padding: EdgeInsets.all(5.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  50.0,
+          InkWell(
+            onTap: () {
+              widget.callback();
+            },
+            child: Align(
+              child: Container(
+                child: Icon(Icons.close_rounded),
+                padding: EdgeInsets.all(5.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    50.0,
+                  ),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey[300],
+                        blurRadius: 1,
+                        spreadRadius: 1),
+                  ],
                 ),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey[300], blurRadius: 1, spreadRadius: 1),
-                ],
               ),
+              alignment: Alignment.topRight,
             ),
-            alignment: Alignment.topRight,
           ),
           Row(
             children: [
@@ -53,7 +69,14 @@ class _PartnerProfileCardState extends State<PartnerProfileCard> {
                   shape: BoxShape.circle,
                   // borderRadius: BorderRadius.circular(50.0),
                   image: DecorationImage(
-                    image: AssetImage("assets/profile_user.jpg"),
+                    image: widget.findPartnerData.picture != "0"
+                        ? NetworkImage(
+                            widget.findPartnerData.uploaded != null
+                                ? APP_ASSET_BASE_URL +
+                                    widget.findPartnerData.picture
+                                : widget.findPartnerData.picture,
+                          )
+                        : AssetImage("assets/profile_user.jpg"),
                   ),
                 ),
 
@@ -61,7 +84,7 @@ class _PartnerProfileCardState extends State<PartnerProfileCard> {
               ),
               Expanded(
                 child: Text(
-                  "Jessica Chastain",
+                  "${widget.findPartnerData.name ?? ''}",
                   style: TextStyle(
                       fontSize: Utils(context).getMediaWidth() * 0.05),
                   softWrap: true,
@@ -76,9 +99,10 @@ class _PartnerProfileCardState extends State<PartnerProfileCard> {
           ),
           InkWell(
             onTap: () {
+              sendRequest();
               Utils(context).showMessage(
                 title: "Jessica Has send You Friend Request",
-              child:FriendRequestCard() ,
+                child: FriendRequestCard(),
               );
               // if (_formKey.currentState.validate()) {
               //   // register();
@@ -110,5 +134,15 @@ class _PartnerProfileCardState extends State<PartnerProfileCard> {
         ],
       ),
     );
+  }
+
+  sendRequest() async {
+    SendPartnerRequestResponse sendPartnerRequestResponse = await Plugs(context)
+        .sendPartnerRequest(
+            userId: userDetails.id.toString(),
+            friendId: widget.findPartnerData.id.toString());
+    Utils(context).showMessage(
+        title: "", child: Text(sendPartnerRequestResponse.message));
+    widget.callback();
   }
 }
