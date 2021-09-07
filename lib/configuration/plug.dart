@@ -14,6 +14,7 @@ import 'package:cuple_app/model/listUserReminderResponse.dart';
 import 'package:cuple_app/model/loginResponse.dart';
 import 'package:cuple_app/model/notificationsListsResponse.dart';
 import 'package:cuple_app/model/registerUserResponse.dart';
+import 'package:cuple_app/model/reminder_type_response.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
 import 'package:cuple_app/model/sendMsgResponse.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
@@ -437,7 +438,7 @@ if(reqestReturn.statusCode==200){
   }
 
   Future<RemindersListsResponse> getreminderTypeList(
-      {@required String type}) async {
+      {@required int type}) async {
     Utils(context).showProgressLoader();
 
     try {
@@ -463,16 +464,44 @@ if(reqestReturn.statusCode==200){
     }
   }
 
+  Future<RemindersTypeResponse> getreminderType() async {
+    Utils(context).showProgressLoader();
+
+    try {
+      http.Response response = await http.get(REMINDER_TYPE,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return RemindersTypeResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+
+
   Future<CreateNewReminderResponse> createNewReminder(
       {@required String category,
       RemindersListData remindersListData,
-      String date}) async {
+      String date, String name}) async {
     Utils(context).showProgressLoader();
     var body = {
       "user_id": userDetails.id.toString(),
       "reminder_id": remindersListData.id.toString(),
       "date": date,
-      "status": "Active"
+      "status": "Active",
+      "name": name
       // "password": password,
     };
     try {

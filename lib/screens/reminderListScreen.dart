@@ -8,6 +8,7 @@ import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
+import 'package:cuple_app/model/reminder_type_response.dart';
 import 'package:cuple_app/screens/createNewReminder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +21,35 @@ class ReminderListScreen extends StatefulWidget {
 
 class _ReminderListScreenState extends State<ReminderListScreen> {
   ListUserReminderResponse listUserReminderResponse;
+  RemindersTypeResponse remindersTypeResponse;
+  RemindersTypeData remindersTypeData;
+  List<String> reminderTypeList = List();
+  var reminderIdsObj = {};
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 2)).then((value) => fetch());
+    Future.delayed(Duration(seconds: 2)).then((value){
+      fetch();
+      getReminderType();
+    });
+  }
+
+  getReminderType() async {
+    setState(() {
+      remindersTypeResponse = null;
+      remindersTypeData = null;
+    });
+    RemindersTypeResponse _remindersListsResponse =
+    await Plugs(context).getreminderType();
+    setState(() {
+      remindersTypeResponse = _remindersListsResponse;
+      for(int i = 0; i < remindersTypeResponse.data.length; i++){
+         reminderTypeList.add(remindersTypeResponse.data[i].name);
+         reminderIdsObj[remindersTypeResponse.data[i].name] = remindersTypeResponse.data[i].id;
+      }
+    });
   }
 
   fetch() async {
@@ -99,6 +123,56 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
         child: Center(
           child: Column(
             children: [
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: reminderTypeList.length,
+                itemBuilder: (BuildContext context, int index){
+                  return Column(
+                    children: [
+                      Text(
+                        "${reminderTypeList[index]}",
+                        style: TextStyle(
+                          fontSize: Utils(context).getMediaWidth() * 0.04,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      listUserReminderResponse!=null? listUserReminderResponse.data
+                          .where((element) => element.reminderId == 1)
+                          .toList()
+                          .length>0?  Flexible(
+                        child: GridView.builder(
+                            controller: ScrollController(),
+                            itemCount:listUserReminderResponse!=null? listUserReminderResponse.data
+                                .where((element) => element.reminderId == 1)
+                                .toList()
+                                .length:0,
+
+                            // physics: NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: Utils(context).getMediaHeight() /
+                                  Utils(context).getMediaWidth(),
+                              // childAspectRatio:10/10,
+                            ),
+                            itemBuilder: (BuildContext context, index) {
+                              return ReminderCard(
+                                userListReminderData: listUserReminderResponse.data
+                                    .where(
+                                        (element) => element.reminderId == 1)
+                                    .toList()[index],
+                                handlerCall: (){
+                                  fetch();
+                                },
+                              );
+                            }),
+                      ):NoRecordFoundScreen():NoRecordFoundScreen(
+                        icon: FontAwesomeIcons.fileDownload,
+                        msg: "Please Wait",
+                      ),
+                    ],
+                  );
+                },
+              ),
               Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
@@ -113,12 +187,13 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                     ),
                   )),
               listUserReminderResponse!=null? listUserReminderResponse.data
-                  .where((element) => element.category == "Anniversary")
+                  .where((element) => element.reminderId == 1)
                   .toList()
                   .length>0?  Flexible(
                 child: GridView.builder(
+                  controller: ScrollController(),
                     itemCount:listUserReminderResponse!=null? listUserReminderResponse.data
-                        .where((element) => element.category == "Anniversary")
+                        .where((element) => element.reminderId == 1)
                         .toList()
                         .length:0,
 
@@ -133,7 +208,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                       return ReminderCard(
                         userListReminderData: listUserReminderResponse.data
                             .where(
-                                (element) => element.category == "Anniversary")
+                                (element) => element.reminderId == 1)
                             .toList()[index],
                         handlerCall: (){
                           fetch();
@@ -158,12 +233,12 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                     ),
                   )),
               listUserReminderResponse!=null? (listUserReminderResponse.data
-                  .where((element) => element.category == "Celebration")
+                  .where((element) => element.reminderId == 2)
                   .toList()
                   .length>0) ?Flexible(
                 child: GridView.builder(
                     itemCount: listUserReminderResponse!=null? listUserReminderResponse.data
-                        .where((element) => element.category == "Celebration")
+                        .where((element) => element.reminderId == 2)
                         .toList()
                         .length:0,
                     // shrinkWrap: false,
@@ -176,7 +251,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                     itemBuilder: (BuildContext context, index) {
                       return ReminderCard(userListReminderData: listUserReminderResponse.data
                           .where(
-                              (element) => element.category == "Celebration")
+                              (element) => element.reminderId == 2)
                           .toList()[index],
                         handlerCall: (){
                           fetch();
@@ -191,6 +266,42 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  getRerminder(BuildContext context){
+    return listUserReminderResponse!=null? listUserReminderResponse.data
+        .where((element) => element.reminderId == 1)
+        .toList()
+        .length>0?  Flexible(
+      child: GridView.builder(
+          controller: ScrollController(),
+          itemCount:listUserReminderResponse!=null? listUserReminderResponse.data
+              .where((element) => element.reminderId == 1)
+              .toList()
+              .length:0,
+
+          // physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: Utils(context).getMediaHeight() /
+                Utils(context).getMediaWidth(),
+            // childAspectRatio:10/10,
+          ),
+          itemBuilder: (BuildContext context, index) {
+            return ReminderCard(
+              userListReminderData: listUserReminderResponse.data
+                  .where(
+                      (element) => element.reminderId == 1)
+                  .toList()[index],
+              handlerCall: (){
+                fetch();
+              },
+            );
+          }),
+    ):NoRecordFoundScreen():NoRecordFoundScreen(
+      icon: FontAwesomeIcons.fileDownload,
+      msg: "Please Wait",
     );
   }
 }

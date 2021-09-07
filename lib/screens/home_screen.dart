@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ListUserReminderResponse remindersListsResponse;
   IdeasListResponse ideasListResponse;
   TipsListResponse tipsListResponse;
+  ListUserReminderResponse listUserReminderResponse;
 
   @override
   void initState() {
@@ -75,6 +76,41 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     // prf.setString("user", jsonEncode(verifyOTPResponse.user));
+  }
+
+  fetchReminders() async {
+    Utils(context).checkInternet().then((value) async {
+      if(value==true){
+
+
+        ListUserReminderResponse _listUserReminderResponse = await Plugs(context)
+            .listUserReminderList(userId: userDetails.id.toString());
+
+        setState(() {
+          listUserReminderResponse = _listUserReminderResponse;
+        });
+
+      }
+
+
+      else {
+        Utils(context).showAlert(
+            context: context,
+            title: "",
+            child: Container(
+                height: 250, width: 150, child: NoInternetConnectionScreen()),
+            handler: () {
+              Navigator.pop(context);
+              fetchReminders();
+            },
+            isCancel: false);
+      }
+
+
+    });
+
+
+
   }
 
   @override
@@ -168,13 +204,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 // }
                 setState(() {
                   selectedIndex = index;
+                  controlWidget = getWidget(index: selectedIndex);
                   if(selectedIndex == 1)
                     _title = "Date Ideas";
-                  else if(selectedIndex == 3)
+                  else if(selectedIndex == 3) {
+                    fetchReminders();
                     _title = "Profile";
+                  }
                   else
                     _title = "Home";
-                  controlWidget = getWidget(index: selectedIndex);
                 });
               },
               items: [
@@ -1014,14 +1052,34 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.02)),
-              Container(
-                child: Text(
-                  " Anniversary",
-                  style: TextStyle(
-                    fontSize: Utils(context).getMediaWidth() * 0.04,
-                    fontWeight: FontWeight.bold,
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Text(
+                      " Dates to Remember",
+                      style: TextStyle(
+                        fontSize: Utils(context).getMediaWidth() * 0.04,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextButton.icon(
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(fontSize: 15),
+                      ),
+                      icon: Icon(Icons.add_circle_outline_outlined),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CreateNewReminder()));//.then((value) => fetch());
+                      },
+                      label: const Text('Create New'),
+                    ),
+                  ),
+                ],
               ),
               Padding(
                   padding: EdgeInsets.only(
@@ -1035,90 +1093,77 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
                             colors: [Color(0XFFE556EB), Color(0XFF5E08B3)])),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.height * 0.03),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Container(
+                      height: Utils(context).getMediaHeight() * 0.2,
+                      width: double.infinity,
+                      child: ListView.builder(
+                        controller: ScrollController(),
+                        shrinkWrap: true,
+                        itemCount: listUserReminderResponse != null ? listUserReminderResponse.data.length:0,
+                        itemBuilder: (BuildContext context, int index){
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                  Text(
-                                    "Marriage Anniversary",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                  Text(
-                                    "Love Anniversary",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                  Text(
-                                    ":\t\t${userDetails.anniversaryDate ?? ''}",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                  Text(
-                                    ":\t\t${userDetails.firstDate ?? ''}",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                ],
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                    MediaQuery.of(context).size.height * 0.03),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                top: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                    0.02)),
+                                        Text(
+                                          "${listUserReminderResponse.data[index].name}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w300),
+                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                top: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                    0.02)),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                top: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                    0.02)),
+                                        Text(
+                                          ":\t\t${listUserReminderResponse.data[index].date}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w300),
+                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                top: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                    0.02)),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               )
                             ],
-                          ),
-                        )
-                      ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -1126,118 +1171,6 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.02)),
-              Container(
-                child: Text(
-                  " Celebration",
-                  style: TextStyle(
-                    fontSize: Utils(context).getMediaWidth() * 0.04,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Padding(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.0)),
-              Container(
-                child: Card(
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.height * 0.03),
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Color(0XFFE556EB), Color(0XFF5E08B3)])),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.height * 0.03),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                  Text(
-                                    "Dog's Birthday",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                  Text(
-                                    "Connors Birthday",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                  Text(
-                                    ":\t\t13 Jun, 2014",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                  Text(
-                                    ":\t\t13 Jun, 1994",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02)),
-                                ],
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.01)),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
