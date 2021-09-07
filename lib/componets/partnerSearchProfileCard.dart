@@ -100,10 +100,7 @@ class _PartnerProfileCardState extends State<PartnerProfileCard> {
           InkWell(
             onTap: () {
               sendRequest();
-              Utils(context).showMessage(
-                title: "Jessica Has send You Friend Request",
-                child: FriendRequestCard(),
-              );
+
               // if (_formKey.currentState.validate()) {
               //   // register();
               //   // Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerificationScreen()));

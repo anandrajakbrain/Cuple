@@ -6,6 +6,7 @@ import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
 import 'package:cuple_app/componets/customMenuDrawer.dart';
+import 'package:cuple_app/componets/friendRequestCard.dart';
 import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/reminderCard.dart';
@@ -14,6 +15,7 @@ import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/createNewReminderResponse.dart';
+import 'package:cuple_app/model/getPartnerRequestResponse.dart';
 import 'package:cuple_app/model/getUserPartnerDetailsResponse.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
@@ -56,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ListUserReminderResponse remindersListsResponse;
   IdeasListResponse ideasListResponse;
   TipsListResponse tipsListResponse;
+  GetPartnerRequestResponse getPartnerRequestResponse;
 
   @override
   void initState() {
@@ -1439,5 +1442,14 @@ class _HomeScreenState extends State<HomeScreen> {
       );
       ;
     }
+  }
+  getfrendRequest() async{
+    GetPartnerRequestResponse _getPartnerRequestResponse=await Plugs(context).getFriendRequest();
+    FriendRequestData friendRequestData=_getPartnerRequestResponse.date.where((element) => element.invitationStatus=="pending").first;
+    Utils(context).showMessage(
+      title: "Jessica Has send You Friend Request",
+      child: FriendRequestCard(),
+    );
+
   }
 }

@@ -1,7 +1,9 @@
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/getPartnerRequestResponse.dart';
 import 'package:flutter/material.dart';
 
 class FriendRequestCard extends StatefulWidget {
+  FriendRequestData friendRequestData;
   @override
   _FriendRequestCardState createState() => _FriendRequestCardState();
 }
