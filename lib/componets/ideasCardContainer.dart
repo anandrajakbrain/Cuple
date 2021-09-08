@@ -15,6 +15,20 @@ class IdeasCardContainer extends StatefulWidget {
 }
 
 class _IdeasCardContainerState extends State<IdeasCardContainer> {
+
+  String parseContent = "";
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      parseContent = Utils(context)
+          .parseHtmlString(
+          widget.ideasData.content
+          .toString())
+          .toString();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -68,7 +82,7 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
           footer: Container(
             padding: EdgeInsets.all(8.0),
             child: Text(
-            Utils(context).parseHtmlString(widget.ideasData.content.toString()).toString() ,
+              parseContent.length < 25 ? parseContent : parseContent.substring(0, 20)+".....",
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: Utils(context).getMediaWidth() * 0.05,

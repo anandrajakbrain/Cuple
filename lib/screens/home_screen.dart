@@ -7,6 +7,7 @@ import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
 import 'package:cuple_app/componets/customMenuDrawer.dart';
 import 'package:cuple_app/componets/friendRequestCard.dart';
+import 'package:cuple_app/componets/ideasCardContainer.dart';
 import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/reminderCard.dart';
@@ -78,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       userDetails = User.fromJson(jsonDecode(prf.getString("user")));
     });
-
+  print(jsonDecode(prf.getString("user")).toString()+"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
     // prf.setString("user", jsonEncode(verifyOTPResponse.user));
   }
 
@@ -339,7 +340,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(8.0),
                           margin: EdgeInsets.only(left: 10.0),
                           child: Text(
                             "See All",
@@ -367,98 +367,144 @@ class _HomeScreenState extends State<HomeScreen> {
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return ideasListResponse.data[index].id == 1 ? Container(
-                      padding: EdgeInsets.all(
-                          Utils(context).getMediaHeight() * 0.02),
-                      width: Utils(context).getMediaWidth() * 0.8,
-                      margin: EdgeInsets.all(12.0),
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            Color(0XFFE556EB),
-                            Color(0XFF5E08B3),
-                          ]),
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: [
-                            BoxShadow(
-                              spreadRadius: 2,
-                              color: Colors.grey[300],
-                              blurRadius: 1,
-                            )
-                          ]),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Best Date Ideas",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize:
-                                    Utils(context).getMediaWidth() * 0.035),
-                          ),
-                          SizedBox(
-                            height: Utils(context).getMediaHeight() * 0.02,
-                          ),
-                          Text(
-                            Utils(context)
-                                .parseHtmlString(ideasListResponse
-                                    .data[index].content
-                                    .toString())
-                                .toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                    Utils(context).getMediaWidth() * 0.03),
-                          ),
-                          SizedBox(
-                            height: Utils(context).getMediaHeight() * 0.02,
-                          ),
-                          InkWell(
-                            onTap: () async{
-
-                              try {
-                                var body = {
-                                  "user_id": userDetails.id.toString(),
-                                  "suggesion_id": ideasListResponse.data[index].id.toString(),
-                                };
-                                Utils(context).showProgressLoader();
-                                http.Response response =
-                                await http.post(
-                                    SUGGESSION_BOOK, headers: Plugs(context).getHeaders(), body: body);
-                                if (response.statusCode == 200) {
-                                  print(response.body);
-                                  Navigator.pop(context);
-                                  Utils(context).showMessage(title: "Success",child: Text(jsonDecode(response.body)['message']));
-                                  // return CreateNewReminderResponse.fromJson(
-                                  //     jsonDecode(response.body));
-                                } else {
-                                  throw Exception(jsonDecode(response.body)['message']);
-                                }
-                              }catch(e,s){
-                                Navigator.pop(context);
-                                Utils(context).showMessage(title: "error",child: Text(e));
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  Color(0XFF2487EC),
-                                  Color(0XFF663DDF),
-                                ]),
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: Text(
-                                "BOOK FOR US",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize:
-                                        Utils(context).getMediaWidth() * 0.03),
+                    String parseContent = Utils(context)
+                        .parseHtmlString(ideasListResponse
+                        .data[index].content
+                        .toString())
+                        .toString();
+                    return ideasListResponse.data[index].id == 1 ? GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  WebViewIdea(ideasListResponse.data[index].link),
+                            ));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(
+                            Utils(context).getMediaHeight() * 0.01),
+                        width: Utils(context).getMediaWidth() * 0.8,
+                        margin: EdgeInsets.all(12.0),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [
+                              Color(0XFFE556EB),
+                              Color(0XFF5E08B3),
+                            ]),
+                            borderRadius: BorderRadius.circular(8.0),
+                            boxShadow: [
+                              BoxShadow(
+                                spreadRadius: 2,
+                                color: Colors.grey[300],
+                                blurRadius: 1,
+                              )
+                            ]),
+                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.only(top: 10.0, bottom: 8.0),
+                                child: ideasListResponse
+                                    .data[index].image!=null?Image.network(
+                                  "${APP_ASSET_BASE_URL+ ideasListResponse
+                                      .data[index].image}",
+                                  // fit: BoxFit.cover,
+                                  height: Utils(context).getMediaHeight() * 0.14,
+                                  //width: 1,
+                                  errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                                    return Image.asset(
+                                      "assets/ideaImg2.png",
+                                      // fit: BoxFit.cover,
+                                      height: Utils(context).getMediaHeight() * 0.14,
+                                      //width: 1,
+                                    );
+                                  },
+                                ):Image.asset(
+                                  "assets/ideaImg2.png",
+                                  // fit: BoxFit.cover,
+                                  height: Utils(context).getMediaHeight() * 0.14,
+                                  //width: 1,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                            Padding(padding: const EdgeInsets.all(5.0),),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "${ideasListResponse
+                                        .data[index].name
+                                        .toString()}",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            Utils(context).getMediaWidth() * 0.035),
+                                  ),
+                                  SizedBox(
+                                    height: Utils(context).getMediaHeight() * 0.01,
+                                  ),
+                                  Text(
+                                    parseContent.length < 60 ? parseContent : parseContent.substring(0, 55)+".....",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                            Utils(context).getMediaWidth() * 0.03),
+                                  ),
+                                  SizedBox(
+                                    height: Utils(context).getMediaHeight() * 0.01,
+                                  ),
+                                  InkWell(
+                                    onTap: () async{
+
+                                      try {
+                                        var body = {
+                                          "user_id": userDetails.id.toString(),
+                                          "suggesion_id": ideasListResponse.data[index].id.toString(),
+                                        };
+                                        Utils(context).showProgressLoader();
+                                        http.Response response =
+                                        await http.post(
+                                            SUGGESSION_BOOK, headers: Plugs(context).getHeaders(), body: body);
+                                        if (response.statusCode == 200) {
+                                          print(response.body);
+                                          Navigator.pop(context);
+                                          Utils(context).showMessage(title: "Success",child: Text(jsonDecode(response.body)['message']));
+                                          // return CreateNewReminderResponse.fromJson(
+                                          //     jsonDecode(response.body));
+                                        } else {
+                                          throw Exception(jsonDecode(response.body)['message']);
+                                        }
+                                      }catch(e,s){
+                                        Navigator.pop(context);
+                                        Utils(context).showMessage(title: "error",child: Text(e));
+                                      }
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(colors: [
+                                          Color(0XFF2487EC),
+                                          Color(0XFF663DDF),
+                                        ]),
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: Text(
+                                        "BOOK FOR US",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                                Utils(context).getMediaWidth() * 0.03),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ) : Container();
                   },
@@ -486,10 +532,28 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: TextButton.icon(
+                        style: TextButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 15),
+                        ),
+                        icon: Icon(Icons.add_circle_outline_outlined),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreateNewReminder())).then((value){
+                            getApis();
+                            fetchReminders();
+                          });
+                        },
+                        label: const Text('Create New'),
+                      ),
+                    ),
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(8.0),
                           margin: EdgeInsets.only(left: 10.0),
                           child: Text(
                             "See All",
@@ -584,7 +648,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: Utils(context).getMediaHeight() * 0.02,
                             ),
                             Text(
-                              "To Celebrate Anniversary",
+                              "To Celebrate ${remindersListsResponse.data[index].name}",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.black,
@@ -667,7 +731,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(8.0),
                           margin: EdgeInsets.only(left: 10.0),
                           child: Text(
                             "See All",
@@ -695,71 +758,116 @@ class _HomeScreenState extends State<HomeScreen> {
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return tipsListResponse.data[index].id == 2 ? Container(
-                      padding: EdgeInsets.all(
-                          Utils(context).getMediaHeight() * 0.02),
-                      width: Utils(context).getMediaWidth() * 0.8,
-                      margin: EdgeInsets.all(12.0),
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            Color(0XFF9250E7),
-                            Color(0XFFC55E3E),
-                          ]),
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: [
-                            BoxShadow(
-                              spreadRadius: 2,
-                              color: Colors.grey[300],
-                              blurRadius: 1,
-                            )
-                          ]),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Best Date Tips",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize:
-                                    Utils(context).getMediaWidth() * 0.035),
-                          ),
-                          SizedBox(
-                            height: Utils(context).getMediaHeight() * 0.02,
-                          ),
-                          Text(
-                            Utils(context)
-                                .parseHtmlString(tipsListResponse
-                                    .data[index].content
-                                    .toString())
-                                .toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                    Utils(context).getMediaWidth() * 0.03),
-                          ),
-                          SizedBox(
-                            height: Utils(context).getMediaHeight() * 0.02,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                Color(0XFFFAFAFA),
-                                Color(0XFFFFFFFF),
-                              ]),
-                              borderRadius: BorderRadius.circular(50),
+                    String parseContent = Utils(context)
+                        .parseHtmlString(tipsListResponse
+                        .data[index].content
+                        .toString())
+                        .toString();
+                    return tipsListResponse.data[index].id == 2 ? GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  WebViewIdea(tipsListResponse.data[index].link),
+                            ));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(
+                            Utils(context).getMediaHeight() * 0.01),
+                        width: Utils(context).getMediaWidth() * 0.8,
+                        margin: EdgeInsets.all(12.0),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [
+                              Color(0XFF9250E7),
+                              Color(0XFFC55E3E),
+                            ]),
+                            borderRadius: BorderRadius.circular(8.0),
+                            boxShadow: [
+                              BoxShadow(
+                                spreadRadius: 2,
+                                color: Colors.grey[300],
+                                blurRadius: 1,
+                              )
+                            ]),
+                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.only(top: 10.0, bottom: 8.0),
+                                child: tipsListResponse
+                                    .data[index].image!=null?Image.network(
+                                  "${APP_ASSET_BASE_URL+ tipsListResponse
+                                      .data[index].image}",
+                                  // fit: BoxFit.cover,
+                                  height: Utils(context).getMediaHeight() * 0.14,
+                                  //width: 1,
+                                  errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                                    return Image.asset(
+                                      "assets/ideaImg2.png",
+                                      // fit: BoxFit.cover,
+                                      height: Utils(context).getMediaHeight() * 0.14,
+                                      //width: 1,
+                                    );
+                                  },
+                                ):Image.asset(
+                                  "assets/ideaImg2.png",
+                                  // fit: BoxFit.cover,
+                                  height: Utils(context).getMediaHeight() * 0.14,
+                                  //width: 1,
+                                ),
+                              ),
                             ),
-                            child: Text(
-                              "KNOW MORE",
-                              style: TextStyle(
-                                  color: Color(0XFFB05983),
-                                  fontSize:
-                                      Utils(context).getMediaWidth() * 0.03),
+                            Padding(padding: const EdgeInsets.all(5.0),),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "${tipsListResponse
+                                        .data[index].name
+                                        .toString()}",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            Utils(context).getMediaWidth() * 0.035),
+                                  ),
+                                  SizedBox(
+                                    height: Utils(context).getMediaHeight() * 0.01,
+                                  ),
+                                  Text(parseContent.length < 60 ? parseContent : parseContent.substring(0, 55)+".....",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                            Utils(context).getMediaWidth() * 0.03),
+                                  ),
+                                  SizedBox(
+                                    height: Utils(context).getMediaHeight() * 0.01,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [
+                                        Color(0XFFFAFAFA),
+                                        Color(0XFFFFFFFF),
+                                      ]),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Text(
+                                      "KNOW MORE",
+                                      style: TextStyle(
+                                          color: Color(0XFFB05983),
+                                          fontSize:
+                                              Utils(context).getMediaWidth() * 0.03),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ) : Container();
                   },
@@ -1007,7 +1115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    ":\t\t${userDetails.phone}",
+                                    ":\t\t${userDetails.phone??""}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -1031,7 +1139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .height *
                                               0.02)),
                                   Text(
-                                    ":\t\t${userDetails.dob}",
+                                    ":\t\t${userDetails.dob??""}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -1109,56 +1217,27 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                    MediaQuery.of(context).size.height * 0.03),
+                                  vertical: MediaQuery.of(context).size.height * 0.01
+                                ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                top: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                    0.02)),
-                                        Text(
-                                          "${listUserReminderResponse.data[index].name}",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                top: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                    0.02)),
-                                      ],
+                                    Expanded(
+                                      child: Text(
+                                        "${listUserReminderResponse.data[index].name}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400),
+                                      ),
                                     ),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                top: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                    0.02)),
-                                        Text(
-                                          ":\t\t${listUserReminderResponse.data[index].date}",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                top: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                    0.02)),
-                                      ],
+                                    Flexible(
+                                      child: Text(
+                                        ": ${listUserReminderResponse.data[index].date}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400),
+                                      ),
                                     )
                                   ],
                                 ),
