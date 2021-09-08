@@ -1195,18 +1195,20 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.0)),
-              Container(
-                child: Card(
+              Card(
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.height * 0.03,
+                    vertical: MediaQuery.of(context).size.height * 0.01
+                  ),
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Color(0XFFE556EB), Color(0XFF5E08B3)])),
                   child: Container(
+                    height: Utils(context).getMediaHeight() * 0.2,
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.height * 0.03),
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Color(0XFFE556EB), Color(0XFF5E08B3)])),
-                    child: Container(
-                      height: Utils(context).getMediaHeight() * 0.2,
-                      width: double.infinity,
+                    child: Center(
                       child: ListView.builder(
                         controller: ScrollController(),
                         shrinkWrap: true,
