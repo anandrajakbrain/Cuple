@@ -1066,7 +1066,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal:
-                                  MediaQuery.of(context).size.height * 0.08),
+                                  MediaQuery.of(context).size.height * 0.06),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -1077,7 +1077,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     "Mobile No.",
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w300),
+                                        fontWeight: FontWeight.w400),
                                   ),
                                   Padding(
                                       padding: EdgeInsets.only(
@@ -1089,7 +1089,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     "Gender",
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w300),
+                                        fontWeight: FontWeight.w400),
                                   ),
                                   Padding(
                                       padding: EdgeInsets.only(
@@ -1101,7 +1101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     "Birth Date",
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w300),
+                                        fontWeight: FontWeight.w400),
                                   ),
                                   Padding(
                                       padding: EdgeInsets.only(
@@ -1115,10 +1115,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    ":\t\t${userDetails.phone??""}",
+                                    ": \t\t${userDetails.phone??""}",
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w300),
+                                        fontWeight: FontWeight.w500),
                                   ),
                                   Padding(
                                       padding: EdgeInsets.only(
@@ -1127,10 +1127,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .height *
                                               0.02)),
                                   Text(
-                                    ":\t\t${userDetails.gender??""}",
+                                    ": \t\t${userDetails.gender??""}",
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w300),
+                                        fontWeight: FontWeight.w500),
                                   ),
                                   Padding(
                                       padding: EdgeInsets.only(
@@ -1139,10 +1139,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .height *
                                               0.02)),
                                   Text(
-                                    ":\t\t${userDetails.dob??""}",
+                                    ": \t\t${userDetails.dob??""}",
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w300),
+                                        fontWeight: FontWeight.w500),
                                   ),
                                   Padding(
                                       padding: EdgeInsets.only(
@@ -1199,7 +1199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.height * 0.03,
+                      horizontal: MediaQuery.of(context).size.height * 0.06,
                     vertical: MediaQuery.of(context).size.height * 0.01
                   ),
                   decoration: BoxDecoration(
@@ -1225,21 +1225,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Expanded(
-                                      child: Text(
-                                        "${listUserReminderResponse.data[index].name}",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w400),
-                                      ),
+                                    Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${listUserReminderResponse.data[index].name}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
                                     ),
-                                    Flexible(
-                                      child: Text(
-                                        ": ${listUserReminderResponse.data[index].date}",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w400),
-                                      ),
+                                    Column(crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          "\t: \t\t${listUserReminderResponse.data[index].date}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
                                     )
                                   ],
                                 ),
