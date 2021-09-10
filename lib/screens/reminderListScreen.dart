@@ -47,9 +47,13 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
       remindersTypeResponse = _remindersListsResponse;
       for(int i = 0; i < remindersTypeResponse.data.length; i++){
          reminderTypeList.add(remindersTypeResponse.data[i].name);
-         reminderIdsObj[remindersTypeResponse.data[i].name] = remindersTypeResponse.data[i].id;
+         print(remindersTypeResponse.data[i].name);
+         print("reminder ${remindersTypeResponse.data[i].id}");
+         reminderIdsObj[remindersTypeResponse.data[i].name] = remindersTypeResponse.data[i].name;
       }
     });
+    print("reminder IDS Obj");
+    print(reminderIdsObj);
   }
 
   fetch() async {
@@ -63,6 +67,8 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
         setState(() {
           listUserReminderResponse = _listUserReminderResponse;
         });
+        print("List User Reminder");
+        print(_listUserReminderResponse.toJson());
 
       }
 
@@ -146,7 +152,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
 
   getReminder(BuildContext context, var name){
     return listUserReminderResponse!=null? listUserReminderResponse.data
-        .where((element) => element.reminderId == reminderIdsObj[name])
+        .where((element) => element.type.toString() == reminderIdsObj[name].toString())
         .toList()
         .length>0?  Container(
       height: Utils(context).getMediaHeight() * 0.28,
@@ -154,7 +160,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
             shrinkWrap: true,
               controller: ScrollController(),
               itemCount:listUserReminderResponse!=null? listUserReminderResponse.data
-                  .where((element) => element.reminderId == reminderIdsObj[name])
+                  .where((element) => element.type.toString() == reminderIdsObj[name].toString())
                   .toList()
                   .length:0,
               // physics: NeverScrollableScrollPhysics(),
@@ -168,7 +174,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                 return ReminderCard(
                   userListReminderData: listUserReminderResponse.data
                       .where(
-                          (element) => element.reminderId == reminderIdsObj[name])
+                          (element) => element.type.toString() == reminderIdsObj[name].toString())
                       .toList()[index],
                   handlerCall: (){
                     fetch();

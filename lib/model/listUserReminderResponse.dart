@@ -38,6 +38,8 @@ class UserListReminderData {
   var deletedAt;
   String name;
   String category;
+  String type;
+  String favourite;
 
   UserListReminderData(
       {this.id,
@@ -49,7 +51,10 @@ class UserListReminderData {
         this.updatedAt,
         this.deletedAt,
         this.name,
-        this.category});
+        this.category,
+      this.type,
+      this.favourite,
+      });
 
   UserListReminderData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -62,6 +67,8 @@ class UserListReminderData {
     deletedAt = json['deleted_at'];
     name = json['name'];
     category = json['category'];
+    type = json['type'];
+    favourite = json['favourite'];
   }
 
   Map<String, dynamic> toJson() {
@@ -76,6 +83,8 @@ class UserListReminderData {
     data['deleted_at'] = this.deletedAt;
     data['name'] = this.name;
     data['category'] = this.category;
+    data['type'] = this.type;
+    data['favourite'] = this.favourite;
     return data;
   }
 }

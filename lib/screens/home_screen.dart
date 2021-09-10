@@ -20,6 +20,7 @@ import 'package:cuple_app/model/getUserPartnerDetailsResponse.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
+import 'package:cuple_app/model/suggesiontypeListsResponse.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/chat_screen.dart';
@@ -34,6 +35,7 @@ import 'package:cuple_app/screens/partnerWishList.dart';
 import 'package:cuple_app/screens/reminderListScreen.dart';
 import 'package:cuple_app/screens/settings_screen.dart';
 import 'package:cuple_app/screens/tipsListScreen.dart';
+import 'package:cuple_app/screens/userFavoriteScreen.dart';
 import 'package:cuple_app/screens/userProfile.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar_item.dart';
@@ -84,20 +86,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   fetchReminders() async {
     Utils(context).checkInternet().then((value) async {
-      if(value==true){
-
-
-        ListUserReminderResponse _listUserReminderResponse = await Plugs(context)
-            .listUserReminderList(userId: userDetails.id.toString());
+      if (value == true) {
+        ListUserReminderResponse _listUserReminderResponse =
+            await Plugs(context)
+                .listUserReminderList(userId: userDetails.id.toString());
 
         setState(() {
           listUserReminderResponse = _listUserReminderResponse;
         });
-
-      }
-
-
-      else {
+      } else {
         Utils(context).showAlert(
             context: context,
             title: "",
@@ -109,12 +106,15 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             isCancel: false);
       }
-
-
     });
+  }
 
-
-
+  getSuggestionTypeList() async {
+    SuggesiontypeListsResponse _suggesiontypeListsResponse =
+        await Plugs(context).getSuggestionType();
+    setState(() {
+      suggesiontypeListsResponse = _suggesiontypeListsResponse;
+    });
   }
 
   @override
@@ -209,12 +209,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   selectedIndex = index;
                   controlWidget = getWidget(index: selectedIndex);
-                  if(selectedIndex == 1)
-                    _title = "Date Ideas";
-                  else if(selectedIndex == 3) {
+                  if (selectedIndex == 1)
+                    _title = "Favorite";
+                  else if (selectedIndex == 3) {
                     _title = "Profile";
-                  }
-                  else
+                  } else
                     _title = "Home";
                 });
               },
@@ -224,8 +223,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: 'Home',
                 ),
                 FFNavigationBarItem(
-                  iconData: Icons.lightbulb_outline,
-                  label: 'Idea',
+                  iconData: Icons.favorite_border,
+                  label: "Favorites",
                 ),
                 FFNavigationBarItem(
                   iconData: Icons.mail_outline_outlined,
@@ -363,151 +362,188 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: Utils(context).getMediaHeight() * 0.24,
                 child: ListView.builder(
                   itemCount: ideasListResponse != null
-                      ? ideasListResponse.data.length
+                      ? ideasListResponse.data.length > 3
+                          ? 3
+                          : ideasListResponse.data.length
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return ideasListResponse.data[index].id == 1 ? Container(
-                      padding: EdgeInsets.all(
-                          Utils(context).getMediaHeight() * 0.02),
-                      width: Utils(context).getMediaWidth() * 0.8,
-                      margin: EdgeInsets.all(12.0),
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            Color(0XFFE556EB),
-                            Color(0XFF5E08B3),
-                          ]),
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: [
-                            BoxShadow(
-                              spreadRadius: 2,
-                              color: Colors.grey[300],
-                              blurRadius: 1,
-                            )
-                          ]),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Best Date Ideas",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize:
-                                    Utils(context).getMediaWidth() * 0.035),
-                          ),
-                          SizedBox(
-                            height: Utils(context).getMediaHeight() * 0.02,
-                          ),
-                          Text(
-                            Utils(context)
-                                .parseHtmlString(ideasListResponse
-                                    .data[index].content
-                                    .toString())
-                                .toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                    Utils(context).getMediaWidth() * 0.03),
-                          ),
-                          SizedBox(
-                            height: Utils(context).getMediaHeight() * 0.02,
-                          ),
-                          InkWell(
-                            onTap: () async{
-
-                              try {
-                                var body = {
-                                  "user_id": userDetails.id.toString(),
-                                  "suggesion_id": ideasListResponse.data[index].id.toString(),
-                                };
-                                Utils(context).showProgressLoader();
-                                http.Response response =
-                                await http.post(
-                                    SUGGESSION_BOOK, headers: Plugs(context).getHeaders(), body: body);
-                                if (response.statusCode == 200) {
-                                  print(response.body);
-                                  Navigator.pop(context);
-                                  Utils(context).showMessage(title: "Success",child: Text(jsonDecode(response.body)['message']));
-                                  // return CreateNewReminderResponse.fromJson(
-                                  //     jsonDecode(response.body));
-                                } else {
-                                  throw Exception(jsonDecode(response.body)['message']);
-                                }
-                              }catch(e,s){
-                                Navigator.pop(context);
-                                Utils(context).showMessage(title: "error",child: Text(e));
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
+                    return ideasListResponse.data[index].id == 1
+                        ? Container(
+                            padding: EdgeInsets.all(
+                                Utils(context).getMediaHeight() * 0.02),
+                            width: Utils(context).getMediaWidth() * 0.8,
+                            margin: EdgeInsets.all(12.0),
+                            decoration: BoxDecoration(
                                 gradient: LinearGradient(colors: [
-                                  Color(0XFF2487EC),
-                                  Color(0XFF663DDF),
+                                  Color(0XFFE556EB),
+                                  Color(0XFF5E08B3),
                                 ]),
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: Text(
-                                "BOOK FOR US",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize:
-                                        Utils(context).getMediaWidth() * 0.03),
-                              ),
+                                borderRadius: BorderRadius.circular(8.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    spreadRadius: 2,
+                                    color: Colors.grey[300],
+                                    blurRadius: 1,
+                                  )
+                                ]),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Best ${suggesiontypeListsResponse != null ? suggesiontypeListsResponse.data.where((element) => element.id == 1).first.name : 'Date Ideas'}",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Utils(context).getMediaWidth() *
+                                          0.035),
+                                ),
+                                SizedBox(
+                                  height:
+                                      Utils(context).getMediaHeight() * 0.02,
+                                ),
+                                Text(
+                                  Utils(context)
+                                      .parseHtmlString(ideasListResponse
+                                          .data[index].content
+                                          .toString())
+                                      .toString(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: Utils(context).getMediaWidth() *
+                                          0.03),
+                                  softWrap: true,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.fade,
+                                ),
+                                SizedBox(
+                                  height:
+                                      Utils(context).getMediaHeight() * 0.02,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    try {
+                                      var body = {
+                                        "user_id": userDetails.id.toString(),
+                                        "suggesion_id": ideasListResponse
+                                            .data[index].id
+                                            .toString(),
+                                      };
+                                      Utils(context).showProgressLoader();
+                                      http.Response response = await http.post(
+                                          SUGGESSION_BOOK,
+                                          headers: Plugs(context).getHeaders(),
+                                          body: body);
+                                      if (response.statusCode == 200) {
+                                        print(response.body);
+                                        Navigator.pop(context);
+                                        Utils(context).showMessage(
+                                            title: "Success",
+                                            child: Text(jsonDecode(
+                                                response.body)['message']));
+                                        // return CreateNewReminderResponse.fromJson(
+                                        //     jsonDecode(response.body));
+                                      } else {
+                                        throw Exception(jsonDecode(
+                                            response.body)['message']);
+                                      }
+                                    } catch (e, s) {
+                                      Navigator.pop(context);
+                                      Utils(context).showMessage(
+                                          title: "error", child: Text(e));
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [
+                                        Color(0XFF2487EC),
+                                        Color(0XFF663DDF),
+                                      ]),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Text(
+                                      "BOOK FOR US",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                              Utils(context).getMediaWidth() *
+                                                  0.03),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ) : Container();
+                          )
+                        : Container();
                   },
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ReminderListScreen()))
-                      .then((value) => getApis());
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FittedBox(
+                    child: Container(
                       padding: const EdgeInsets.all(8.0),
                       margin: EdgeInsets.only(left: 10.0),
                       child: Text(
                         "Dates to Remember",
                         style: TextStyle(
-                          fontSize: Utils(context).getMediaWidth() * 0.04,
+                          fontSize: Utils(context).getMediaWidth() * 0.03,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    Row(
+                  ),
+                  Expanded(
+                    child: Row(
                       children: [
-                        Container(
+                        Padding(
                           padding: const EdgeInsets.all(8.0),
-                          margin: EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            "See All",
-                            style: TextStyle(
-                                fontSize:
-                                    Utils(context).getMediaWidth() * 0.035,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.blue),
+                          child: TextButton.icon(
+                            style: TextButton.styleFrom(
+                              textStyle: const TextStyle(fontSize: 15),
+                            ),
+                            icon: Icon(Icons.add_circle_outline_outlined),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          CreateNewReminder())); //.then((value) => fetch());
+                            },
+                            label: const Text('Create New'),
                           ),
                         ),
-                        Icon(
-                          Icons.arrow_forward,
-                          color: Colors.blue,
-                        )
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ReminderListScreen()))
+                                .then((value) => getApis());
+                          },
+                          child: FittedBox(
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              margin: EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                "See All",
+                                style: TextStyle(
+                                    fontSize:
+                                        Utils(context).getMediaWidth() * 0.035,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.blue),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Container(
                 height: Utils(context).getMediaHeight() * 0.26,
@@ -657,7 +693,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.all(8.0),
                       margin: EdgeInsets.only(left: 10.0),
                       child: Text(
-                        "Love Tips",
+                        suggesiontypeListsResponse != null
+                            ? suggesiontypeListsResponse.data
+                                .where((element) => element.id == 2)
+                                .first
+                                .name
+                            : 'Love Tips',
                         style: TextStyle(
                           fontSize: Utils(context).getMediaWidth() * 0.04,
                           fontWeight: FontWeight.bold,
@@ -691,77 +732,87 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: Utils(context).getMediaHeight() * 0.24,
                 child: ListView.builder(
                   itemCount: tipsListResponse != null
-                      ? tipsListResponse.data.length
+                      ? tipsListResponse.data.length > 3
+                          ? 3
+                          : tipsListResponse.data.length
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return tipsListResponse.data[index].id == 2 ? Container(
-                      padding: EdgeInsets.all(
-                          Utils(context).getMediaHeight() * 0.02),
-                      width: Utils(context).getMediaWidth() * 0.8,
-                      margin: EdgeInsets.all(12.0),
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            Color(0XFF9250E7),
-                            Color(0XFFC55E3E),
-                          ]),
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: [
-                            BoxShadow(
-                              spreadRadius: 2,
-                              color: Colors.grey[300],
-                              blurRadius: 1,
-                            )
-                          ]),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Best Date Tips",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize:
-                                    Utils(context).getMediaWidth() * 0.035),
-                          ),
-                          SizedBox(
-                            height: Utils(context).getMediaHeight() * 0.02,
-                          ),
-                          Text(
-                            Utils(context)
-                                .parseHtmlString(tipsListResponse
-                                    .data[index].content
-                                    .toString())
-                                .toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                    Utils(context).getMediaWidth() * 0.03),
-                          ),
-                          SizedBox(
-                            height: Utils(context).getMediaHeight() * 0.02,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8.0),
+                    return tipsListResponse.data[index].id == 2
+                        ? Container(
+                            padding: EdgeInsets.all(
+                                Utils(context).getMediaHeight() * 0.02),
+                            width: Utils(context).getMediaWidth() * 0.8,
+                            margin: EdgeInsets.all(12.0),
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                Color(0XFFFAFAFA),
-                                Color(0XFFFFFFFF),
-                              ]),
-                              borderRadius: BorderRadius.circular(50),
+                                gradient: LinearGradient(colors: [
+                                  Color(0XFF9250E7),
+                                  Color(0XFFC55E3E),
+                                ]),
+                                borderRadius: BorderRadius.circular(8.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    spreadRadius: 2,
+                                    color: Colors.grey[300],
+                                    blurRadius: 1,
+                                  )
+                                ]),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Best Date Tips",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Utils(context).getMediaWidth() *
+                                          0.035),
+                                ),
+                                SizedBox(
+                                  height:
+                                      Utils(context).getMediaHeight() * 0.02,
+                                ),
+                                Text(
+                                  Utils(context)
+                                      .parseHtmlString(tipsListResponse
+                                          .data[index].content
+                                          .toString())
+                                      .toString(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: Utils(context).getMediaWidth() *
+                                          0.03),
+                                  softWrap: true,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.fade,
+                                ),
+                                SizedBox(
+                                  height:
+                                      Utils(context).getMediaHeight() * 0.02,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(colors: [
+                                      Color(0XFFFAFAFA),
+                                      Color(0XFFFFFFFF),
+                                    ]),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Text(
+                                    "KNOW MORE",
+                                    style: TextStyle(
+                                        color: Color(0XFFB05983),
+                                        fontSize:
+                                            Utils(context).getMediaWidth() *
+                                                0.03),
+                                  ),
+                                ),
+                              ],
                             ),
-                            child: Text(
-                              "KNOW MORE",
-                              style: TextStyle(
-                                  color: Color(0XFFB05983),
-                                  fontSize:
-                                      Utils(context).getMediaWidth() * 0.03),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ) : Container();
+                          )
+                        : Container();
                   },
                 ),
               ),
@@ -1007,7 +1058,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    ":\t\t${userDetails.phone}",
+                                    ":\t\t${userDetails.phone ?? ''}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -1019,7 +1070,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .height *
                                               0.02)),
                                   Text(
-                                    ":\t\t${userDetails.gender??""}",
+                                    ":\t\t${userDetails.gender ?? ""}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -1055,17 +1106,21 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.02)),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    child: Text(
-                      " Dates to Remember",
-                      style: TextStyle(
-                        fontSize: Utils(context).getMediaWidth() * 0.04,
-                        fontWeight: FontWeight.bold,
+                  FittedBox(
+                    child: Container(
+                      child: Text(
+                        " Dates to Remember",
+                        style: TextStyle(
+                          fontSize: Utils(context).getMediaWidth() * 0.04,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
+                  // TextButton.icon(onPressed: (){}, icon: Icon(Icons.add_circle_outline_outlined), label: Text("Create New")),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextButton.icon(
@@ -1077,7 +1132,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CreateNewReminder()));//.then((value) => fetch());
+                                builder: (context) =>
+                                    CreateNewReminder())); //.then((value) => fetch());
                       },
                       label: const Text('Create New'),
                     ),
@@ -1098,69 +1154,79 @@ class _HomeScreenState extends State<HomeScreen> {
                             colors: [Color(0XFFE556EB), Color(0XFF5E08B3)])),
                     child: Container(
                       height: Utils(context).getMediaHeight() * 0.2,
-                      width: double.infinity,
+                      width:Utils(context).getMediaWidth()*0.80,
                       child: ListView.builder(
                         controller: ScrollController(),
                         shrinkWrap: true,
-                        itemCount: listUserReminderResponse != null ? listUserReminderResponse.data.length:0,
-                        itemBuilder: (BuildContext context, int index){
+                        itemCount: listUserReminderResponse != null
+                            ? listUserReminderResponse.data.length
+                            : 0,
+                        itemBuilder: (BuildContext context, int index) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal:
-                                    MediaQuery.of(context).size.height * 0.03),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                top: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                    0.02)),
-                                        Text(
-                                          "${listUserReminderResponse.data[index].name}",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                top: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                    0.02)),
-                                      ],
-                                    ),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                top: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                    0.02)),
-                                        Text(
-                                          ":\t\t${listUserReminderResponse.data[index].date}",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                top: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                    0.02)),
-                                      ],
-                                    )
-                                  ],
+                                    MediaQuery.of(context).size.height *
+                                        0.03),
+                                child:FittedBox(
+                                  child:  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                      0.02)),
+                                          Text(
+                                            "${listUserReminderResponse.data[index].name}",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                      0.02)),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                      0.02)),
+                                          FittedBox(
+                                            child: Text(
+                                              ":\t\t${listUserReminderResponse.data[index].date}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                      0.02)),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               )
                             ],
@@ -1225,7 +1291,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       MediaQuery.of(context).size.height * 0.1),
                   child: userDetails.picture != "0"
                       ? Image.network(
-                    userDetails.uploaded!=null? APP_ASSET_BASE_URL + userDetails.picture:userDetails.picture,
+                          userDetails.uploaded != null
+                              ? APP_ASSET_BASE_URL + userDetails.picture
+                              : userDetails.picture,
                           fit: BoxFit.cover,
                           height: MediaQuery.of(context).size.height * 0.15,
                           width: MediaQuery.of(context).size.height * 0.15,
@@ -1259,9 +1327,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return displayHomeWidget(context);
         break;
       case 1:
-        return IdeasListScreen(
-          isBottom: true,
-        );
+        return UserFavoriteScreen();
         break;
       case 2:
         if (partnerData == null) {
@@ -1290,20 +1356,23 @@ class _HomeScreenState extends State<HomeScreen> {
   getApis() async {
     Utils(context).checkInternet().then((value) async {
       if (value == true) {
+        await getSuggestionTypeList();
         await getReminder();
         await getIdeasList();
         await getTipsList();
         await getpartnerDetails();
+        await getfrendRequest();
       } else {
         Utils(context).showAlert(
-          context: context,
+            context: context,
             title: "",
             child: Container(
-                height: 250, width: 150, child: NoInternetConnectionScreen()),handler: (){
+                height: 250, width: 150, child: NoInternetConnectionScreen()),
+            handler: () {
               Navigator.pop(context);
               getApis();
-        },
-        isCancel: false);
+            },
+            isCancel: false);
       }
     });
   }
@@ -1376,13 +1445,56 @@ class _HomeScreenState extends State<HomeScreen> {
       ;
     }
   }
-  getfrendRequest() async{
-    GetPartnerRequestResponse _getPartnerRequestResponse=await Plugs(context).getFriendRequest();
-    FriendRequestData friendRequestData=_getPartnerRequestResponse.date.where((element) => element.invitationStatus=="pending").first;
-    Utils(context).showMessage(
-      title: "Jessica Has send You Friend Request",
-      child: FriendRequestCard(),
-    );
 
+  getfrendRequest() async {
+    String friendname;
+
+    GetPartnerRequestResponse _getPartnerRequestResponse =
+        await Plugs(context).getFriendRequest();
+    print("Request Element");
+    setState(() {
+      getPartnerRequestResponse=_getPartnerRequestResponse;
+      getPartnerRequestResponseGlobal=_getPartnerRequestResponse;
+    });
+
+
+    print(_getPartnerRequestResponse.date
+        .where((element) => element.invitationStatus == "Pending"&&element.id == userDetails.id)
+        .isEmpty);
+    if (_getPartnerRequestResponse.date
+            .where((element) => element.invitationStatus == "Pending"&&element.id == userDetails.id)
+            .isEmpty ==
+        false) {
+      FriendRequestData friendRequestData = _getPartnerRequestResponse.date
+          .where((element) => element.invitationStatus == "Pending"&&element.id == userDetails.id)
+          .first;
+      /*Utils(context).showMessage(
+        title: "$friendname send Friend Request",
+        child: FriendRequestCard(
+          friendRequestData: friendRequestData,
+          callback: (value){
+            setState(() {
+              friendname=value;
+            });
+          },
+        ),
+      );*/
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) {
+            return FriendRequestCard(
+              friendRequestData:getPartnerRequestResponseGlobal.date.first ,
+              callback: (value){
+                setState(() {
+                  friendname=value;
+                });
+              },
+            );
+          }
+      );
+
+
+    }
   }
 }

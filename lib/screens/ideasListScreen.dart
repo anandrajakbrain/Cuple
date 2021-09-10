@@ -185,7 +185,7 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
               ),
               backgroundColor: APP_BAR_COLOR,
               title: Text(
-                "Date Ideas",
+                "${suggesiontypeListsResponse!=null?suggesiontypeListsResponse.data.where((element) => element.id==1).first.name:'Date Ideas'}",
                 style: TextStyle(color: Colors.black),
               ),
               actions: [

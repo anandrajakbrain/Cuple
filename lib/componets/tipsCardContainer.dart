@@ -57,6 +57,9 @@ class _TipsCardContainerState extends State<TipsCardContainer> {
             style: TextStyle(
                 fontSize: Utils(context).getMediaWidth() * 0.05,
                 fontWeight: FontWeight.w500),
+            softWrap: true,
+            maxLines: 2,
+            overflow: TextOverflow.fade,
           ),
         ),
       ),

@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'createNewReminder.dart';
 import 'edit_profile.dart';
 //
 // class UserProfileScreen extends StatefulWidget {
@@ -245,7 +246,7 @@ class _UserProfileState extends State<UserProfile> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // Future.delayed(Duration(seconds: 1)).then((value) => fetchReminder());
+    Future.delayed(Duration(seconds: 1)).then((value) => fetchReminder());
 
   }
   @override
@@ -263,6 +264,376 @@ class _UserProfileState extends State<UserProfile> {
       body: Container(
         color: APP_BAR_COLOR,
         child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: Utils(context).getMediaWidth() * 0.03),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.08),
+                    child: Card(
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: MediaQuery.of(context).size.height * 0.03),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [Color(0XFFE556EB), Color(0XFF5E08B3)])),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height * 0.1)),
+                            Text(
+                              "${userDetails.name}",
+                              style: TextStyle(
+                                  color: Colors.white, fontWeight: FontWeight.w500),
+                            ),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    top:
+                                    MediaQuery.of(context).size.height * 0.01)),
+                            Text(
+                              "${userDetails.email}",
+                              style: TextStyle(
+                                  color: Colors.white, fontWeight: FontWeight.w300),
+                            ),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    top:
+                                    MediaQuery.of(context).size.height * 0.02)),
+                            Divider(
+                              thickness: 0.2,
+                              color: Colors.white,
+                            ),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    top:
+                                    MediaQuery.of(context).size.height * 0.02)),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                  MediaQuery.of(context).size.height * 0.08),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Mobile No.",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                                  0.02)),
+                                      Text(
+                                        "Gender",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                                  0.02)),
+                                      Text(
+                                        "Birth Date",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                                  0.02)),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        ":\t\t${userDetails.phone??''}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                                  0.02)),
+                                      Text(
+                                        ":\t\t${userDetails.gender ?? ""}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                                  0.02)),
+                                      Text(
+                                        ":\t\t${userDetails.dob}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                                  0.02)),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.02)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FittedBox(
+                        child:                   Container(
+                          child: Text(
+                            " Dates to Remember",
+                            style: TextStyle(
+                              fontSize: Utils(context).getMediaWidth() * 0.04,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      // TextButton.icon(onPressed: (){}, icon: Icon(Icons.add_circle_outline_outlined), label: Text("Create New")),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextButton.icon(
+                          style: TextButton.styleFrom(
+                            textStyle: const TextStyle(fontSize: 15),
+                          ),
+                          icon: Icon(Icons.add_circle_outline_outlined),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        CreateNewReminder())); //.then((value) => fetch());
+                          },
+                          label: const Text('Create New'),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.0)),
+                  Container(
+                    child: Card(
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: MediaQuery.of(context).size.height * 0.03),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [Color(0XFFE556EB), Color(0XFF5E08B3)])),
+                        child: Container(
+                          height: Utils(context).getMediaHeight() * 0.2,
+                          width: double.infinity,
+                          child: ListView.builder(
+                            controller: ScrollController(),
+                            shrinkWrap: true,
+                            itemCount: listUserReminderResponse != null
+                                ? listUserReminderResponse.data.length
+                                : 0,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                        MediaQuery.of(context).size.height *
+                                            0.03),
+                                    child:FittedBox(
+                                      child:  Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                          0.02)),
+                                              Text(
+                                                "${listUserReminderResponse.data[index].name}",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                          0.02)),
+                                            ],
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                          0.02)),
+                                              FittedBox(
+                                                child: Text(
+                                                  ":\t\t${listUserReminderResponse.data[index].date}",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                          0.02)),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.02)),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditProfile()))
+                          ;
+                    },
+                    child: Container(
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(
+                            MediaQuery.of(context).size.height * 0.02),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [Color(0XFF1A93EE), Color(0XFF6F34DD)]),
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "EDIT PROFILE",
+                              style: TextStyle(
+                                  color: Colors.white, fontWeight: FontWeight.w300),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.17,
+                  width: MediaQuery.of(context).size.height * 0.17,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        Color(0XFF5E08B3),
+                        Color(0XFFE556EB),
+                      ]),
+                      shape: BoxShape.circle),
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                          MediaQuery.of(context).size.height * 0.1),
+                      child: userDetails.picture != "0"
+                          ? Image.network(
+                        userDetails.uploaded != null
+                            ? APP_ASSET_BASE_URL + userDetails.picture
+                            : userDetails.picture,
+                        fit: BoxFit.cover,
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        width: MediaQuery.of(context).size.height * 0.15,
+                        errorBuilder: (context, error, straktress) {
+                          return Image.asset(
+                            "assets/profile_user.jpg",
+                            fit: BoxFit.cover,
+                            height: MediaQuery.of(context).size.height * 0.15,
+                            width: MediaQuery.of(context).size.height * 0.15,
+                          );
+                        },
+                      )
+                          : Image.asset(
+                        "assets/profile_user.jpg",
+                        fit: BoxFit.cover,
+                        height: MediaQuery.of(context).size.height * 0.15,
+                        width: MediaQuery.of(context).size.height * 0.15,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+/*
+* Stack(
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
@@ -714,9 +1085,4 @@ class _UserProfileState extends State<UserProfile> {
               ],
             )
           ],
-        ),
-      ),
-    );
-  }
-}
-
+        )*/

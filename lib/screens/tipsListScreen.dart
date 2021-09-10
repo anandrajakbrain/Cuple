@@ -69,7 +69,7 @@ class _TipsListScreenState extends State<TipsListScreen> {
         leading: CustomBackButton(),
         backgroundColor: APP_BAR_COLOR,
         title: Text(
-          "Love Tips",
+          "${suggesiontypeListsResponse!=null?suggesiontypeListsResponse.data.where((element) => element.id==2).first.name:'Love Tips'}",
           style: TextStyle(color: Colors.black),
         ),
         actions: [

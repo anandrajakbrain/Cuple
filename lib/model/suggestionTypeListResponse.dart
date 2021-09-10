@@ -1,16 +1,16 @@
-class RemindersListsResponse {
+class SuggestionTypeListResponse {
   bool success;
-  List<RemindersListData> data;
+  List<SugesstionTypeData> data;
   String message;
 
-  RemindersListsResponse({this.success, this.data, this.message});
+  SuggestionTypeListResponse({this.success, this.data, this.message});
 
-  RemindersListsResponse.fromJson(Map<String, dynamic> json) {
+  SuggestionTypeListResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
-      data = new List<RemindersListData>();
+      data = new List<SugesstionTypeData>();
       json['data'].forEach((v) {
-        data.add(new RemindersListData.fromJson(v));
+        data.add(new SugesstionTypeData.fromJson(v));
       });
     }
     message = json['message'];
@@ -27,27 +27,27 @@ class RemindersListsResponse {
   }
 }
 
-class RemindersListData {
+class SugesstionTypeData {
   int id;
-  var category;
+  int parent;
   String name;
   String status;
   String createdAt;
   String updatedAt;
   var deletedAt;
 
-  RemindersListData(
+  SugesstionTypeData(
       {this.id,
-        this.category,
+        this.parent,
         this.name,
         this.status,
         this.createdAt,
         this.updatedAt,
         this.deletedAt});
 
-  RemindersListData.fromJson(Map<String, dynamic> json) {
+  SugesstionTypeData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    category = json['reminders_type_id'];
+    parent = json['parent'];
     name = json['name'];
     status = json['status'];
     createdAt = json['created_at'];
@@ -58,7 +58,7 @@ class RemindersListData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['category'] = this.category;
+    data['parent'] = this.parent;
     data['name'] = this.name;
     data['status'] = this.status;
     data['created_at'] = this.createdAt;

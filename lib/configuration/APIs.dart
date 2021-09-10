@@ -28,6 +28,12 @@ const String SUGGESSION_BOOK=APP_BASE_URL+"suggesion-book";
 const String FIND_PARTNER=APP_BASE_URL+"find/partner";
 const String SEND_PARTNER_REQUEST=APP_BASE_URL+"send-partner-request";
 const String CANCEL_PARTNER_REQUEST=APP_BASE_URL+"cancel-partner-request?match_id=";
+const String ACCEPT_PARTNER_REQUEST=APP_BASE_URL+"accept-partner-request";
 const String GET_PARTNER_REQUEST=APP_BASE_URL+"get-partner-request?uid=";
 const String REMINDER_TYPE=APP_BASE_URL+"reminders-type";
+const String SUGGESTION_TYPE_LIST_FOR_HOME=APP_BASE_URL+"suggesiontype-lists";
+const String SHOW_USER=APP_BASE_URL+"show-user?id=";
+const String ADD_TO_WISHLIST=APP_BASE_URL+"add-wishlist";
+const String USER_FAVOURITES_LIST=APP_BASE_URL+"get-favourites?user_id=";
+const String ADD_TO_FAVOURITES=APP_BASE_URL+"add-to-favourite";
 

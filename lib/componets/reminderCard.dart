@@ -3,6 +3,7 @@ import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/deleteWishListResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
+import 'package:cuple_app/model/sendPartnerRequestResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -22,9 +23,24 @@ class _ReminderCardState extends State<ReminderCard> {
     return InkWell(
       onLongPress: (){
         Utils(context).showAlert(context: context,title: "Options",child: Container(
-          height: Utils(context).getMediaHeight()*0.10,
+          height: Utils(context).getMediaHeight()*0.20,
           child: Column(children: [
-            TextButton(
+            TextButton.icon(
+             icon: Icon(Icons.favorite),
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(fontSize: 20),
+              ),
+              onPressed: () async{
+                print(widget.userListReminderData.id);
+                SendPartnerRequestResponse sendResult =
+                    await Plugs(context).addToFavourites(
+                    reminderId: widget.userListReminderData.id.toString(),action:widget.userListReminderData.favourite=='yes'?'no':'yes' );
+                Navigator.pop(context);
+                widget.handlerCall();
+              },
+              label:  Text("${widget.userListReminderData.favourite=='yes'?'Remove':'Add'} To Favourites"),
+            ),TextButton.icon(
+              icon: Icon(Icons.delete_outline),
               style: TextButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 20),
               ),
@@ -36,7 +52,7 @@ class _ReminderCardState extends State<ReminderCard> {
                 Navigator.pop(context);
                 widget.handlerCall();
               },
-              child: const Text('Delete'),
+              label: const Text('Delete                  '),
             ),
           ],),
         ));

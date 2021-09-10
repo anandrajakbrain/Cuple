@@ -39,6 +39,7 @@ class IdeasData {
   String updatedAt;
   var deletedAt;
   String suggesiontype;
+  String wishlist_added;
 
   IdeasData(
       {this.id,
@@ -51,7 +52,8 @@ class IdeasData {
         this.createdAt,
         this.updatedAt,
         this.deletedAt,
-        this.suggesiontype});
+        this.suggesiontype,
+      this.wishlist_added});
 
   IdeasData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,6 +67,7 @@ class IdeasData {
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
     suggesiontype = json['suggesiontype'];
+    wishlist_added = json['wishlist-added'];
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +83,7 @@ class IdeasData {
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
     data['suggesiontype'] = this.suggesiontype;
+    data['wishlist-added'] = this.wishlist_added;
     return data;
   }
 }

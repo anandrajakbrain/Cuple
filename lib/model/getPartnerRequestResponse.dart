@@ -7,9 +7,9 @@ class GetPartnerRequestResponse {
 
   GetPartnerRequestResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    if (json['date'] != null) {
+    if (json['data'] != null) {
       date = new List<FriendRequestData>();
-      json['date'].forEach((v) {
+      json['data'].forEach((v) {
         date.add(new FriendRequestData.fromJson(v));
       });
     }
@@ -20,7 +20,7 @@ class GetPartnerRequestResponse {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
     if (this.date != null) {
-      data['date'] = this.date.map((v) => v.toJson()).toList();
+      data['data'] = this.date.map((v) => v.toJson()).toList();
     }
     data['message'] = this.message;
     return data;

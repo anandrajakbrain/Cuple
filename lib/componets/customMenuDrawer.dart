@@ -1,6 +1,7 @@
 import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/getPartnerRequestResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/login.dart';
 import 'package:cuple_app/screens/myWishList.dart';
@@ -146,9 +147,17 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SearchPartnerScreen()));
-            },
+              if(getPartnerRequestResponseGlobal.date.length<1){
+                Navigator.push(context,
+                    MaterialPageRoute(
+                        builder: (context) => SearchPartnerScreen()));
+
+
+              }else{
+                Utils(context).showMessage(title: "Hello ${userDetails.name}",child: Text("You Already Have Choose Partner"));
+              }
+
+              },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Container(
