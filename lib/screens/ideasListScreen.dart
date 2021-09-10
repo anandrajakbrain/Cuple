@@ -220,8 +220,8 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2),
                             itemBuilder: (BuildContext context, index) {
-                              return IdeasCardContainer(
-                                  ideasData: ideasListResponse.data[index]);
+                              return ideasListResponse.data[index].id == 1 ? IdeasCardContainer(
+                                  ideasData: ideasListResponse.data[index]) : Container();
                             })
                         : NoRecordFoundScreen()
                     : NoRecordFoundScreen(

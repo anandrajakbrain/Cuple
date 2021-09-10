@@ -50,7 +50,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         frequency, questionnaire, dateNights, msgFrequency);
 
     setState(() {
-      userSettingsResponse=_userSettingsResponse;
+      //userSettingsResponse=_userSettingsResponse;
     });
   }
 
@@ -183,7 +183,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       });
                       fetch();
                     },
-                    items: <String>['Anytime', 'Once a week', 'Once a month','ones in a week']
+                    items: <String>['anytime', 'Once a week', 'Once a month','ones in a week']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,

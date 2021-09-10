@@ -45,7 +45,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
     await Plugs(context).getreminderType();
     setState(() {
       remindersTypeResponse = _remindersListsResponse;
-      for(int i = 0; i < remindersTypeResponse.data.length; i++){
+      for(int i = 0; i < remindersTypeResponse.data.length; i++){print(remindersTypeResponse.data[i].name.toString());
          reminderTypeList.add(remindersTypeResponse.data[i].name);
          print(remindersTypeResponse.data[i].name);
          print("reminder ${remindersTypeResponse.data[i].id}");

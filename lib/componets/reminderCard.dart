@@ -118,7 +118,7 @@ class _ReminderCardState extends State<ReminderCard> {
             //   height: Utils(context).getMediaHeight() * 0.01,
             // ),
             Text(
-              "To Celebrate Anniversary",
+              "To Celebrate ${widget.userListReminderData.name}",
               style: TextStyle(
                   color: Colors.white,
                   fontSize:

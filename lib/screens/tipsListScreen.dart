@@ -84,6 +84,7 @@ class _TipsListScreenState extends State<TipsListScreen> {
               itemCount: tipsListResponse!=null?tipsListResponse.data.length:0,
               gridDelegate:
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              controller: ScrollController(),
               itemBuilder: (BuildContext context, index) {
                 return tipsListResponse.data[index].id == 2 ? TipsCardContainer(tipsData: tipsListResponse.data[index]) : Container();
               }):NoRecordFoundScreen():NoRecordFoundScreen(icon: FontAwesomeIcons.fileDownload,msg: "Please Wait",
