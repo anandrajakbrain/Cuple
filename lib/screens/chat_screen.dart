@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/listContainer.dart';
 import 'package:cuple_app/configuration/app_config.dart';
@@ -27,7 +29,7 @@ class _ChatScreenState extends State<ChatScreen> {
   String msgStr;
   TextEditingController msgController = new TextEditingController();
   var _formKey = GlobalKey<FormState>();
-
+  Timer timer;
   fetch() async {
     GetMsgResponse _getMsgResponse =
         await Plugs(context).getmsg(Userid: userDetails.id.toString());
@@ -38,12 +40,17 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   List msgs = ["Hello!", "Hey, Whats up", "....."];
-
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration(seconds: 2)).then((value) => fetch());
+    timer = Timer.periodic(Duration(seconds: 3), (Timer t) => fetch());
   }
 
   @override
