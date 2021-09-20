@@ -638,7 +638,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: Utils(context).getMediaHeight() * 0.02,
                             ),
                             Text(
-                              "To Celebrate Anniversary",
+                              "To Celebrate ${remindersListsResponse.data[index].type}",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.black,
@@ -932,7 +932,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Container(
-                width: Utils(context).getMediaWidth() * 0.75,
+                width: Utils(context).getMediaWidth() * 0.85,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
                     Color(0XFF663DDF),
@@ -940,7 +940,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ]),
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: Row(
+                child: Row(mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -1151,7 +1151,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    CreateNewReminder())); //.then((value) => fetch());
+                                    CreateNewReminder())).then((value) {
+                          getApis();
+                          fetchReminders();
+                        }); //.then((value) => fetch());
                       },
                       label: const Text('Create New'),
                     ),
