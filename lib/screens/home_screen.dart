@@ -1348,7 +1348,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return UserFavoriteScreen();
         break;
       case 2:
-        if (partnerData == null) {
+        if (partnerData != null) {
           return ChatScreen(
             isbottom: true,
           );
@@ -1518,7 +1518,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (_getPartnerRequestResponse.date
             .where((element) =>
                 element.invitationStatus == "Accepted" &&
-                element.toId == userDetails.id &&
+                // element.toId == userDetails.id &&
                 element.adminStatus == "Appprove")
             .isEmpty ==
         false) {
@@ -1527,11 +1527,11 @@ class _HomeScreenState extends State<HomeScreen> {
         FriendRequestData friendRequestData = _getPartnerRequestResponse.date
             .where((element) =>
                 element.invitationStatus == "Accepted" &&
-                element.toId == userDetails.id &&
+                // element.toId == userDetails.id &&
                 element.adminStatus == "Appprove")
             .first;
         SharedPreferences prf = await SharedPreferences.getInstance();
-        userDetails.partnerid = friendRequestData.fromId;
+        userDetails.partnerid = friendRequestData.fromId==userDetails.id?friendRequestData.toId:friendRequestData.fromId;
         prf.setString("user", jsonEncode(userDetails));
 
         await getpartnerDetails();

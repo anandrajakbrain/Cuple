@@ -401,7 +401,7 @@ class _ChatScreenState extends State<ChatScreen> {
   sendMsg() async {
     try {
       SendMsgResponse sendMsgResponse =
-          await Plugs(context).sendMsg(to_id: "6", MSG: msgController.text);
+          await Plugs(context).sendMsg(to_id: partnerData.id.toString(), MSG: msgController.text);
       setState(() {
         msgController.text = "";
       });
