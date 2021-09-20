@@ -36,4 +36,5 @@ const String SHOW_USER=APP_BASE_URL+"show-user?id=";
 const String ADD_TO_WISHLIST=APP_BASE_URL+"add-wishlist";
 const String USER_FAVOURITES_LIST=APP_BASE_URL+"get-favourites?user_id=";
 const String ADD_TO_FAVOURITES=APP_BASE_URL+"add-to-favourite";
+const String SEND_NOTIFICATION=APP_BASE_URL+"send-notification";
 

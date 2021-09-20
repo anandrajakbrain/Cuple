@@ -19,6 +19,7 @@ import 'package:cuple_app/model/registerUserResponse.dart';
 import 'package:cuple_app/model/reminder_type_response.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
 import 'package:cuple_app/model/sendMsgResponse.dart';
+import 'package:cuple_app/model/sendNotificationResponse.dart';
 import 'package:cuple_app/model/sendPartnerRequestResponse.dart';
 import 'package:cuple_app/model/showUserResponse.dart';
 import 'package:cuple_app/model/suggesiontypeListsResponse.dart';
@@ -150,6 +151,7 @@ class Plugs {
     var body = {
       "name": name,
       "otp": Otp,
+      "token": devieToken,
       // "password": password,
     };
     try {
@@ -176,13 +178,15 @@ class Plugs {
   }
 
   Future<LoginResponse> updateSettings(
-      var userId,
-      var chat,
-      var notification,
-      var frequency,
-      var questionnaire,
-      var dateNights,
-      var msgFrequency) async {
+    var userId,
+    var chat,
+    var notification,
+    var frequency,
+    var questionnaire,
+    var dateNights,
+    var msgFrequency,
+    bool celebration_subscribe,
+  ) async {
     Utils(context).showProgressLoader();
     var body = {
       "user_id": userId.toString(),
@@ -192,6 +196,7 @@ class Plugs {
       "questionnaire": questionnaire != null ? questionnaire : '',
       "date_nights": dateNights != null ? dateNights : '',
       "msg_frequency": msgFrequency != null ? msgFrequency : '',
+      "celebration_subscribe": celebration_subscribe ? "1" : "0",
     };
     print(body);
     try {
@@ -543,7 +548,8 @@ class Plugs {
       "reminder_id": remindersListData.id.toString(),
       "date": date,
       "status": "Active",
-      "name": name
+      "name": name,
+      "favourite":"no",
       // "password": password,
     };
     try {
@@ -1007,7 +1013,10 @@ class Plugs {
           body: body, headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
+
+
         Navigator.pop(context);
+
         return SendPartnerRequestResponse.fromJson(jsonDecode(response.body));
       } else {
         throw Exception(response.body);
@@ -1182,6 +1191,36 @@ class Plugs {
     }
   }
 
+/*------------------------NOTIFICATION WITH FCM-------------------------*/
+  Future<SendNotificationResponse> sendNotification(
+      {String sendToUID, String title, String msg}) async {
+    try {
+      var body = {
+        "id": sendToUID,
+        "title": title,
+        "body": msg,
+      };
+      http.Response response = await http.post(SEND_NOTIFICATION,
+          body: body,
+          // body: body,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        return SendNotificationResponse.fromJson(jsonDecode(response.body));
+      }else{
+        throw Exception(jsonDecode(response.body));
+      }
+    } catch (e, s) {
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+
+    }
+  }
+
+/*------------------------NOTIFICATION WITH FCM-------------------------*/
   Map<String, String> getHeaders({String token = null}) {
     return <String, String>{
       // 'content-type': 'application/json',

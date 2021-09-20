@@ -62,6 +62,7 @@ class User {
   int partnerid;
   var uploaded;
   String premium;
+  var celebration_subscribe;
 
   User(
       {this.id,
@@ -100,6 +101,7 @@ class User {
       this.gender,
         this.uploaded,
         this.premium,
+        this.celebration_subscribe,
       });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -139,6 +141,8 @@ class User {
     gender = json['gender'];
     uploaded = json['uploaded'];
     premium = json['premium'];
+    celebration_subscribe = json['celebration_subscribe'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -179,6 +183,7 @@ class User {
     data['gender'] = this.gender;
     data['uploaded'] = this.uploaded;
     data['premium'] = this.premium;
+    data['celebration_subscribe'] = this.celebration_subscribe;
     return data;
   }
 }

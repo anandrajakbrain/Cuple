@@ -14,7 +14,9 @@ import 'package:custom_switch/custom_switch.dart';
 
 class SettingsScreen extends StatefulWidget {
   final User userDetails;
+
   SettingsScreen(this.userDetails);
+
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
@@ -26,28 +28,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var questionnaire = "weekly";
   var dateNights = "one in week";
   var msgFrequency = "Once a week";
-
+  bool celebration_subscribe = false;
   var userSettingsResponse;
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      notificationToggleStatus = widget.userDetails.nofication == "on" ? true : false;
+      notificationToggleStatus =
+          widget.userDetails.nofication == "on" ? true : false;
       chatToggleStatus = widget.userDetails.chat == "on" ? true : false;
       frequency = widget.userDetails.frequency;
       questionnaire = widget.userDetails.questionnaire;
       dateNights = widget.userDetails.dateNights;
       msgFrequency = widget.userDetails.msgFrequency;
+      celebration_subscribe=widget.userDetails.celebration_subscribe==0?false:true;
     });
   }
 
   fetch() async {
-    var _userSettingsResponse =
-    await Plugs(context).updateSettings(userDetails.id.toString(),
+    var _userSettingsResponse = await Plugs(context).updateSettings(
+        userDetails.id.toString(),
         chatToggleStatus ? "on" : "off",
         notificationToggleStatus ? "on" : "off",
-        frequency, questionnaire, dateNights, msgFrequency);
+        frequency,
+        questionnaire,
+        dateNights,
+        msgFrequency,
+        celebration_subscribe);
+    setState(() {
+      userDetails.celebration_subscribe = celebration_subscribe ? 1 : 0;
+    });
 
     setState(() {
       //userSettingsResponse=_userSettingsResponse;
@@ -72,15 +83,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Column(
             children: [
               ListTile(
-                leading: Text("Notification -",
+                leading: Text(
+                  "Notification -",
                   style: TextStyle(
-                    fontSize: Utils(context).getMediaHeight() * 0.025
-                  ),
+                      fontSize: Utils(context).getMediaHeight() * 0.025),
                 ),
-                title: Text("${notificationToggleStatus ? "on" : "off"}",
+                title: Text(
+                  "${notificationToggleStatus ? "on" : "off"}",
                   style: TextStyle(
-                      fontSize: Utils(context).getMediaHeight() * 0.025
-                  ),
+                      fontSize: Utils(context).getMediaHeight() * 0.025),
                 ),
                 trailing: CustomSwitch(
                   activeColor: Colors.blue,
@@ -98,53 +109,83 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 height: Utils(context).getMediaHeight() * 0.02,
               ),
               ListTile(
-                leading: Text("Frequency",
+                leading: Text(
+                  "Celebration Subscribe -",
                   style: TextStyle(
-                      fontSize: Utils(context).getMediaHeight() * 0.025
-                  ),
+                      fontSize: Utils(context).getMediaHeight() * 0.025),
                 ),
-                trailing: DropdownButton<String>(
-                  value: frequency,
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: const TextStyle(color: Colors.deepPurple),
-                  underline: Container(
-                    height: 0,
-                    color: Colors.deepPurpleAccent,
-                  ),
-                  onChanged: (String newValue) {
+                title: Text(
+                  "${userDetails.celebration_subscribe == 1 ? "on" : "off"}",
+                  style: TextStyle(
+                      fontSize: Utils(context).getMediaHeight() * 0.025),
+                ),
+                trailing: CustomSwitch(
+                  activeColor: Colors.blue,
+                  value: celebration_subscribe,
+                  onChanged: (value) {
+                    print("VALUE : $value");
                     setState(() {
-                      frequency = newValue;
+                      celebration_subscribe = value;
                     });
                     fetch();
                   },
-                  items: <String>['once- 14 days before','Once a week', ' Once a month']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                )
+                ),
               ),
-              SizedBox(
-                height: Utils(context).getMediaHeight() * 0.02,
-              ),
-              Divider(height: 0.08,),
               SizedBox(
                 height: Utils(context).getMediaHeight() * 0.02,
               ),
               ListTile(
-                leading: Text("Chat -",
-                  style: TextStyle(
-                      fontSize: Utils(context).getMediaHeight() * 0.025
+                  leading: Text(
+                    "Frequency",
+                    style: TextStyle(
+                        fontSize: Utils(context).getMediaHeight() * 0.025),
                   ),
+                  trailing: DropdownButton<String>(
+                    value: frequency,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.deepPurple),
+                    underline: Container(
+                      height: 0,
+                      color: Colors.deepPurpleAccent,
+                    ),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        frequency = newValue;
+                      });
+                      fetch();
+                    },
+                    items: <String>[
+                      'once- 14 days before',
+                      'Once a week',
+                      ' Once a month'
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  )),
+              SizedBox(
+                height: Utils(context).getMediaHeight() * 0.02,
+              ),
+              Divider(
+                height: 0.08,
+              ),
+              SizedBox(
+                height: Utils(context).getMediaHeight() * 0.02,
+              ),
+              ListTile(
+                leading: Text(
+                  "Chat -",
+                  style: TextStyle(
+                      fontSize: Utils(context).getMediaHeight() * 0.025),
                 ),
-                title: Text("${chatToggleStatus ? "on" : "off"}",
+                title: Text(
+                  "${chatToggleStatus ? "on" : "off"}",
                   style: TextStyle(
-                      fontSize: Utils(context).getMediaHeight() * 0.025
-                  ),
+                      fontSize: Utils(context).getMediaHeight() * 0.025),
                 ),
                 trailing: CustomSwitch(
                   activeColor: Colors.blue,
@@ -162,10 +203,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 height: Utils(context).getMediaHeight() * 0.02,
               ),
               ListTile(
-                  leading: Text("Message Frequency",
+                  leading: Text(
+                    "Message Frequency",
                     style: TextStyle(
-                        fontSize: Utils(context).getMediaHeight() * 0.025
-                    ),
+                        fontSize: Utils(context).getMediaHeight() * 0.025),
                   ),
                   trailing: DropdownButton<String>(
                     value: msgFrequency,
@@ -183,27 +224,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       });
                       fetch();
                     },
-                    items: <String>['anytime', 'Once a week', 'Once a month','ones in a week']
-                        .map<DropdownMenuItem<String>>((String value) {
+                    items: <String>[
+                      'anytime',
+                      'Once a week',
+                      'Once a month',
+                      'ones in a week'
+                    ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
                       );
                     }).toList(),
-                  )
-              ),
+                  )),
               SizedBox(
                 height: Utils(context).getMediaHeight() * 0.02,
               ),
-              Divider(height: 0.08,),
+              Divider(
+                height: 0.08,
+              ),
               SizedBox(
                 height: Utils(context).getMediaHeight() * 0.02,
               ),
               ListTile(
-                  leading: Text("Date Nights",
+                  leading: Text(
+                    "Date Nights",
                     style: TextStyle(
-                        fontSize: Utils(context).getMediaHeight() * 0.025
-                    ),
+                        fontSize: Utils(context).getMediaHeight() * 0.025),
                   ),
                   trailing: DropdownButton<String>(
                     value: dateNights,
@@ -221,27 +267,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       });
                       fetch();
                     },
-                    items: <String>['every 3 week', 'one in week', 'every week', 'anytime']
-                        .map<DropdownMenuItem<String>>((String value) {
+                    items: <String>[
+                      'every 3 week',
+                      'one in week',
+                      'every week',
+                      'anytime'
+                    ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
                       );
                     }).toList(),
-                  )
-              ),
+                  )),
               SizedBox(
                 height: Utils(context).getMediaHeight() * 0.02,
               ),
-              Divider(height: 0.08,),
+              Divider(
+                height: 0.08,
+              ),
               SizedBox(
                 height: Utils(context).getMediaHeight() * 0.02,
               ),
               ListTile(
-                  leading: Text("Questionnaire",
+                  leading: Text(
+                    "Questionnaire",
                     style: TextStyle(
-                        fontSize: Utils(context).getMediaHeight() * 0.025
-                    ),
+                        fontSize: Utils(context).getMediaHeight() * 0.025),
                   ),
                   trailing: DropdownButton<String>(
                     value: questionnaire,
@@ -266,12 +317,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: Text(value),
                       );
                     }).toList(),
-                  )
-              ),
+                  )),
               SizedBox(
                 height: Utils(context).getMediaHeight() * 0.02,
               ),
-              Divider(height: 0.08,),
+              Divider(
+                height: 0.08,
+              ),
             ],
           ),
         ),

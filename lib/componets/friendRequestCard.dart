@@ -157,6 +157,7 @@ class _FriendRequestCardState extends State<FriendRequestCard> {
       setState(() {
         userDetails.partnerid = widget.friendRequestData.fromId;
       });
+      Plugs(context).sendNotification(sendToUID:  widget.friendRequestData.fromId.toString(),title: "Friend Request Accepted",msg: "${userDetails.name } Has Been Accepted Your Friend Request Please Wait For Admin Approval.");
       SharedPreferences prf = await SharedPreferences.getInstance();
       // print("Update User Data");
       // print(updateUserResponse.data.toJson());
@@ -165,6 +166,7 @@ class _FriendRequestCardState extends State<FriendRequestCard> {
       SendPartnerRequestResponse sendPartnerRequestResponse =
           await Plugs(context).cancelPartnerRequest(
               matchId: widget.friendRequestData.id.toString());
+      Plugs(context).sendNotification(sendToUID:  widget.friendRequestData.fromId.toString(),title: "Friend Request Canceled",msg: "${userDetails.name } Has Been Reject Your Friend Request.");
       Navigator.pop(context);
       Utils(context).showMessage(
           title: "", child: Text(sendPartnerRequestResponse.message));

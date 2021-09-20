@@ -79,7 +79,7 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
                   )
             : NoRecordFoundScreen(
                 icon: FontAwesomeIcons.fileDownload,
-                msg: partnerData!=null?"Please Wait":"You Didn't Choose Partner Yet",
+                msg: partnerData!=null?"Please Wait":"You Didn't Have Partner Yet",
               ),
       ),
     );

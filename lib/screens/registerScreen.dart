@@ -493,33 +493,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
+/*
+* TODO : If Register with google cause error
+* https://stackoverflow.com/questions/56188338/platformexception-platformexceptionsign-in-failed-com-google-android-gms-comm
+* check this
+* */
   register() async {
     RegisterUserResponse registerUserResponse = await Plugs(context)
         .register(email: email, phone: phone, name: name, gender: gender);
     if (registerUserResponse.success == true) {
-      GetOTPResponse getOTPResponse =
-          await Plugs(context).requestForOTP(name: email);
-      if (getOTPResponse.success == true) {
-        print(getOTPResponse.data.otp);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
+        ),
+            (route) => false,
+      );
+      // GetOTPResponse getOTPResponse =
+      //     await Plugs(context).requestForOTP(name: email);
+      // if (getOTPResponse.success == true) {
+      //   print(getOTPResponse.data.otp);
 
         /*  Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (context) => OtpVerificationScreen(getOTPResponse: getOTPResponse,name: name,),
 
             ),(route) => false,);*/
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LoginScreen(),
-          ),
-          (route) => false,
-        );
-      } else {
-        Utils(context).showMessage(
-          title: "Error",
-          child: Text(getOTPResponse.message),
-        );
-      }
+
+      // } else {
+      //   Utils(context).showMessage(
+      //     title: "Error",
+      //     child: Text(getOTPResponse.message),
+      //   );
+      // }
     } else {
       Utils(context).showMessage(
         title: "Error",

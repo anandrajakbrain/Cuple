@@ -49,6 +49,8 @@ dependencies:
   flutter_facebook_auth: ^2.0.1
   flutter_facebook_login: ^1.1.1
   webview_flutter:
+  firebase_messaging:
+  flutter_local_notifications: ^4.0.1
 
 dev_dependencies:
   flutter_test:

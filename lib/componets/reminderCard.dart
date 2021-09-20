@@ -38,7 +38,7 @@ class _ReminderCardState extends State<ReminderCard> {
                 Navigator.pop(context);
                 widget.handlerCall();
               },
-              label:  Text("${widget.userListReminderData.favourite=='yes'?'Remove':'Add'} To Favourites"),
+              label:  Expanded(child: Text("${widget.userListReminderData.favourite=='yes'?'Remove':'Add'} To Favourites",)),
             ),TextButton.icon(
               icon: Icon(Icons.delete_outline),
               style: TextButton.styleFrom(
@@ -117,13 +117,16 @@ class _ReminderCardState extends State<ReminderCard> {
             // SizedBox(
             //   height: Utils(context).getMediaHeight() * 0.01,
             // ),
-            Text(
+            FittedBox(
+            child: Text(
               "To Celebrate ${widget.userListReminderData.name}",
               style: TextStyle(
                   color: Colors.white,
                   fontSize:
                   Utils(context).getMediaWidth() * 0.03),
             ),
+            ),
+
           ],
         ),
       ),

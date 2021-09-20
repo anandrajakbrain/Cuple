@@ -7,13 +7,15 @@ import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/home_screen.dart';
 import 'package:cuple_app/screens/login.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:html/parser.dart';
+String devieToken;
 class Utils {
   BuildContext context;
-
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   Utils(@required this.context);
 
   double getMediaWidth() {
@@ -23,6 +25,19 @@ class Utils {
   double getMediaHeight() {
     return MediaQuery.of(context).size.height;
   }
+
+  getToken() async {
+    print("Token Fnction Call");
+    firebaseMessaging.getToken().then((token) {
+      print("Token : " + token);
+      devieToken = token; // Print the Token in Console
+    });
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("deviceToken", devieToken);
+    // UtilitiesMethods(context).showMessage(context: context,title:"Toke",child: Text(tokenData.toString()));
+    print("Device Token : "+pref.getString("deviceToken").toString());
+  }
+
 
  Future<Widget> checkUser() async {
     SharedPreferences prf = await SharedPreferences.getInstance();

@@ -480,6 +480,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: FittedBox(
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    margin: EdgeInsets.only(left: 10.0),
+                    child: Text(
+                        " ${partnerData!=null?"Next Date to remember for "+partnerData.name:""}",
+                      style: TextStyle(
+                        fontSize: Utils(context).getMediaWidth() * 0.04,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -1154,7 +1172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             colors: [Color(0XFFE556EB), Color(0XFF5E08B3)])),
                     child: Container(
                       height: Utils(context).getMediaHeight() * 0.2,
-                      width:Utils(context).getMediaWidth()*0.80,
+                      width: Utils(context).getMediaWidth() * 0.80,
                       child: ListView.builder(
                         controller: ScrollController(),
                         shrinkWrap: true,
@@ -1168,22 +1186,22 @@ class _HomeScreenState extends State<HomeScreen> {
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal:
-                                    MediaQuery.of(context).size.height *
-                                        0.03),
-                                child:FittedBox(
-                                  child:  Row(
+                                        MediaQuery.of(context).size.height *
+                                            0.03),
+                                child: FittedBox(
+                                  child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Padding(
                                               padding: EdgeInsets.only(
                                                   top: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
+                                                          .size
+                                                          .height *
                                                       0.02)),
                                           Text(
                                             "${listUserReminderResponse.data[index].name}",
@@ -1194,20 +1212,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Padding(
                                               padding: EdgeInsets.only(
                                                   top: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
+                                                          .size
+                                                          .height *
                                                       0.02)),
                                         ],
                                       ),
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Padding(
                                               padding: EdgeInsets.only(
                                                   top: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
+                                                          .size
+                                                          .height *
                                                       0.02)),
                                           FittedBox(
                                             child: Text(
@@ -1220,8 +1238,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Padding(
                                               padding: EdgeInsets.only(
                                                   top: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
+                                                          .size
+                                                          .height *
                                                       0.02)),
                                         ],
                                       )
@@ -1453,20 +1471,25 @@ class _HomeScreenState extends State<HomeScreen> {
         await Plugs(context).getFriendRequest();
     print("Request Element");
     setState(() {
-      getPartnerRequestResponse=_getPartnerRequestResponse;
-      getPartnerRequestResponseGlobal=_getPartnerRequestResponse;
+      getPartnerRequestResponse = _getPartnerRequestResponse;
+      getPartnerRequestResponseGlobal = _getPartnerRequestResponse;
     });
 
-
     print(_getPartnerRequestResponse.date
-        .where((element) => element.invitationStatus == "Pending"&&element.id == userDetails.id)
+        .where((element) =>
+            element.invitationStatus == "Pending" &&
+            element.id == userDetails.id)
         .isEmpty);
     if (_getPartnerRequestResponse.date
-            .where((element) => element.invitationStatus == "Pending"&&element.id == userDetails.id)
+            .where((element) =>
+                element.invitationStatus == "Pending" &&
+                element.toId == userDetails.id)
             .isEmpty ==
         false) {
       FriendRequestData friendRequestData = _getPartnerRequestResponse.date
-          .where((element) => element.invitationStatus == "Pending"&&element.id == userDetails.id)
+          .where((element) =>
+              element.invitationStatus == "Pending" &&
+              element.toId == userDetails.id)
           .first;
       /*Utils(context).showMessage(
         title: "$friendname send Friend Request",
@@ -1484,17 +1507,35 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           builder: (context) {
             return FriendRequestCard(
-              friendRequestData:getPartnerRequestResponseGlobal.date.first ,
-              callback: (value){
+              friendRequestData: getPartnerRequestResponseGlobal.date.first,
+              callback: (value) {
                 setState(() {
-                  friendname=value;
+                  friendname = value;
                 });
               },
             );
-          }
-      );
+          });
+    } else if (_getPartnerRequestResponse.date
+            .where((element) =>
+                element.invitationStatus == "Accepted" &&
+                element.toId == userDetails.id &&
+                element.adminStatus == "Appprove")
+            .isEmpty ==
+        false) {
+      print("Partner Data Inserting");
+      if (userDetails.partnerid == 0) {
+        FriendRequestData friendRequestData = _getPartnerRequestResponse.date
+            .where((element) =>
+                element.invitationStatus == "Accepted" &&
+                element.toId == userDetails.id &&
+                element.adminStatus == "Appprove")
+            .first;
+        SharedPreferences prf = await SharedPreferences.getInstance();
+        userDetails.partnerid = friendRequestData.fromId;
+        prf.setString("user", jsonEncode(userDetails));
 
-
+        await getpartnerDetails();
+      }
     }
   }
 }
