@@ -529,7 +529,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          CreateNewReminder())); //.then((value) => fetch());
+                                          CreateNewReminder())).then((value) => getApis()); //.then((value) => fetch());
                             },
                             label: const Text('Create New'),
                           ),
@@ -1383,6 +1383,7 @@ class _HomeScreenState extends State<HomeScreen> {
         await getTipsList();
         await getpartnerDetails();
         await getfrendRequest();
+        await fetchReminders();
       } else {
         Utils(context).showAlert(
             context: context,

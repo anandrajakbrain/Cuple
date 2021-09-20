@@ -14,7 +14,9 @@ import 'package:flutter/material.dart';
 
 class CustomMenuDrawer extends StatefulWidget {
   final User userDetails;
+
   CustomMenuDrawer(this.userDetails);
+
   @override
   _CustomMenuDrawerState createState() => _CustomMenuDrawerState();
 }
@@ -52,25 +54,27 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                             ])),
                         child: userDetails.picture != "0"
                             ? Image.network(
-                          userDetails.uploaded!=null? APP_ASSET_BASE_URL + userDetails.picture:userDetails.picture,
-                          fit: BoxFit.cover,
-                          // height: MediaQuery.of(context).size.height * 0.15,
-                          // width: MediaQuery.of(context).size.height * 0.15,
-                          errorBuilder: (context, error, straktress) {
-                            return Image.asset(
-                              "assets/profile_user.jpg",
-                              fit: BoxFit.cover,
-                              // height: MediaQuery.of(context).size.height * 0.15,
-                              // width: MediaQuery.of(context).size.height * 0.15,
-                            );
-                          },
-                        )
+                                userDetails.uploaded != null
+                                    ? APP_ASSET_BASE_URL + userDetails.picture
+                                    : userDetails.picture,
+                                fit: BoxFit.cover,
+                                // height: MediaQuery.of(context).size.height * 0.15,
+                                // width: MediaQuery.of(context).size.height * 0.15,
+                                errorBuilder: (context, error, straktress) {
+                                  return Image.asset(
+                                    "assets/profile_user.jpg",
+                                    fit: BoxFit.cover,
+                                    // height: MediaQuery.of(context).size.height * 0.15,
+                                    // width: MediaQuery.of(context).size.height * 0.15,
+                                  );
+                                },
+                              )
                             : Image.asset(
-                          "assets/profile_user.jpg",
-                          fit: BoxFit.cover,
-                          // height: MediaQuery.of(context).size.height * 0.15,
-                          // width: MediaQuery.of(context).size.height * 0.15,
-                        ),
+                                "assets/profile_user.jpg",
+                                fit: BoxFit.cover,
+                                // height: MediaQuery.of(context).size.height * 0.15,
+                                // width: MediaQuery.of(context).size.height * 0.15,
+                              ),
                       ),
                       Padding(
                           padding: EdgeInsets.only(
@@ -84,12 +88,11 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.w300,
                                 fontSize:
-                                Utils(context).getMediaHeight() * 0.024),
+                                    Utils(context).getMediaHeight() * 0.024),
                           ),
                           Text(
                             '${userDetails != null ? userDetails.email ?? "" : ""}',
                             overflow: TextOverflow.ellipsis,
-
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w300,
@@ -147,17 +150,17 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
           ),
           InkWell(
             onTap: () {
-              if(getPartnerRequestResponseGlobal.date.length<1){
-                Navigator.push(context,
+              if (getPartnerRequestResponseGlobal.date.length < 1) {
+                Navigator.push(
+                    context,
                     MaterialPageRoute(
                         builder: (context) => SearchPartnerScreen()));
-
-
-              }else{
-                Utils(context).showMessage(title: "Hello ${userDetails.name}",child: Text("You Already Have Choose Partner"));
+              } else {
+                Utils(context).showMessage(
+                    title: "Hello ${userDetails.name}",
+                    child: Text("You Already Have Choose Partner"));
               }
-
-              },
+            },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Container(
@@ -219,7 +222,8 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => PartnerWishlist(
-                            partnerName: partnerData!=null?partnerData.name:'',
+                            partnerName:
+                                partnerData != null ? partnerData.name : '',
                           )));
             },
             child: Padding(
@@ -241,7 +245,8 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                         ),
                       ),
                     ),
-                    Text("${partnerData!=null?partnerData.name:'Partner'} Wish List")
+                    Text(
+                        "${partnerData != null ? partnerData.name : 'Partner'} Wish List")
                   ],
                 ),
               ),
@@ -249,11 +254,11 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
           ),
           InkWell(
             onTap: () {
-
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => SettingsScreen(widget.userDetails)));
+                      builder: (context) =>
+                          SettingsScreen(widget.userDetails)));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -282,11 +287,16 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
           ),
           InkWell(
             onTap: () {
-
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TutorialListScreen()));
+              if (userDetails.premium == "Inactive") {
+                Utils(context).showMessage(
+                    title: "Sorry ",
+                    child: Text("Please Get Premium User Subscription "));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TutorialListScreen()));
+              }
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -339,7 +349,6 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
           ),
           InkWell(
             onTap: () {
-
               Utils(context).logout();
               // Navigator.push(context,
               //     MaterialPageRoute(builder: (context) => LoginScreen()));

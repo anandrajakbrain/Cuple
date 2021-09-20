@@ -61,8 +61,12 @@ class _CreateNewReminderState extends State<CreateNewReminder> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime.now(),
-        lastDate: DateTime(DateTime.now().year + 25));
+        firstDate:DateTime(1969, 1, 1),// DateTime.now(),
+        lastDate: DateTime(DateTime.now().year + 25),
+    helpText: "Select Reminder Date",
+      errorFormatText: 'Enter valid Reminder date',
+      errorInvalidText: 'Enter date in valid range',
+    );
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;

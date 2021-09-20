@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/listContainer.dart';
+import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
@@ -93,7 +94,24 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(50.0),
-                                          child: Image.asset(
+                                          child:partnerData.picture!="0"? Image.network(
+                                            partnerData.uploaded != null
+                                                ? APP_ASSET_BASE_URL + partnerData.picture
+                                                : partnerData.picture,
+                                            fit: BoxFit.cover,
+
+                                            height: 50.0,
+                                            width: 50.0,
+                                            errorBuilder: (context, error, straktress) {
+                                              return Image.asset(
+                                                "assets/profile_user.jpg",
+                                                fit: BoxFit.cover,
+
+                                                height: 50.0,
+                                                width: 50.0,
+                                              );
+                                            },
+                                          ): Image.asset(
                                             "assets/profile_user.jpg",
                                             fit: BoxFit.cover,
                                             height: 50.0,
@@ -174,7 +192,24 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(50.0),
-                                          child: Image.asset(
+                                          child: userDetails.picture!="0"? Image.network(
+                                            userDetails.uploaded != null
+                                                ? APP_ASSET_BASE_URL + userDetails.picture
+                                                : userDetails.picture,
+                                            fit: BoxFit.cover,
+
+                                            height: 50.0,
+                                            width: 50.0,
+                                            errorBuilder: (context, error, straktress) {
+                                              return Image.asset(
+                                                "assets/profile_user.jpg",
+                                                fit: BoxFit.cover,
+
+                                                height: 50.0,
+                                                width: 50.0,
+                                              );
+                                            },
+                                          ):Image.asset(
                                             "assets/profile_user.jpg",
                                             fit: BoxFit.cover,
                                             height: 50.0,
@@ -303,7 +338,24 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(50.0),
-                                          child: Image.asset(
+                                          child: partnerData.picture!="0"? Image.network(
+                                            partnerData.uploaded != null
+                                                ? APP_ASSET_BASE_URL + partnerData.picture
+                                                : partnerData.picture,
+                                            fit: BoxFit.cover,
+
+                                            height: 50.0,
+                                            width: 50.0,
+                                            errorBuilder: (context, error, straktress) {
+                                              return Image.asset(
+                                                "assets/profile_user.jpg",
+                                                fit: BoxFit.cover,
+
+                                                height: 50.0,
+                                                width: 50.0,
+                                              );
+                                            },
+                                          ):Image.asset(
                                             "assets/profile_user.jpg",
                                             fit: BoxFit.cover,
                                             height: 50.0,
@@ -384,7 +436,24 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(50.0),
-                                          child: Image.asset(
+                                          child: partnerData.picture!="0"? Image.network(
+                                            partnerData.uploaded != null
+                                                ? APP_ASSET_BASE_URL + partnerData.picture
+                                                : partnerData.picture,
+                                            fit: BoxFit.cover,
+
+                                            height: 50.0,
+                                            width: 50.0,
+                                            errorBuilder: (context, error, straktress) {
+                                              return Image.asset(
+                                                "assets/profile_user.jpg",
+                                                fit: BoxFit.cover,
+
+                                                height: 50.0,
+                                                width: 50.0,
+                                              );
+                                            },
+                                          ):Image.asset(
                                             "assets/profile_user.jpg",
                                             fit: BoxFit.cover,
                                             height: 50.0,

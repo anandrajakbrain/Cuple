@@ -55,7 +55,9 @@ class PartnerData {
   var deletedAt;
   String picture;
   var socialType;
-
+  var uploaded;
+  String premium;
+  var celebration_subscribe;
   PartnerData(
       {this.id,
         this.name,
@@ -88,7 +90,11 @@ class PartnerData {
         this.updatedAt,
         this.deletedAt,
         this.picture,
-        this.socialType});
+        this.socialType,
+        var uploaded,
+        String premium,
+        var celebration_subscribe,
+      });
 
   PartnerData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -123,6 +129,9 @@ class PartnerData {
     deletedAt = json['deleted_at'];
     picture = json['picture'];
     socialType = json['social_type'];
+    uploaded = json['uploaded'];
+    premium = json['premium'];
+    celebration_subscribe = json['celebration_subscribe'];
   }
 
   Map<String, dynamic> toJson() {
@@ -159,6 +168,9 @@ class PartnerData {
     data['deleted_at'] = this.deletedAt;
     data['picture'] = this.picture;
     data['social_type'] = this.socialType;
+    data['uploaded'] = this.uploaded;
+    data['premium'] = this.premium;
+    data['celebration_subscribe'] = this.celebration_subscribe;
     return data;
   }
 }
