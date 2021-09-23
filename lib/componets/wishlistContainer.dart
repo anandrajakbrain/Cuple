@@ -74,7 +74,7 @@ class _WishListContainerState extends State<WishListContainer> {
                       handler: () async {
                         DeleteWishListResponse deleteWishListResponse =
                             await Plugs(context).deleteUserWishList(
-                                id: widget.userWishListData.id.toString());
+                                id: widget.userWishListData.wishlistId.toString());
                         Navigator.pop(context);
                         widget.handlerCall();
                       },

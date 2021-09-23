@@ -12,10 +12,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:html/parser.dart';
+
 String devieToken;
+
 class Utils {
   BuildContext context;
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+
   Utils(@required this.context);
 
   double getMediaWidth() {
@@ -35,21 +38,21 @@ class Utils {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString("deviceToken", devieToken);
     // UtilitiesMethods(context).showMessage(context: context,title:"Toke",child: Text(tokenData.toString()));
-    print("Device Token : "+pref.getString("deviceToken").toString());
+    print("Device Token : " + pref.getString("deviceToken").toString());
   }
 
-
- Future<Widget> checkUser() async {
+  Future<Widget> checkUser() async {
     SharedPreferences prf = await SharedPreferences.getInstance();
     // print(prf.getString("user"));
     if (prf.containsKey("user")) {
-      userDetails=User.fromJson(jsonDecode(prf.getString("user")));
-      token=prf.getString("token");
-    return HomeScreen();
-    }else{
+      userDetails = User.fromJson(jsonDecode(prf.getString("user")));
+      token = prf.getString("token");
+      return HomeScreen();
+    } else {
       return LoginScreen();
     }
   }
+
   String parseHtmlString(String htmlString) {
     var document = parse(htmlString);
 
@@ -57,6 +60,7 @@ class Utils {
 
     return parsedString;
   }
+
   showProgressLoader() {
     return showDialog(
         barrierDismissible: false,
@@ -79,6 +83,7 @@ class Utils {
           );
         });
   }
+
   showAlert({
     BuildContext context,
     String title,
@@ -97,15 +102,42 @@ class Utils {
           );
         });
   }
+
   logout() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.clear();
     Navigator.pushAndRemoveUntil(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()), (Route<dynamic> route) => false);
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+        (Route<dynamic> route) => false);
   }
-  Future <bool> checkInternet() async{
-    bool result=await DataConnectionChecker().hasConnection;
+
+  Future<bool> checkInternet() async {
+    bool result = await DataConnectionChecker().hasConnection;
     print("Has Connection $result");
     return result;
+  }
+
+
+}
+String getInDays({String inputDate}) {
+  String daysData;
+  if (DateTime.parse(inputDate).difference(DateTime.now()).inDays >=0) {
+    // print();
+    daysData = DateTime.parse(inputDate)
+        .difference(DateTime.now())
+        .inDays
+        .toString();
+    return daysData;
+  } else {
+    var tmp = DateTime.parse(inputDate);
+    DateTime now = DateTime.now();
+    daysData =
+        DateTime.utc(now.add(Duration(days: 364)).year, tmp.month, tmp.day)
+            .difference(DateTime.now())
+            .inDays
+            .toString();
+    return daysData;
+    // print();
   }
 }

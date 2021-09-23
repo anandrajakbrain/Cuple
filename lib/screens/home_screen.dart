@@ -188,7 +188,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            drawer: CustomMenuDrawer(userDetails),
+            drawer: CustomMenuDrawer(userDetails,handler: (){
+              getApis();
+            },),
             bottomNavigationBar: FFNavigationBar(
               theme: FFNavigationBarTheme(
                 barBackgroundColor: Colors.white,
@@ -368,8 +370,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return ideasListResponse.data[index].id == 1
-                        ? Container(
+                    // return ideasListResponse.data[index].id == 1
+                        return Container(
                             padding: EdgeInsets.all(
                                 Utils(context).getMediaHeight() * 0.02),
                             width: Utils(context).getMediaWidth() * 0.8,
@@ -403,19 +405,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height:
                                       Utils(context).getMediaHeight() * 0.02,
                                 ),
-                                Text(
-                                  Utils(context)
-                                      .parseHtmlString(ideasListResponse
-                                          .data[index].content
-                                          .toString())
-                                      .toString(),
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: Utils(context).getMediaWidth() *
-                                          0.03),
-                                  softWrap: true,
-                                  maxLines: 3,
-                                  overflow: TextOverflow.fade,
+                                Container(
+                                  child: Text(
+                                    Utils(context)
+                                        .parseHtmlString(ideasListResponse
+                                            .data[index].content
+                                            .toString())
+                                        .toString(),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: Utils(context).getMediaWidth() *
+                                            0.03),
+                                    softWrap: true,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.fade,
+                                  ),
                                 ),
                                 SizedBox(
                                   height:
@@ -475,8 +479,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
-                          )
-                        : Container();
+                          );
+                        // : Container();
                   },
                 ),
               ),
@@ -593,7 +597,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "${remindersListsResponse.data[index].name}",
+                              "${remindersListsResponse.data[index].customize_name??remindersListsResponse.data[index].name}",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -627,7 +631,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: Utils(context).getMediaHeight() * 0.02,
                             ),
                             Text(
-                              "${DateTime.parse(remindersListsResponse.data[index].date).difference(DateTime.now()).inDays} days",
+                              "${getInDays(inputDate:remindersListsResponse.data[index].date )} days",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -756,8 +760,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return tipsListResponse.data[index].id == 2
-                        ? Container(
+                    return  Container(
                             padding: EdgeInsets.all(
                                 Utils(context).getMediaHeight() * 0.02),
                             width: Utils(context).getMediaWidth() * 0.8,
@@ -809,28 +812,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height:
                                       Utils(context).getMediaHeight() * 0.02,
                                 ),
-                                Container(
-                                  padding: EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(colors: [
-                                      Color(0XFFFAFAFA),
-                                      Color(0XFFFFFFFF),
-                                    ]),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Text(
-                                    "KNOW MORE",
-                                    style: TextStyle(
-                                        color: Color(0XFFB05983),
-                                        fontSize:
-                                            Utils(context).getMediaWidth() *
-                                                0.03),
+                                InkWell(
+                                  onTap: (){
+                                    // print(widget.ideasData.link);
+
+                                    Utils(context).showMessage(title: tipsListResponse.data[index].name,child: Text( Utils(context).parseHtmlString(tipsListResponse.data[index].content.toString()).toString()));
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [
+                                        Color(0XFFFAFAFA),
+                                        Color(0XFFFFFFFF),
+                                      ]),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Text(
+                                      "KNOW MORE",
+                                      style: TextStyle(
+                                          color: Color(0XFFB05983),
+                                          fontSize:
+                                              Utils(context).getMediaWidth() *
+                                                  0.03),
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                          )
-                        : Container();
+                          );
+                        // : Container();
                   },
                 ),
               ),
@@ -1152,7 +1162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             MaterialPageRoute(
                                 builder: (context) =>
                                     CreateNewReminder())).then((value) {
-                          getApis();
+                          // getApis();
                           fetchReminders();
                         }); //.then((value) => fetch());
                       },

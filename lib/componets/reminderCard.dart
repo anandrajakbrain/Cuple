@@ -107,7 +107,8 @@ class _ReminderCardState extends State<ReminderCard> {
             //   height: Utils(context).getMediaHeight() * 0.01,
             // ),
             Text(
-              "${DateTime.parse(widget.userListReminderData.date).difference(DateTime.now()).inDays} days",//"",
+              getInDays(inputDate: widget.userListReminderData.date).toString()+ " Days",
+              // "${DateTime.parse(widget.userListReminderData.date).difference(DateTime.now()).inDays} days",//"",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

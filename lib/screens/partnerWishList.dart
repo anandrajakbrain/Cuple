@@ -7,6 +7,7 @@ import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/userWishListResponse.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PartnerWishlist extends StatefulWidget {
@@ -84,7 +85,9 @@ class _PartnerWishlistState extends State<PartnerWishlist> {
               itemCount: userWishListResponse.data.length,
               itemBuilder: (context, index) {
                 return WishListContainer(isEven: true,isDelete: false,userWishListData: userWishListResponse.data[index],);
-              }):NoRecordFoundScreen():NoRecordFoundScreen(
+              }):Container(
+            child: Center(child: SvgPicture.asset("assets/hearts.svg",color: Color(0XFFD947E0),),),
+          ):NoRecordFoundScreen(
             icon: FontAwesomeIcons.fileDownload,
             msg: "Please Wait",
           ),

@@ -541,7 +541,9 @@ class Plugs {
       {@required String category,
       RemindersListData remindersListData,
       String date,
-      String name}) async {
+      String name,
+String customize_name,
+      }) async {
     Utils(context).showProgressLoader();
     var body = {
       "user_id": userDetails.id.toString(),
@@ -550,6 +552,7 @@ class Plugs {
       "status": "Active",
       "name": name,
       "favourite":"no",
+      "customize_name":customize_name,
       // "password": password,
     };
     try {
@@ -634,7 +637,7 @@ class Plugs {
 
     try {
       http.Response response = await http.get(
-          SUGGESION_TYPE_LIST + "?type=$type",
+          SUGGESION_TYPE_LIST + "?category_id=2",//According to Suggestion Type 2 is Love Tips Id
           headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
@@ -663,7 +666,7 @@ class Plugs {
     try {
       http.Response response = await http.get(
           SUGGESION_TYPE_LIST +
-              "?type=$type&auth_id=" +
+              "?category_id=1&auth_id=" +//According To Suggestion Type Date Ideas id is 1
               userDetails.id.toString(),
           headers: getHeaders(token: token));
       if (response.statusCode == 200) {
@@ -773,7 +776,7 @@ class Plugs {
 
   Future<DeleteWishListResponse> deleteUserWishList({String id}) async {
     Utils(context).showProgressLoader();
-
+print(DELETE_WISH_LIST + id);
     try {
       http.Response response = await http.delete(DELETE_WISH_LIST + id,
           headers: getHeaders(token: token));

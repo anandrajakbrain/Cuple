@@ -30,6 +30,7 @@ class IdeasListResponse {
 class IdeasData {
   int id;
   int suggesionTypeId;
+  String name;
   String category;
   String content;
   String image;
@@ -53,7 +54,9 @@ class IdeasData {
         this.updatedAt,
         this.deletedAt,
         this.suggesiontype,
-      this.wishlist_added});
+      this.wishlist_added,
+      this.name,
+      });
 
   IdeasData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -68,6 +71,7 @@ class IdeasData {
     deletedAt = json['deleted_at'];
     suggesiontype = json['suggesiontype'];
     wishlist_added = json['wishlist-added'];
+    name = json['name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -84,6 +88,7 @@ class IdeasData {
     data['deleted_at'] = this.deletedAt;
     data['suggesiontype'] = this.suggesiontype;
     data['wishlist-added'] = this.wishlist_added;
+    data['name'] = this.name;
     return data;
   }
 }

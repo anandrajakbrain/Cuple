@@ -27,6 +27,7 @@ class _CreateNewReminderState extends State<CreateNewReminder> {
   RemindersListData remindersListData;
   DateTime selectedDate = DateTime.now();
   RemindersTypeResponse remindersTypeResponse;
+  String customREminderName;
 
   getReminderType() async {
     RemindersTypeResponse _remindersListsResponse =
@@ -59,11 +60,12 @@ class _CreateNewReminderState extends State<CreateNewReminder> {
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate:DateTime(1969, 1, 1),// DateTime.now(),
-        lastDate: DateTime(DateTime.now().year + 25),
-    helpText: "Select Reminder Date",
+      context: context,
+      initialDate: selectedDate,
+      firstDate:DateTime.now(),// DateTime(1969, 1, 1),
+      // DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 25),
+      helpText: "Select Reminder Date",
       errorFormatText: 'Enter valid Reminder date',
       errorInvalidText: 'Enter date in valid range',
     );
@@ -77,6 +79,7 @@ class _CreateNewReminderState extends State<CreateNewReminder> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: CustomBackButton(),
         title: Text(
@@ -198,6 +201,52 @@ class _CreateNewReminderState extends State<CreateNewReminder> {
                 SizedBox(
                   height: Utils(context).getMediaHeight() * 0.03,
                 ),
+                Container(
+                  // padding: EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    // keyboardType: widget.TxtInputType,
+                    // controller: widget.controller,
+                    decoration: InputDecoration(
+                      labelText: "Reminder Name",
+                      labelStyle: TextStyle(
+                        fontSize: Utils(context).getMediaWidth() * 0.059,
+                        color: Colors.grey[500],
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey[300],
+                          // width: 2.0,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "! Please Fill Reminder Name";
+                      }
+
+                      return null;
+                    },
+                    onChanged: (val) {
+                      setState(() {
+                        customREminderName = val;
+                      });
+                    },
+                    /*onChanged: (val){
+          if (_formkey.currentState.validate()) {
+            print("Validated");
+          }else{
+            print("Not Validated");
+          }
+        },*/
+                  ),
+                ),
                 InkWell(
                   onTap: () {
                     print("Tap Work");
@@ -285,6 +334,7 @@ class _CreateNewReminderState extends State<CreateNewReminder> {
         remindersListData: remindersListData,
         date: selectedDate.toString(),
         name: reminderTypeVal.name.toString(),
+        customize_name: customREminderName,
       );
       Navigator.pop(context);
     } catch (e, s) {

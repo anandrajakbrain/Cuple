@@ -436,7 +436,7 @@ class _EditProfileState extends State<EditProfile> {
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.035),
                 ),
-                InkWell(
+             /*   InkWell(
                   onTap: () {
                     _selectDate(context, 'anniversary');
                   },
@@ -489,14 +489,23 @@ class _EditProfileState extends State<EditProfile> {
                                   width: 1))),
                     ),
                   ),
-                ),
+                ),*/
                 Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.055),
                 ),
                 GestureDetector(
                   onTap: () {
-                    fetch();
+
+
+                    if(phone=="00000000"||phone==null){
+                      Utils(context).showMessage(title: "Update your phone no",child: Text("You did'nt update your phone no yet "),handler: (){
+                        Navigator.pop(context);
+                      },isCancel: true);
+                    }else{
+                      fetch();
+                    }
+
                   },
                   child: Container(
                     child: Container(

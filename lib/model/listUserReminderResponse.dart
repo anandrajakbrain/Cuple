@@ -40,6 +40,7 @@ class UserListReminderData {
   String category;
   String type;
   String favourite;
+  String customize_name;
 
   UserListReminderData(
       {this.id,
@@ -54,6 +55,7 @@ class UserListReminderData {
         this.category,
       this.type,
       this.favourite,
+        this.customize_name,
       });
 
   UserListReminderData.fromJson(Map<String, dynamic> json) {
@@ -69,6 +71,7 @@ class UserListReminderData {
     category = json['category'];
     type = json['type'];
     favourite = json['favourite'];
+    customize_name = json['customize_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -85,6 +88,7 @@ class UserListReminderData {
     data['category'] = this.category;
     data['type'] = this.type;
     data['favourite'] = this.favourite;
+    data['customize_name'] = this.customize_name;
     return data;
   }
 }

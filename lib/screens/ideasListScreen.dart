@@ -123,8 +123,8 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2),
                                 itemBuilder: (BuildContext context, index) {
-                                  return ideasListResponse.data[index].id == 1 ? IdeasCardContainer(
-                                      ideasData: ideasListResponse.data[index]) : Container();
+                                  return  IdeasCardContainer(
+                                      ideasData: ideasListResponse.data[index]);// Container();
                                   /*Container(
                       height: Utils(context).getMediaHeight() * 0.6,
                       margin: EdgeInsets.all(8.0),
@@ -184,10 +184,47 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                 },
               ),
               backgroundColor: APP_BAR_COLOR,
-              title: Text(
+              title: partnerData != null ? Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Color(0XFF6341DF), Color(0XFF1E8FED)]),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      margin: EdgeInsets.only(left: 10.0),
+                      child: Text(
+                        "${userDetails != null ? userDetails.name ?? "" : ""}",
+                        style: TextStyle(
+                            fontSize: Utils(context).getMediaWidth() * 0.04,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                        ),
+                      ),
+                    ),
+                    SvgPicture.asset("assets/hearts.svg", height: Utils(context).getMediaHeight() * 0.03,),
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      margin: EdgeInsets.only(left: 10.0),
+                      child: Text(
+                        "${partnerData != null ? partnerData.name ?? "" : ""}",
+                        style: TextStyle(
+                            fontSize: Utils(context).getMediaWidth() * 0.04,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ) : Container(child: Text(
                 "${suggesiontypeListsResponse!=null?suggesiontypeListsResponse.data.where((element) => element.id==1).first.name:'Date Ideas'}",
                 style: TextStyle(color: Colors.black),
-              ),
+              ),),/* Text(
+                "${suggesiontypeListsResponse!=null?suggesiontypeListsResponse.data.where((element) => element.id==1).first.name:'Date Ideas'}",
+                style: TextStyle(color: Colors.black),
+              ),*/
               actions: [
                 InkWell(
                   onTap: () {
@@ -220,8 +257,8 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2),
                             itemBuilder: (BuildContext context, index) {
-                              return ideasListResponse.data[index].id == 1 ? IdeasCardContainer(
-                                  ideasData: ideasListResponse.data[index]) : Container();
+                              return IdeasCardContainer(
+                                  ideasData: ideasListResponse.data[index]) ;// Container();
                             })
                         : NoRecordFoundScreen()
                     : NoRecordFoundScreen(

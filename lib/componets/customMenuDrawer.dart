@@ -14,8 +14,8 @@ import 'package:flutter/material.dart';
 
 class CustomMenuDrawer extends StatefulWidget {
   final User userDetails;
-
-  CustomMenuDrawer(this.userDetails);
+final handler;
+  CustomMenuDrawer(this.userDetails,{@required this.handler});
 
   @override
   _CustomMenuDrawerState createState() => _CustomMenuDrawerState();
@@ -110,7 +110,7 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
           InkWell(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => UserProfile()));
+                  MaterialPageRoute(builder: (context) => UserProfile())).then((value) => widget.handler());
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
