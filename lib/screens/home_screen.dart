@@ -388,8 +388,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return ideasListResponse.data[index].id == 1
-                        ? GestureDetector(
+                    return
+                         GestureDetector(
                       onTap: (){
                         Navigator.push(
                             context,
@@ -538,8 +538,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                    )
-                        : Container();
+                    );
+
                   },
                 ),
               ),
@@ -826,8 +826,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return tipsListResponse.data[index].id == 2
-                        ? GestureDetector(
+                    return  GestureDetector(
                       onTap: (){
                         Navigator.push(
                             context,
@@ -942,8 +941,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                    )
-                     : Container();
+                    );
+
                   },
                 ),
               ),
