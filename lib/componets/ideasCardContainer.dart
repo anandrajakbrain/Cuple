@@ -3,6 +3,7 @@ import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
+import 'package:cuple_app/screens/ideasDetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:io';
@@ -11,23 +12,30 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class IdeasCardContainer extends StatefulWidget {
   IdeasData ideasData;
+
   IdeasCardContainer({@required this.ideasData});
+
   @override
   _IdeasCardContainerState createState() => _IdeasCardContainerState();
 }
 
 class _IdeasCardContainerState extends State<IdeasCardContainer> {
-  bool isfev=false;
+  bool isfev = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         print(widget.ideasData.link);
-
-        Utils(context).showMessage(title: "",child: Text( Utils(context).parseHtmlString(widget.ideasData.content.toString()).toString()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => IdeasDetailsScreen(ideasData: widget.ideasData,)));
+        // Utils(context).showMessage(title: "",child: Text( Utils(context).parseHtmlString(widget.ideasData.content.toString()).toString()));
       },
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.6,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.6,
         margin: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: Color(0XFFE8F6F1),
@@ -43,25 +51,29 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
         child: Stack(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height,
-              child: widget.ideasData.image!=null?Image.network(
-                "${APP_ASSET_BASE_URL+ widget.ideasData.image}",
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
+              child: widget.ideasData.image != null ? Image.network(
+                "${APP_ASSET_BASE_URL + widget.ideasData.image}",
                 // fit: BoxFit.cover,
-                  fit: BoxFit.fill,
+                fit: BoxFit.fill,
                 // height: Utils(context).getMediaHeight() * 0.14,
                 // width: 1,
-                errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                errorBuilder: (BuildContext context, Object exception,
+                    StackTrace stackTrace) {
                   return Image.asset(
                     "assets/ideaImg2.png",
-                      fit: BoxFit.fill,
+                    fit: BoxFit.fill,
                     // fit: BoxFit.cover,
                     // height: Utils(context).getMediaHeight() * 0.14,
                     // width: 1,
                   );
                 },
-              ):Image.asset(
+              ) : Image.asset(
                 "assets/ideaImg2.png",
-                  fit: BoxFit.fill,
+                fit: BoxFit.fill,
                 // fit: BoxFit.cover,
                 // height: Utils(context).getMediaHeight() * 0.14,
                 // width: 1,
@@ -70,7 +82,8 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Text(
-                Utils(context).parseHtmlString(widget.ideasData.content.toString()).toString() ,
+                Utils(context).parseHtmlString(
+                    widget.ideasData.content.toString()).toString(),
                 softWrap: true,
                 maxLines: 2,
                 overflow: TextOverflow.fade,
@@ -86,17 +99,20 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
                 right: 0,
                 child: IconButton(
                     icon: Icon(
-                      widget.ideasData.wishlist_added!="no"?Icons.favorite:Icons.favorite_border,
+                      widget.ideasData.wishlist_added != "no"
+                          ? Icons.favorite
+                          : Icons.favorite_border,
                       color: Colors.red,
                     ),
                     onPressed: () async {
-                      if(widget.ideasData.wishlist_added=="no"){
-                        Plugs(context).addToWishList(suggestionId: widget.ideasData.id.toString());
+                      if (widget.ideasData.wishlist_added == "no") {
+                        Plugs(context).addToWishList(
+                            suggestionId: widget.ideasData.id.toString());
                       }
 
                       setState(() {
-                        if(widget.ideasData.wishlist_added=="no"){
-                          widget.ideasData.wishlist_added="yes";
+                        if (widget.ideasData.wishlist_added == "no") {
+                          widget.ideasData.wishlist_added = "yes";
                         }
                       });
                     })),
@@ -109,18 +125,17 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
                       color: Colors.blue,
                     ),
                     onPressed: () {
-                     if(widget.ideasData.link!=null){
-                       Navigator.push(
-                           context,
-                           MaterialPageRoute(
-                             builder: (context) =>
-                                 WebViewIdea(widget.ideasData.link),
-                           ));
-                     }else{
-                       Utils(context).showMessage(title: "Sorry",child: Text("There Is No Available Link On Idea"));
-                     }
-
-
+                      if (widget.ideasData.link != null) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  WebViewIdea(widget.ideasData.link),
+                            ));
+                      } else {
+                        Utils(context).showMessage(title: "Sorry",
+                            child: Text("There Is No Available Link On Idea"));
+                      }
                     })),
           ],
         ),
@@ -184,7 +199,9 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
 
 class WebViewIdea extends StatefulWidget {
   final link;
+
   WebViewIdea(this.link);
+
   @override
   WebViewIdeaState createState() => WebViewIdeaState();
 }
