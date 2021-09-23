@@ -76,7 +76,7 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
                 overflow: TextOverflow.fade,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: Colors.white,
+                    //color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 17),
               ),

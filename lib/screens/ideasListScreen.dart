@@ -90,7 +90,7 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                         style: TextStyle(
                           fontSize: Utils(context).getMediaWidth() * 0.04,
                           fontWeight: FontWeight.bold,
-                            color: Colors.white
+                            //color: Colors.white
                         ),
                       ),
                     ),
