@@ -1,8 +1,11 @@
+
+
 import 'package:cuple_app/componets/partnerSearchProfileCard.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/findPartnerResponse.dart';
+import 'package:cuple_app/model/sendInvitationResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -129,11 +132,10 @@ class _SearchPartnerScreenState extends State<SearchPartnerScreen> {
                       return PartnerProfileCard(
                         findPartnerData:
                             findPartnerResponse.alldata.data[index],
-                        callback: (){
+                        callback: () {
                           setState(() {
                             findPartnerResponse.alldata.data.removeAt(index);
                           });
-
                         },
                       );
                     }),
@@ -148,8 +150,28 @@ class _SearchPartnerScreenState extends State<SearchPartnerScreen> {
   getPartner() async {
     FindPartnerResponse _findPartnerResponse =
         await Plugs(context).findPartner(search_key: searchPartner);
-    setState(() {
-      findPartnerResponse = _findPartnerResponse;
-    });
+    print("Work");
+    if (findPartnerResponse.alldata.data.length < 1) {
+      print("Not Exist");
+      Utils(context).showAlert(
+          context: context,
+          title: "Sorry",
+          child: Text(
+              "We Did'nt Find $searchPartner would you want to send invitation ?"),
+          handler: () async{
+          SendInvitationResponse sendInvitationResponse= await  Plugs(context).sendInvitation(email: searchPartner);
+         if(sendInvitationResponse.success==true){
+           Navigator.pop(context);
+           Utils(context).showMessage(title: "Success",child: Text("We SuccessFully Send Invite "));
+         }
+
+          },
+          isCancel: true);
+    } else {
+      print("exist");
+      setState(() {
+        findPartnerResponse = _findPartnerResponse;
+      });
+    }
   }
 }

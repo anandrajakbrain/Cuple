@@ -342,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(8.0),
                     margin: EdgeInsets.only(left: 10.0),
                     child: partnerData!=null? Text(
-                      "${partnerData!= null ? partnerData.firstName ?? "" : ""} Partner",
+                      "${partnerData!= null ? partnerData.firstName ?? partnerData.name : ""} Partner",
                       style: TextStyle(
                         fontSize: Utils(context).getMediaWidth() * 0.04,
                         fontWeight: FontWeight.bold,
@@ -1613,6 +1613,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getpartnerDetails() async {
     try {
+
       if (userDetails.partnerid != 0) {
         GetUserPartnerDetailsResponse _getUserPartnerDetailsResponse =
         await Plugs(context)
@@ -1643,11 +1644,17 @@ class _HomeScreenState extends State<HomeScreen> {
       getPartnerRequestResponseGlobal = _getPartnerRequestResponse;
     });
 
-    print(_getPartnerRequestResponse.date
+
+print("Partner Requester Condition True or false ");
+print(jsonEncode(getPartnerRequestResponse.date));
+print(_getPartnerRequestResponse.date
         .where((element) =>
-    element.invitationStatus == "Pending" &&
-        element.id == userDetails.id)
+
+        element.invitationStatus == "Accepted" &&
+        // element.toId == userDetails.id &&
+        element.adminStatus == "Appprove")
         .isEmpty);
+
     if (_getPartnerRequestResponse.date
         .where((element) =>
     element.invitationStatus == "Pending" &&

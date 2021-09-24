@@ -38,4 +38,5 @@ const String USER_FAVOURITES_LIST=APP_BASE_URL+"get-favourites?user_id=";
 const String ADD_TO_FAVOURITES=APP_BASE_URL+"add-to-favourite";
 const String SEND_NOTIFICATION=APP_BASE_URL+"send-notification";
 const String BEFORE_RAGISTER=APP_BASE_URL+"before-register";
+const String SEND_INVITES=APP_BASE_URL+"send-invite";
 

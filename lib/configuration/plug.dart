@@ -19,6 +19,7 @@ import 'package:cuple_app/model/notificationsListsResponse.dart';
 import 'package:cuple_app/model/registerUserResponse.dart';
 import 'package:cuple_app/model/reminder_type_response.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
+import 'package:cuple_app/model/sendInvitationResponse.dart';
 import 'package:cuple_app/model/sendMsgResponse.dart';
 import 'package:cuple_app/model/sendNotificationResponse.dart';
 import 'package:cuple_app/model/sendPartnerRequestResponse.dart';
@@ -1088,9 +1089,11 @@ class Plugs {
     Utils(context).showProgressLoader();
 
     try {
+
       var body = {
         "match_id": matchId,
       };
+      print(body);
       http.Response response = await http.post(ACCEPT_PARTNER_REQUEST,
           body: body, headers: getHeaders(token: token));
       if (response.statusCode == 200) {
@@ -1151,6 +1154,7 @@ class Plugs {
       /*var body={
         "search_key":search_key,
       };*/
+      print(GET_PARTNER_REQUEST + userDetails.id.toString());
       http.Response response =
           await http.get(GET_PARTNER_REQUEST + userDetails.id.toString(),
               // body: body,
@@ -1159,6 +1163,38 @@ class Plugs {
         print(response.body);
         Navigator.pop(context);
         return GetPartnerRequestResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+  Future<SendInvitationResponse> sendInvitation({@required String email}) async {
+    Utils(context).showProgressLoader();
+
+    try {
+      var body={
+        "email":email,
+        "name":userDetails.name,
+      };
+      print(SEND_INVITES);
+      http.Response response =
+          await http.post(SEND_INVITES,
+              body: body,
+              headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return SendInvitationResponse.fromJson(jsonDecode(response.body));
       } else {
         throw Exception(response.body);
       }

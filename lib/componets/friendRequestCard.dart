@@ -147,6 +147,7 @@ class _FriendRequestCardState extends State<FriendRequestCard> {
 
   actionRequest(String type) async {
     if (type == "accept") {
+
       SendPartnerRequestResponse sendPartnerRequestResponse =
           await Plugs(context).acceptPartnerRequest(
               matchId: widget.friendRequestData.id.toString());
