@@ -43,6 +43,7 @@ import 'package:ff_navigation_bar/ff_navigation_bar_item.dart';
 import 'package:ff_navigation_bar/ff_navigation_bar_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -656,63 +657,77 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.grey[300],
                                 blurRadius: 1,
                               )
-                            ]),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                            ],
+                        ),
+                        child: Stack(
+                          fit: StackFit.expand,
                           children: [
-                            Text(
-                              "${remindersListsResponse.data[index].customize_name??remindersListsResponse.data[index].name}",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                  Utils(context).getMediaWidth() * 0.03),
-                            ),
-                            SizedBox(
-                              height: Utils(context).getMediaHeight() * 0.02,
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  Color(0XFF2487EC),
-                                  Color(0XFF663DDF),
-                                ]),
-                                borderRadius: BorderRadius.circular(50),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 20.0),
+                              child: SvgPicture.asset(
+                                  "assets/hearts.svg",fit: BoxFit.cover,
+                                  color: Colors.red[100],
+                                  //semanticsLabel: 'A red up arrow'
                               ),
-                              child: Text(
-                                DateFormat("MMM d,y").format(
-                                  DateTime.parse(
-                                      remindersListsResponse.data[index].date),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "${remindersListsResponse.data[index].customize_name??remindersListsResponse.data[index].name}",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                      Utils(context).getMediaWidth() * 0.03),
                                 ),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize:
-                                    Utils(context).getMediaWidth() * 0.03),
-                              ),
-                            ),
-                            SizedBox(
-                              height: Utils(context).getMediaHeight() * 0.02,
-                            ),
-                            Text(
-                              "${DateTime.parse(remindersListsResponse.data[index].date).difference(DateTime.now()).inDays+1} day(s)",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                  Utils(context).getMediaWidth() * 0.03),
-                            ),
-                            SizedBox(
-                              height: Utils(context).getMediaHeight() * 0.02,
-                            ),
-                            Text(
-                              "To Celebrate ${remindersListsResponse.data[index].type}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize:
-                                  Utils(context).getMediaWidth() * 0.03),
+                                SizedBox(
+                                  height: Utils(context).getMediaHeight() * 0.02,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(colors: [
+                                      Color(0XFF2487EC),
+                                      Color(0XFF663DDF),
+                                    ]),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Text(
+                                    DateFormat("MMM d,y").format(
+                                      DateTime.parse(
+                                          remindersListsResponse.data[index].date),
+                                    ),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                        Utils(context).getMediaWidth() * 0.03),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Utils(context).getMediaHeight() * 0.02,
+                                ),
+                                Text(
+                                  "${DateTime.parse(remindersListsResponse.data[index].date).difference(DateTime.now()).inDays+1} day(s)",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                      Utils(context).getMediaWidth() * 0.03),
+                                ),
+                                SizedBox(
+                                  height: Utils(context).getMediaHeight() * 0.02,
+                                ),
+                                Text(
+                                  "To Celebrate ${remindersListsResponse.data[index].type}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize:
+                                      Utils(context).getMediaWidth() * 0.03),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -1049,10 +1064,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PartnerWishlist(
-                            partnerName: partnerData != null
-                                ? partnerData.name
-                                : 'Partner'),
+                        builder: (context) =>
+                            WebViewIdea("https://www.herwishlist.com/"),
                       ));
                 },
                 child: Container(
