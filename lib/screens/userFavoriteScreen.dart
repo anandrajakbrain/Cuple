@@ -50,8 +50,8 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
     await Plugs(context).getreminderType();
     setState(() {
       remindersTypeResponse = _remindersListsResponse;
-      for(int i = 0; i < remindersTypeResponse.data.length; i++){print(remindersTypeResponse.data[i].name.toString());
-      reminderTypeList.add(remindersTypeResponse.data[i].name);
+      for(int i = 0; i < remindersTypeResponse.data.length; i++){//print(remindersTypeResponse.data[i].name.toString());
+      reminderTypeList.add(remindersTypeResponse.data[i]?.name);
       print(remindersTypeResponse.data[i].name);
       print("reminder ${remindersTypeResponse.data[i].id}");
       reminderIdsObj[remindersTypeResponse.data[i].name] = remindersTypeResponse.data[i].name;
@@ -197,14 +197,16 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 0))
-        .then((value) {
-      fetch();
-      getReminderType();
-      fetchPartnerWishList();
-      fetchIdeasList();
-      fetchLoveTips();
-    });
+    if(partnerData != null){
+      Future.delayed(Duration(seconds: 0))
+          .then((value) {
+        fetch();
+        getReminderType();
+        fetchPartnerWishList();
+        fetchIdeasList();
+        fetchLoveTips();
+      });
+    }
   }
 
   @override
@@ -526,10 +528,16 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
             ),
           ],
         )
-            : NoRecordFoundScreen(
+            : Container(width: double.infinity,height: Utils(context).getMediaHeight(),
+          child: Column(mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              NoRecordFoundScreen(
                 icon: FontAwesomeIcons.fileDownload,
                 msg: partnerData!=null?"Please Wait":"You Didn't Have Partner Yet",
               ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -215,7 +215,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   selectedIndex = index;
                   controlWidget = getWidget(index: selectedIndex);
                   if (selectedIndex == 1)
-                    _title = "${partnerData.name.toString().split(' ').first}";
+                    if (selectedIndex == 1) {
+                      if(partnerData != null) {
+                        _title = "${partnerData.name
+                            .toString()
+                            .split(' ')
+                            .first}";
+                      }
+                    }
                   else if (selectedIndex == 3) {
                     _title = "Profile";
                   } else
