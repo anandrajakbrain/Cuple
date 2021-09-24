@@ -387,7 +387,7 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
                       ),
                     ),
                     Container(
-                      height: Utils(context).getMediaHeight() * 0.3,
+                      //height: Utils(context).getMediaHeight() * 0.3,
                       child: getReminder(context, reminderTypeList[index]),
                     )
                   ],

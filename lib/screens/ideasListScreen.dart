@@ -28,7 +28,7 @@ class IdeasListScreen extends StatefulWidget {
 class _IdeasListScreenState extends State<IdeasListScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   IdeasListResponse ideasListResponse;
-  
+
   fetchIdeasList() async {
     Utils(context).checkInternet().then((value) async {
       if(value==true){
