@@ -19,11 +19,9 @@ class PartnerWishlist extends StatefulWidget {
 
 class _PartnerWishlistState extends State<PartnerWishlist> {
   UserWishListResponse userWishListResponse;
-  fetch() async {
+  fetchPartnerWishList() async {
     Utils(context).checkInternet().then((value) async {
       if(value==true){
-
-
         if(partnerData!=null) {
           UserWishListResponse _userWishListResponse =
           await Plugs(context).getPartnerWishList(
@@ -34,8 +32,6 @@ class _PartnerWishlistState extends State<PartnerWishlist> {
           });
         }
       }
-
-
       else {
         Utils(context).showAlert(
             context: context,
@@ -44,22 +40,18 @@ class _PartnerWishlistState extends State<PartnerWishlist> {
                 height: 250, width: 150, child: NoInternetConnectionScreen()),
             handler: () {
               Navigator.pop(context);
-              fetch();
+              fetchPartnerWishList();
             },
             isCancel: false);
       }
-
-
     });
-
-
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 2)).then((value) => fetch());
+    Future.delayed(Duration(seconds: 2)).then((value) => fetchPartnerWishList());
   }
 
   @override
