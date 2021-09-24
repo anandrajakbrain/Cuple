@@ -315,10 +315,16 @@ class Plugs {
       var email,
       var phone,
       var dob,
+
       File image,
       String mAnniversary,
       String lAnniversary,
-      String gender) async {
+      String gender,
+      String firstName,
+      String lastName,
+      String state,
+
+      ) async {
     Utils(context).showProgressLoader();
     var body = {
       "id": userId,
@@ -331,11 +337,23 @@ class Plugs {
     var request = new http.MultipartRequest("POST", uri);
     try {
       request.fields['id'] = userId.toString();
-      request.fields['name'] = name.toString();
+
       request.fields['email'] = email.toString();
 
       if (phone != null) {
         request.fields['phone'] = phone.toString();
+
+      }
+      if (firstName != null) {
+        request.fields['first_name'] = firstName.toString();
+        request.fields['name'] = firstName+" "+lastName;//name.toString();
+
+      }
+      if (lastName != null) {
+        request.fields['last_name'] = lastName.toString();
+      }
+      if (state != null) {
+        request.fields['state'] = state.toString();
       }
       if (gender != null) {
         request.fields['gender'] = gender.toString();

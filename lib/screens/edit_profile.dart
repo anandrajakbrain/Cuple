@@ -72,11 +72,15 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController dobController = TextEditingController();
   TextEditingController marriageAnniversary = TextEditingController();
   TextEditingController loveAnniversary = TextEditingController();
+  TextEditingController firstNameController= TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController stateController = TextEditingController();
 
   var name = "";
   var email = "";
   var phone = "";
   var dob = "";
+  var firstName, lastName, state = "";
 
   fetch() async {
     UpdateUserResponse _updateUserResponse = await Plugs(context)
@@ -89,7 +93,10 @@ class _EditProfileState extends State<EditProfile> {
             _image,
             marriageAnniversary.text.toString(),
             loveAnniversary.text.toString(),
-            gender);
+            gender,
+            firstName,
+            lastName,
+            state);
 
     setState(() {
       updateUserResponse = _updateUserResponse;
@@ -129,12 +136,18 @@ class _EditProfileState extends State<EditProfile> {
     super.initState();
     setState(() {
       nameController.text = userDetails.name;
+      firstNameController.text = userDetails.firstName??"";
+      lastNameController.text = userDetails.lastName??"";
+      stateController.text = userDetails.state??"";
       emailController.text = userDetails.email;
       mobileController.text = userDetails.phone;
       dobController.text = userDetails.dob;
       name = userDetails.name;
       email = userDetails.email;
       phone = userDetails.phone;
+      firstName = userDetails.firstName??"";
+      lastName = userDetails.lastName??"";
+      state = userDetails.state??"";
       dob = userDetails.dob;
       marriageAnniversary.text = userDetails.anniversaryDate;
       loveAnniversary.text = userDetails.firstDate;
@@ -227,7 +240,10 @@ class _EditProfileState extends State<EditProfile> {
                                     )
                                   : userDetails.picture != "0"
                                       ? Image.network(
-                                userDetails.uploaded!=null? APP_ASSET_BASE_URL + userDetails.picture:userDetails.picture,
+                                          userDetails.uploaded != null
+                                              ? APP_ASSET_BASE_URL +
+                                                  userDetails.picture
+                                              : userDetails.picture,
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height *
@@ -310,14 +326,33 @@ class _EditProfileState extends State<EditProfile> {
                     padding: EdgeInsets.only(
                         top: Utils(context).getMediaHeight() * 0.035)),
                 TextFormField(
-                  controller: nameController,
+                  controller: firstNameController,
                   onChanged: (val) {
                     setState(() {
-                      name = val;
+                      firstName = val;
                     });
                   },
                   decoration: InputDecoration(
-                      labelText: 'Name',
+                      labelText: ' First Name',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.grey,
+                              style: BorderStyle.solid,
+                              width: 1))),
+                ), Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.035),
+                ),
+                TextFormField(
+                  controller: lastNameController,
+                  onChanged: (val) {
+                    setState(() {
+                      lastName = val;
+                    });
+                  },
+                  decoration: InputDecoration(
+                      labelText: 'Last Name',
                       labelStyle: TextStyle(color: Colors.grey),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -436,7 +471,7 @@ class _EditProfileState extends State<EditProfile> {
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.035),
                 ),
-             /*   InkWell(
+                /*   InkWell(
                   onTap: () {
                     _selectDate(context, 'anniversary');
                   },
@@ -496,16 +531,17 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 GestureDetector(
                   onTap: () {
-
-
-                    if(phone=="00000000"||phone==null){
-                      Utils(context).showMessage(title: "Update your phone no",child: Text("You did'nt update your phone no yet "),handler: (){
-                        Navigator.pop(context);
-                      },isCancel: true);
-                    }else{
+                    if (phone == "00000000" || phone == null) {
+                      Utils(context).showMessage(
+                          title: "Update your phone no",
+                          child: Text("You did'nt update your phone no yet "),
+                          handler: () {
+                            Navigator.pop(context);
+                          },
+                          isCancel: true);
+                    } else {
                       fetch();
                     }
-
                   },
                   child: Container(
                     child: Container(

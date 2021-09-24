@@ -1,23 +1,29 @@
+import 'package:cuple_app/model/verifyOTPResponse.dart';
+
 class RegisterUserResponse {
   bool success;
-  RegisterData data;
   String message;
+  User user;
+  String accessToken;
 
-  RegisterUserResponse({this.success, this.data, this.message});
+  RegisterUserResponse(
+      {this.success, this.message, this.user, this.accessToken});
 
   RegisterUserResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    data = json['data'] != null ? new RegisterData.fromJson(json['data']) : null;
     message = json['message'];
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    accessToken = json['access_token'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
-    if (this.data != null) {
-      data['data'] = this.data.toJson();
-    }
     data['message'] = this.message;
+    if (this.user != null) {
+      data['user'] = this.user.toJson();
+    }
+    data['access_token'] = this.accessToken;
     return data;
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/registerUserResponse.dart';
@@ -5,6 +7,9 @@ import 'package:cuple_app/screens/login.dart';
 import 'package:cuple_app/screens/registerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'home_screen.dart';
 
 class BeforeReagisterOtpScreen extends StatefulWidget {
   PreviewReg previewReg;
@@ -166,10 +171,15 @@ if(_pinPutController.text==widget.previewReg.otp){
         last_name: widget.previewReg.lastName,
         state: widget.previewReg.state);
     if (registerUserResponse.success == true) {
+      SharedPreferences prf=await SharedPreferences.getInstance();
+      prf.setString("user", jsonEncode(registerUserResponse.user));
+      prf.setString("token", registerUserResponse.accessToken);
+
+
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => LoginScreen(),
+          builder: (context) => HomeScreen(),
         ),
             (route) => false,
       );
