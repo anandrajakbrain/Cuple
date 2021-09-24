@@ -28,20 +28,15 @@ class IdeasListScreen extends StatefulWidget {
 class _IdeasListScreenState extends State<IdeasListScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   IdeasListResponse ideasListResponse;
-
-  fetch() async {
+  
+  fetchIdeasList() async {
     Utils(context).checkInternet().then((value) async {
       if(value==true){
-
         IdeasListResponse _ideasListResponse = await Plugs(context).getIdeasList();
-
         setState(() {
           ideasListResponse = _ideasListResponse;
         });
-
       }
-
-
       else {
         Utils(context).showAlert(
             context: context,
@@ -50,24 +45,18 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                 height: 250, width: 150, child: NoInternetConnectionScreen()),
             handler: () {
               Navigator.pop(context);
-              fetch();
+              fetchIdeasList();
             },
             isCancel: false);
       }
-
-
     });
-
-
-
-
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 1)).then((value) => fetch());
+    Future.delayed(Duration(seconds: 1)).then((value) => fetchIdeasList());
   }
 
   @override
