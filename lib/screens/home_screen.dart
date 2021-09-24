@@ -21,6 +21,7 @@ import 'package:cuple_app/model/getUserPartnerDetailsResponse.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
+import 'package:cuple_app/model/settingsResponse.dart';
 import 'package:cuple_app/model/suggesiontypeListsResponse.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
@@ -117,6 +118,13 @@ class _HomeScreenState extends State<HomeScreen> {
     await Plugs(context).getSuggestionType();
     setState(() {
       suggesiontypeListsResponse = _suggesiontypeListsResponse;
+    });
+  }
+
+  getSettings() async{
+    SettingsResponse _settingsResponse = await Plugs(context).getSettings(userDetails.id.toString());
+    setState(() {
+      userSettings = _settingsResponse;
     });
   }
 
@@ -1548,6 +1556,7 @@ class _HomeScreenState extends State<HomeScreen> {
         await getpartnerDetails();
         await getfrendRequest();
         await fetchReminders();
+        await getSettings();
       } else {
         Utils(context).showAlert(
             context: context,

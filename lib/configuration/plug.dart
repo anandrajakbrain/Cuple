@@ -22,6 +22,7 @@ import 'package:cuple_app/model/remindersListsResponse.dart';
 import 'package:cuple_app/model/sendMsgResponse.dart';
 import 'package:cuple_app/model/sendNotificationResponse.dart';
 import 'package:cuple_app/model/sendPartnerRequestResponse.dart';
+import 'package:cuple_app/model/settingsResponse.dart';
 import 'package:cuple_app/model/showUserResponse.dart';
 import 'package:cuple_app/model/suggesiontypeListsResponse.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
@@ -36,6 +37,7 @@ import 'package:http_parser/http_parser.dart';
 
 User userDetails;
 String token;
+SettingsResponse userSettings;
 PartnerData partnerData;
 SuggesiontypeListsResponse suggesiontypeListsResponse;
 GetPartnerRequestResponse getPartnerRequestResponseGlobal;
@@ -266,6 +268,30 @@ class Plugs {
         print(response.body);
         Navigator.pop(context);
         return LoginResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      throw Exception(e);
+    }
+  }
+
+  Future<SettingsResponse> getSettings(
+      var userId,
+      ) async {
+    Utils(context).showProgressLoader();
+    try {
+      http.Response response =
+      await http.get(USER_SETTINGS+"?user_id=$userId", headers: getHeaders(),);
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return SettingsResponse.fromJson(jsonDecode(response.body));
       } else {
         throw Exception(response.body);
       }

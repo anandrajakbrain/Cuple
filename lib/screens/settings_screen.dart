@@ -5,6 +5,7 @@ import 'package:cuple_app/componets/reminderCard.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/settingsResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/createNewReminder.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,20 +30,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var dateNights = "one in week";
   var msgFrequency = "Once a week";
   bool celebration_subscribe = false;
-  var userSettingsResponse;
+  SettingsResponse settingsResponse;
 
   @override
   void initState() {
     super.initState();
     setState(() {
       notificationToggleStatus =
-          widget.userDetails.nofication == "on" ? true : false;
-      chatToggleStatus = widget.userDetails.chat == "on" ? true : false;
-      frequency = widget.userDetails.frequency;
-      questionnaire = widget.userDetails.questionnaire;
-      dateNights = widget.userDetails.dateNights;
-      msgFrequency = widget.userDetails.msgFrequency;
-      celebration_subscribe=widget.userDetails.celebration_subscribe==0?false:true;
+      userSettings.data.nofication == "on" ? true : false;
+      chatToggleStatus = userSettings.data.chat == "on" ? true : false;
+      frequency = userSettings.data.frequency;
+      questionnaire = userSettings.data.questionnaire;
+      dateNights = userSettings.data.date_nights;
+      msgFrequency = userSettings.data.msg_frequency;
+      celebration_subscribe=userSettings.data.celebration_subscribe==0?false:true;
     });
   }
 
@@ -59,9 +60,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       userDetails.celebration_subscribe = celebration_subscribe ? 1 : 0;
     });
+    fetchSettings();
+  }
 
+  fetchSettings() async {
+    SettingsResponse _settingsResponse = await Plugs(context).getSettings(
+        userDetails.id.toString());
     setState(() {
-      //userSettingsResponse=_userSettingsResponse;
+      settingsResponse = _settingsResponse;
+      userSettings = settingsResponse;
+      notificationToggleStatus =
+      settingsResponse.data.nofication == "on" ? true : false;
+      chatToggleStatus = settingsResponse.data.chat == "on" ? true : false;
+      frequency = settingsResponse.data.frequency;
+      questionnaire = settingsResponse.data.questionnaire;
+      dateNights = settingsResponse.data.date_nights;
+      msgFrequency = settingsResponse.data.msg_frequency;
+      celebration_subscribe=settingsResponse.data.celebration_subscribe==0?false:true;
     });
   }
 
@@ -115,7 +130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       fontSize: Utils(context).getMediaHeight() * 0.025),
                 ),
                 title: Text(
-                  "${userDetails.celebration_subscribe == 1 ? "on" : "off"}",
+                  "${celebration_subscribe ? "on" : "off"}",
                   style: TextStyle(
                       fontSize: Utils(context).getMediaHeight() * 0.025),
                 ),
@@ -159,7 +174,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     items: <String>[
                       'once- 14 days before',
                       'Once a week',
-                      ' Once a month'
+                      'Once a month'
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
