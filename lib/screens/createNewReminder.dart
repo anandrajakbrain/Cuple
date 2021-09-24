@@ -62,7 +62,7 @@ class _CreateNewReminderState extends State<CreateNewReminder> {
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate:DateTime.now(),// DateTime(1969, 1, 1),
+      firstDate: DateTime(1969, 1, 1),
       // DateTime.now(),
       lastDate: DateTime(DateTime.now().year + 25),
       helpText: "Select Reminder Date",
@@ -111,7 +111,7 @@ resizeToAvoidBottomInset: false,
                             )
                             .toList(),
                         decoration: InputDecoration(
-                          labelText: "Reminder Type",
+                          labelText: "what’s the occasion?",
                           labelStyle: TextStyle(
                               fontSize: Utils(context).getMediaWidth() * 0.04),
                           border: OutlineInputBorder(),
@@ -207,9 +207,9 @@ resizeToAvoidBottomInset: false,
                     // keyboardType: widget.TxtInputType,
                     // controller: widget.controller,
                     decoration: InputDecoration(
-                      labelText: "Reminder Name",
+                      labelText: "Who are we celebrating?",
                       labelStyle: TextStyle(
-                        fontSize: Utils(context).getMediaWidth() * 0.059,
+                        fontSize: Utils(context).getMediaWidth() * 0.04,
                         color: Colors.grey[500],
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -228,7 +228,7 @@ resizeToAvoidBottomInset: false,
                     ),
                     validator: (value) {
                       if (value.isEmpty) {
-                        return "! Please Fill Reminder Name";
+                        return "! Please tell Who are we celebrating?";
                       }
 
                       return null;

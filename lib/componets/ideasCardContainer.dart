@@ -7,6 +7,7 @@ import 'package:cuple_app/screens/ideasDetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -21,6 +22,7 @@ class IdeasCardContainer extends StatefulWidget {
 
 class _IdeasCardContainerState extends State<IdeasCardContainer> {
   bool isfev = false;
+// Color txtColor=Color.
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +92,7 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     //color: Colors.white,
+                  // color:  Color.
                     fontWeight: FontWeight.bold,
                     fontSize: 17),
               ),

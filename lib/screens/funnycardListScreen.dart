@@ -1,5 +1,6 @@
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/funnyCardContainer.dart';
+import 'package:cuple_app/componets/hartScreen.dart';
 import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/configuration/app_config.dart';
@@ -80,7 +81,7 @@ class _FunnyCardListScreenState extends State<FunnyCardListScreen> {
               itemBuilder: (context, index) {
                 return FunnyCardContainer(
                     funnyCardData: funnycardsListsResponse.data[index]);
-              }):NoRecordFoundScreen():NoRecordFoundScreen(icon: FontAwesomeIcons.fileDownload,msg: "Please Wait",),
+              }):HartScreenComponent():NoRecordFoundScreen(icon: FontAwesomeIcons.fileDownload,msg: "Please Wait",),
         ),
       ),
     );

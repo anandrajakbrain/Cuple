@@ -2,6 +2,7 @@ import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/deleteWishListResponse.dart';
 import 'package:cuple_app/model/userWishListResponse.dart';
+import 'package:cuple_app/screens/wishListDetailsScreen.dart';
 import 'package:flutter/material.dart';
 
 class WishListContainer extends StatefulWidget {
@@ -44,6 +45,11 @@ class _WishListContainerState extends State<WishListContainer> {
         ],
       ),
       child: ListTile(
+        onTap: (){
+
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => WisllistDetailScreen(userWishListData: widget.userWishListData,)));
+        },
         title: Text(
           Utils(context)
               .parseHtmlString(widget.userWishListData.content)

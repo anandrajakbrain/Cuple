@@ -1,4 +1,5 @@
 import 'package:cuple_app/componets/backButton.dart';
+import 'package:cuple_app/componets/hartScreen.dart';
 import 'package:cuple_app/componets/listContainer.dart';
 import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
@@ -126,7 +127,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
                               notificationsListsResponse.data[index],
                         );
                       })
-                  : NoRecordFoundScreen(msg: "No Notification Found",)
+                  : HartScreenComponent()
               : NoRecordFoundScreen(
             icon: FontAwesomeIcons.fileDownload,
             msg: "Please Wait",

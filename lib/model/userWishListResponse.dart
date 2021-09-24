@@ -39,19 +39,22 @@ class UserWishListData {
   String createdAt;
   String updatedAt;
   var deletedAt;
+  String name;
 
-  UserWishListData(
-      {this.wishlistId,
-        this.id,
-        this.suggesionTypeId,
-        this.category,
-        this.content,
-        this.image,
-        this.link,
-        this.status,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt});
+  UserWishListData({
+    this.wishlistId,
+    this.id,
+    this.suggesionTypeId,
+    this.category,
+    this.content,
+    this.image,
+    this.link,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.name,
+  });
 
   UserWishListData.fromJson(Map<String, dynamic> json) {
     wishlistId = json['wishlist_id'];
@@ -65,6 +68,7 @@ class UserWishListData {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    name = json['name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +84,7 @@ class UserWishListData {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['name'] = this.name;
     return data;
   }
 }

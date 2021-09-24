@@ -1,6 +1,7 @@
 import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
+import 'package:cuple_app/componets/hartScreen.dart';
 import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/reminderCard.dart';
@@ -181,7 +182,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                   },
                 );
               }),
-        ):NoRecordFoundScreen():NoRecordFoundScreen(
+        ):HartScreenComponent():NoRecordFoundScreen(
       icon: FontAwesomeIcons.fileDownload,
       msg: "Please Wait",
     );

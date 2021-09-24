@@ -1,4 +1,5 @@
 import 'package:cuple_app/componets/backButton.dart';
+import 'package:cuple_app/componets/hartScreen.dart';
 import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
 import 'package:cuple_app/componets/wishlistContainer.dart';
@@ -85,11 +86,10 @@ class _PartnerWishlistState extends State<PartnerWishlist> {
               itemCount: userWishListResponse.data.length,
               itemBuilder: (context, index) {
                 return WishListContainer(isEven: true,isDelete: false,userWishListData: userWishListResponse.data[index],);
-              }):Container(
-            child: Center(child: SvgPicture.asset("assets/hearts.svg",color: Color(0XFFD947E0),),),
-          ):NoRecordFoundScreen(
+              }):HartScreenComponent():NoRecordFoundScreen(
             icon: FontAwesomeIcons.fileDownload,
             msg: "Please Wait",
+
           ),
         ),
       ),

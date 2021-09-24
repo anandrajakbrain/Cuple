@@ -1,6 +1,7 @@
 import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
+import 'package:cuple_app/screens/tipsDetailScreen.dart';
 import 'package:flutter/material.dart';
 
 class TipsCardContainer extends StatefulWidget {
@@ -18,8 +19,9 @@ class _TipsCardContainerState extends State<TipsCardContainer> {
     return InkWell(
       onTap: (){
         // print(widget.ideasData.link);
-
-        Utils(context).showMessage(title: widget.tipsData.name,child: Text( Utils(context).parseHtmlString(widget.tipsData.content.toString()).toString()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => TipsDetailScreen(tipsData: widget.tipsData,)));
+        // Utils(context).showMessage(title: widget.tipsData.name,child: Text( Utils(context).parseHtmlString(widget.tipsData.content.toString()).toString()));
       },
       child: Container(
         height: Utils(context).getMediaHeight() * 0.6,

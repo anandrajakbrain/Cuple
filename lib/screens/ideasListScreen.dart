@@ -1,6 +1,7 @@
 import 'package:cuple_app/componets/appBarActionButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
 import 'package:cuple_app/componets/customMenuDrawer.dart';
+import 'package:cuple_app/componets/hartScreen.dart';
 import 'package:cuple_app/componets/ideasCardContainer.dart';
 import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/componets/noRecordFoundScreen.dart';
@@ -260,7 +261,7 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                               return IdeasCardContainer(
                                   ideasData: ideasListResponse.data[index]) ;// Container();
                             })
-                        : NoRecordFoundScreen()
+                        : HartScreenComponent()
                     : NoRecordFoundScreen(
                         icon: FontAwesomeIcons.fileDownload,
                         msg: "Please Wait",

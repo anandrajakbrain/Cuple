@@ -509,8 +509,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         }
                                       } catch (e, s) {
                                         Navigator.pop(context);
+                                        print(s);
                                         Utils(context).showMessage(
-                                            title: "error", child: Text(e));
+                                            title: "error", child: Text(e.toString()));
                                       }
                                     },
                                     child: Container(

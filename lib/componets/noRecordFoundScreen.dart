@@ -1,10 +1,12 @@
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class NoRecordFoundScreen extends StatefulWidget {
   String msg;
   IconData icon;
-  NoRecordFoundScreen({this.icon=FontAwesomeIcons.thermometerEmpty,this.msg="No Record Found"});
+  bool isIcon;
+  NoRecordFoundScreen({this.icon=FontAwesomeIcons.thermometerEmpty,this.msg="No Record Found",this.isIcon=false});
   @override
   _NoRecordFoundScreenState createState() => _NoRecordFoundScreenState();
 }
@@ -17,9 +19,11 @@ class _NoRecordFoundScreenState extends State<NoRecordFoundScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(widget.icon,size: Utils(context).getMediaWidth()*0.08,),
+         widget.isIcon!=true? Center(child: SvgPicture.asset("assets/hearts.svg",color: Color(0XFFD947E0),),)
+          :Icon(widget.icon,size: Utils(context).getMediaWidth()*0.08,),
 
-          SizedBox(height: 10,),  Text(
+          SizedBox(height: 10,),
+          Text(
             "${widget.msg}",
             style: TextStyle(
                 color: Colors.grey,

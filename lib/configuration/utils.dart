@@ -106,6 +106,8 @@ class Utils {
   logout() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.clear();
+    partnerData=null;
+    userDetails=null;
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => LoginScreen()),
