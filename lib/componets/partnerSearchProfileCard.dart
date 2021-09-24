@@ -140,6 +140,8 @@ class _PartnerProfileCardState extends State<PartnerProfileCard> {
             friendId: widget.findPartnerData.id.toString());
     Utils(context).showMessage(
         title: "", child: Text(sendPartnerRequestResponse.message));
+
     widget.callback();
+  Navigator.pop(context);
   }
 }

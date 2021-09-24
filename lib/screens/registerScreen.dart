@@ -4,10 +4,12 @@ import 'package:cuple_app/componets/inputFeildUI.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/beforeRegisterResponse.dart';
 import 'package:cuple_app/model/facebookUserData.dart';
 import 'package:cuple_app/model/getOTPResponse.dart';
 import 'package:cuple_app/model/registerUserResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
+import 'package:cuple_app/screens/beforeReagisterOtpScreen.dart';
 import 'package:cuple_app/screens/otpVerficationScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -42,15 +44,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController nameController,
       emailController,
+      firstNameController,
+      lastNameController,
+      stateController,
       phoneController = new TextEditingController();
   String gender = "Male";
   var _formKey = GlobalKey<FormState>();
   var user;
-  String name, email, phone;
+  String name, email, phone, firstname, lastName, stateName;
   bool isLoggedIn = false;
   GoogleSignInAccount _currentUser;
   String _contactText = '';
-
+PreviewReg previewReg;
   @override
   void initState() {
     super.initState();
@@ -72,8 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       String phone,
       String photoUrl}) async {
     VerifyOTPResponse verifyOTPResponse = await Plugs(context)
-        .loginWithSocialMedia(socailType, name, email,
-            phone, photoUrl);
+        .loginWithSocialMedia(socailType, name, email, phone, photoUrl);
     if (verifyOTPResponse.success == true) {
       SharedPreferences prf = await SharedPreferences.getInstance();
       prf.setString("user", jsonEncode(verifyOTPResponse.user));
@@ -175,13 +179,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
-
   Future signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.getCredential(
@@ -190,12 +194,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
 
     // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential).then((value){
+    await FirebaseAuth.instance.signInWithCredential(credential).then((value) {
       print(value.user.displayName);
     });
   }
-  //------------------------------------------------------------------------------------------------------
 
+  //------------------------------------------------------------------------------------------------------
 
   void onLoginStatusChanged(bool isLoggedIn) {
     setState(() {
@@ -246,7 +250,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }*/
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -276,11 +279,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: Utils(context).getMediaHeight() * 0.06,
                   ),
                   RegisterInputField(
-                    controller: nameController,
-                    labelName: "Name",
+                    controller: firstNameController,
+                    labelName: "First Name",
                     getvalue: (value) {
                       setState(() {
-                        name = value;
+                        firstname = value;
+                      });
+                    },
+                  ),
+                  RegisterInputField(
+                    controller: lastNameController,
+                    labelName: "Last Name",
+                    getvalue: (value) {
+                      setState(() {
+                        lastName = value;
                       });
                     },
                   ),
@@ -303,6 +315,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     getvalue: (value) {
                       setState(() {
                         phone = value;
+                      });
+                    },
+                  ),
+                  RegisterInputField(
+                    controller: stateController,
+                    labelName: "State",
+                    // TxtInputType: TextInputType.phone,
+                    getvalue: (value) {
+                      setState(() {
+                        stateName = value;
                       });
                     },
                   ),
@@ -349,7 +371,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   InkWell(
                     onTap: () {
                       if (_formKey.currentState.validate()) {
-                        register();
+                        // register();
+                        beforeRagisterOtp();
                         // Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerificationScreen()));
                       }
                     },
@@ -493,28 +516,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+
 /*
 * TODO : If Register with google cause error
 * https://stackoverflow.com/questions/56188338/platformexception-platformexceptionsign-in-failed-com-google-android-gms-comm
 * check this
 * */
+
+  beforeRagisterOtp() async{
+    BeforeRegisterResponse beforeRegisterResponse=await Plugs(context).beforeRegister(email: email, phone: phone, name: "$firstname $lastName",first_name: firstname,last_name: lastName,state: stateName,gender: gender);
+    if(beforeRegisterResponse.success==true){
+      previewReg =PreviewReg(firstName: firstname,lastName: lastName,name: "$firstname $lastName",phone: phone,gender: gender,state: stateName,otp: beforeRegisterResponse.data.otp.toString(),email: email);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BeforeReagisterOtpScreen(previewReg: previewReg,),
+        ),
+            (route) => false,
+      );
+    }else{
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text(beforeRegisterResponse.message),
+      );
+    }
+  }
+
+
   register() async {
-    RegisterUserResponse registerUserResponse = await Plugs(context)
-        .register(email: email, phone: phone, name: name, gender: gender);
+    RegisterUserResponse registerUserResponse = await Plugs(context).register(
+        email: email,
+        phone: phone,
+        name: "$firstname $lastName",
+        gender: gender,
+        first_name: firstname,
+        last_name: lastName,
+        state: stateName);
     if (registerUserResponse.success == true) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) => LoginScreen(),
         ),
-            (route) => false,
+        (route) => false,
       );
       // GetOTPResponse getOTPResponse =
       //     await Plugs(context).requestForOTP(name: email);
       // if (getOTPResponse.success == true) {
       //   print(getOTPResponse.data.otp);
 
-        /*  Navigator.pushAndRemoveUntil(context,
+      /*  Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (context) => OtpVerificationScreen(getOTPResponse: getOTPResponse,name: name,),
 
             ),(route) => false,);*/
@@ -570,4 +621,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     }
   }
+}
+
+class PreviewReg {
+  String name;
+  String firstName;
+  String lastName;
+  String phone;
+  String gender;
+  String state;
+  String otp;
+  String email;
+
+  PreviewReg({
+    this.name,
+    this.firstName,
+    this.lastName,
+    this.phone,
+    this.gender,
+    this.state,
+    this.otp,
+    this.email,
+  });
 }

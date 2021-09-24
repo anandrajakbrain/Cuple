@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/utils.dart';
+import 'package:cuple_app/model/beforeRegisterResponse.dart';
 import 'package:cuple_app/model/createNewReminderResponse.dart';
 import 'package:cuple_app/model/deleteWishListResponse.dart';
 import 'package:cuple_app/model/findPartnerResponse.dart';
@@ -71,10 +72,13 @@ class Plugs {
     }
   }
 
-  Future<RegisterUserResponse> register(
+  Future<BeforeRegisterResponse> beforeRegister(
       {@required String email,
       @required String phone,
       @required String name,
+      String first_name,
+      String last_name,
+      String state,
       String gender}) async {
     Utils(context).showProgressLoader();
     var body = {
@@ -83,6 +87,62 @@ class Plugs {
       "name": name,
       "image": "",
       "gender": gender,
+      "first_name": first_name,
+      "last_name": last_name,
+      "state": state,
+
+      // "password":"0",
+    };
+    try {
+      print(body);
+      http.Response response =
+          await http.post(BEFORE_RAGISTER, headers: getHeaders(), body: body);
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return BeforeRegisterResponse.fromJson(jsonDecode(response.body));
+      } else {
+        var temp = jsonDecode(response.body);
+        if (temp['message'].containsKey("email")) {
+          throw Exception(temp['message']['email'][0]);
+        } else if (temp['message'].containsKey("phone")) {
+          throw Exception(temp['message']['phone'][0]);
+        } else {
+          throw Exception(temp['message']);
+        }
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+     print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      throw Exception(e);
+    }
+  }
+
+
+
+  Future<RegisterUserResponse> register(
+      {@required String email,
+      @required String phone,
+      @required String name,
+      String first_name,
+      String last_name,
+      String state,
+      String gender}) async {
+    Utils(context).showProgressLoader();
+    var body = {
+      "email": email,
+      "phone": phone,
+      "name": name,
+      "image": "",
+      "gender": gender,
+      "first_name": first_name,
+      "last_name": last_name,
+      "state": state,
+      "device_token":devieToken,
       // "password":"0",
     };
     try {
@@ -537,13 +597,13 @@ class Plugs {
     }
   }
 
-  Future<CreateNewReminderResponse> createNewReminder(
-      {@required String category,
-      RemindersListData remindersListData,
-      String date,
-      String name,
-String customize_name,
-      }) async {
+  Future<CreateNewReminderResponse> createNewReminder({
+    @required String category,
+    RemindersListData remindersListData,
+    String date,
+    String name,
+    String customize_name,
+  }) async {
     Utils(context).showProgressLoader();
     var body = {
       "user_id": userDetails.id.toString(),
@@ -551,8 +611,8 @@ String customize_name,
       "date": date,
       "status": "Active",
       "name": name,
-      "favourite":"no",
-      "customize_name":customize_name,
+      "favourite": "no",
+      "customize_name": customize_name,
       // "password": password,
     };
     try {
@@ -636,9 +696,10 @@ String customize_name,
     Utils(context).showProgressLoader();
 
     try {
-      http.Response response = await http.get(
-          SUGGESION_TYPE_LIST + "?category_id=2",//According to Suggestion Type 2 is Love Tips Id
-          headers: getHeaders(token: token));
+      http.Response response =
+          await http.get(SUGGESION_TYPE_LIST + "?category_id=2",
+              //According to Suggestion Type 2 is Love Tips Id
+              headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -666,7 +727,7 @@ String customize_name,
     try {
       http.Response response = await http.get(
           SUGGESION_TYPE_LIST +
-              "?category_id=1&auth_id=" +//According To Suggestion Type Date Ideas id is 1
+              "?category_id=1&auth_id=" + //According To Suggestion Type Date Ideas id is 1
               userDetails.id.toString(),
           headers: getHeaders(token: token));
       if (response.statusCode == 200) {
@@ -776,7 +837,7 @@ String customize_name,
 
   Future<DeleteWishListResponse> deleteUserWishList({String id}) async {
     Utils(context).showProgressLoader();
-print(DELETE_WISH_LIST + id);
+    print(DELETE_WISH_LIST + id);
     try {
       http.Response response = await http.delete(DELETE_WISH_LIST + id,
           headers: getHeaders(token: token));
@@ -1017,7 +1078,6 @@ print(DELETE_WISH_LIST + id);
       if (response.statusCode == 200) {
         print(response.body);
 
-
         Navigator.pop(context);
 
         return SendPartnerRequestResponse.fromJson(jsonDecode(response.body));
@@ -1209,7 +1269,7 @@ print(DELETE_WISH_LIST + id);
           headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         return SendNotificationResponse.fromJson(jsonDecode(response.body));
-      }else{
+      } else {
         throw Exception(jsonDecode(response.body));
       }
     } catch (e, s) {
@@ -1219,7 +1279,6 @@ print(DELETE_WISH_LIST + id);
         title: "Error",
         child: Text("$e"),
       );
-
     }
   }
 

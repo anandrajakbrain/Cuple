@@ -34,6 +34,7 @@ import 'package:cuple_app/screens/myWishList.dart';
 import 'package:cuple_app/screens/notificationListScreen.dart';
 import 'package:cuple_app/screens/partnerWishList.dart';
 import 'package:cuple_app/screens/reminderListScreen.dart';
+import 'package:cuple_app/screens/searchPartnerScreen.dart';
 import 'package:cuple_app/screens/settings_screen.dart';
 import 'package:cuple_app/screens/tipsListScreen.dart';
 import 'package:cuple_app/screens/userFavoriteScreen.dart';
@@ -323,12 +324,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(8.0),
                     margin: EdgeInsets.only(left: 10.0),
                     child: Text(
-                      "Welcome ${userDetails != null ? userDetails.name ?? "" : ""}!",
+                      "Welcome ${userDetails != null ? userDetails.firstName ?? "" : ""}!",
                       style: TextStyle(
                         fontSize: Utils(context).getMediaWidth() * 0.04,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    margin: EdgeInsets.only(left: 10.0),
+                    child: partnerData!=null? Text(
+                      "${partnerData!= null ? partnerData.firstName ?? "" : ""} Partner",
+                      style: TextStyle(
+                        fontSize: Utils(context).getMediaWidth() * 0.04,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ):TextButton(onPressed: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchPartnerScreen()));
+                    }, child: Text("Connect your partner",style: TextStyle(fontWeight: FontWeight.bold),)),
                   ),
                 ],
               ),
