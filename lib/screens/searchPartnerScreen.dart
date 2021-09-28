@@ -148,10 +148,15 @@ class _SearchPartnerScreenState extends State<SearchPartnerScreen> {
   }
 
   getPartner() async {
+    if(findPartnerResponse!=null){
+      setState(() {
+        findPartnerResponse=null;
+      });
+    }
     FindPartnerResponse _findPartnerResponse =
         await Plugs(context).findPartner(search_key: searchPartner);
     print("Work");
-    if (findPartnerResponse.alldata.data.length < 1) {
+    if (_findPartnerResponse.alldata.data.length < 1) {
       print("Not Exist");
       Utils(context).showAlert(
           context: context,
