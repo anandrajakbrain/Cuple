@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/beforeRegisterResponse.dart';
+import 'package:cuple_app/model/checkUserStatusResponse.dart';
 import 'package:cuple_app/model/createNewReminderResponse.dart';
 import 'package:cuple_app/model/deleteWishListResponse.dart';
 import 'package:cuple_app/model/findPartnerResponse.dart';
@@ -684,6 +685,52 @@ class Plugs {
       //       );;
     }
   }
+  Future<CreateNewReminderResponse> updateReminder({
+    @required String category,
+    RemindersListData remindersListData,
+    String date,
+    String name,
+    String customize_name,
+    String id,
+   String  favourite,
+  }) async {
+    Utils(context).showProgressLoader();
+    var body = {
+      "user_id": userDetails.id.toString(),
+      "reminder_id": remindersListData.id.toString(),
+      "date": date,
+      "status": "Active",
+      "name": name,
+      "favourite": "no",
+      "customize_name": customize_name,
+      "id":id,
+      // "password": password,
+    };
+    try {
+      http.Response response = await http.post(UPDATE_USER_REMINDERS,
+          headers: getHeaders(), body: body);
+      if (response.statusCode == 200) {
+        // print(jsonDecode(response.body)['success']);
+        Navigator.pop(context);
+        print("Update Reminder Response");
+print(response.body);
+        return CreateNewReminderResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(jsonDecode(response.body));
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+
+      // throw Exception(e)Utils(context).showMessage(
+      //         title: "Error",
+      //         // temp=jsonDecode(source);
+      //         child: Text("${e}"),
+      //       );;
+    }
+  }
 
   Future<TutorialsListsResponse> getTutorialList() async {
     Utils(context).showProgressLoader();
@@ -972,6 +1019,31 @@ class Plugs {
         print(response.body);
         // Navigator.pop(context);
         return GetMsgResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      // Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+  Future<CheckUserStatusResponse> checkUserStatus({String Userid,String status="Online"}) async {
+    // Utils(context).showProgressLoader();
+//status Online or Offline
+    try {
+      http.Response response =
+          await http.get(CHECK_USER_STATUS +"$Userid&status=$status", headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        // Navigator.pop(context);
+        return CheckUserStatusResponse.fromJson(jsonDecode(response.body));
       } else {
         throw Exception(response.body);
       }

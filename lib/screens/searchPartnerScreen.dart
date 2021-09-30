@@ -6,6 +6,7 @@ import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/findPartnerResponse.dart';
 import 'package:cuple_app/model/sendInvitationResponse.dart';
+import 'package:cuple_app/screens/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -167,10 +168,16 @@ class _SearchPartnerScreenState extends State<SearchPartnerScreen> {
           SendInvitationResponse sendInvitationResponse= await  Plugs(context).sendInvitation(email: searchPartner);
          if(sendInvitationResponse.success==true){
            Navigator.pop(context);
-           Utils(context).showMessage(title: "Success",child: Text("We SuccessFully Send Invite "));
+           Utils(context).showMessage(title: "Success",child: Text("Partner has been invited successfully. "),
+           actionButtonTitle: "Ok",
+           trigger: (){
+             Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+           }
+           );
          }
 
           },
+          handlerButtonTitle: "Invite",
           isCancel: true);
     } else {
       print("exist");

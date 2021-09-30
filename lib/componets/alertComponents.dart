@@ -6,7 +6,8 @@ class AlertComponets extends StatefulWidget {
   String title;
   Widget child;
   bool isCancel = true;
-  AlertComponets({this.title, this.child, this.Handler = null, this.isCancel});
+  String handlerButtonTitle;
+  AlertComponets({this.title, this.child, this.Handler = null, this.isCancel,this.handlerButtonTitle="ok"});
   @override
   _AlertComponetsState createState() => _AlertComponetsState();
 }
@@ -28,7 +29,7 @@ class _AlertComponetsState extends State<AlertComponets> {
           onPressed: () {
             widget.Handler();
           },
-          child: Text("Ok"),
+          child: Text(widget.handlerButtonTitle??"Ok"),
         ),
         widget.isCancel == true
             ? FlatButton(

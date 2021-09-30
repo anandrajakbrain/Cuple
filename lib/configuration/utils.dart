@@ -71,7 +71,7 @@ class Utils {
   }
 
   showMessage(
-      {String title, Widget child, final handler, bool isCancel = true}) {
+      {String title, Widget child, final handler, bool isCancel = true,String actionButtonTitle="ok",Function trigger}) {
     return showDialog(
         barrierDismissible: false,
         context: context,
@@ -79,7 +79,11 @@ class Utils {
           return AlertDialog(
             title: Text(title),
             content: child,
-            // actions: [],
+            actions: [
+              TextButton(onPressed: (){
+                trigger!=null?trigger(): Navigator.pop(context);
+              }, child: Text("$actionButtonTitle")),
+            ],
           );
         });
   }
@@ -89,6 +93,7 @@ class Utils {
     String title,
     Widget child,
     final handler = null,
+    String handlerButtonTitle,
     bool isCancel = true,
   }) {
     return showDialog(
@@ -99,6 +104,7 @@ class Utils {
             child: child,
             Handler: handler,
             isCancel: isCancel,
+            handlerButtonTitle: handlerButtonTitle,
           );
         });
   }

@@ -1,3 +1,6 @@
+import 'package:cuple_app/model/listUserReminderResponse.dart';
+import 'package:cuple_app/screens/reminderListScreen.dart';
+import 'package:flutter/material.dart';
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
 import 'package:cuple_app/configuration/app_config.dart';
@@ -6,15 +9,17 @@ import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/createNewReminderResponse.dart';
 import 'package:cuple_app/model/reminder_type_response.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+class EditReminder extends StatefulWidget {
+  UserListReminderData userListReminderData;
+  final callback;
+  EditReminder({@required this.userListReminderData,this.callback});
 
-class CreateNewReminder extends StatefulWidget {
   @override
-  _CreateNewReminderState createState() => _CreateNewReminderState();
+  _EditReminderState createState() => _EditReminderState();
 }
 
-class _CreateNewReminderState extends State<CreateNewReminder> {
+class _EditReminderState extends State<EditReminder> {
   List<String> categoryType = [
     'Anniversary',
     'Celebration',
@@ -23,38 +28,64 @@ class _CreateNewReminderState extends State<CreateNewReminder> {
   RemindersTypeData reminderTypeVal;
   String reminderNameVal;
   TextEditingController dateInputController = new TextEditingController();
+  TextEditingController customREminderNameController = new TextEditingController();
   RemindersListsResponse remindersListsResponse;
   RemindersListData remindersListData;
   DateTime selectedDate = DateTime.now();
   RemindersTypeResponse remindersTypeResponse;
   String customREminderName;
 
+
   getReminderType() async {
     RemindersTypeResponse _remindersListsResponse =
-        await Plugs(context).getreminderType();
+    await Plugs(context).getreminderType();
     setState(() {
       remindersTypeResponse = _remindersListsResponse;
     });
   }
+setOldData() async{
+    setState(() {
+      reminderTypeVal=remindersTypeResponse.data.where((element) =>element.name==widget.userListReminderData.type).first;
+    });
 
+  getReminderName(reminderTypeVal.id).then((val){
+    setState(() {
+      remindersListData=remindersListsResponse.data.where((element) => element.name==widget.userListReminderData.name).first;
+    });
+    print("reminder name");
+print(remindersListData.toJson());
+  });
+  print(widget.userListReminderData.customize_name);
+setState(() {
+  selectedDate=DateTime.parse(widget.userListReminderData.date);
+  customREminderName=widget.userListReminderData.customize_name;
+  customREminderNameController.text=widget.userListReminderData.customize_name;
+  dateInputController.text = DateFormat("MMM d,y").format(selectedDate);
+});
+
+}
   getReminderName(int type) async {
     setState(() {
       remindersListsResponse = null;
       remindersListData = null;
     });
     RemindersListsResponse _remindersListsResponse =
-        await Plugs(context).getreminderTypeList(type: type);
+    await Plugs(context).getreminderTypeList(type: type);
     setState(() {
       remindersListsResponse = _remindersListsResponse;
     });
   }
-
+getallApi() async{
+ await getReminderType();
+ await setOldData();
+}
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration(seconds: 2)).then((value) {
-      getReminderType();
+      getallApi();
+
     });
   }
 
@@ -78,12 +109,14 @@ class _CreateNewReminderState extends State<CreateNewReminder> {
 
   @override
   Widget build(BuildContext context) {
+    print("Edit Profile Data");
+   print(widget.userListReminderData.toJson());
     return Scaffold(
-resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: CustomBackButton(),
         title: Text(
-          "Create New Reminder",
+          "Update Reminder",
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: APP_BAR_COLOR,
@@ -101,103 +134,103 @@ resizeToAvoidBottomInset: false,
                 ),
                 remindersTypeResponse != null
                     ? DropdownButtonFormField(
-                        value: reminderTypeVal,
-                        items: remindersTypeResponse.data
-                            .map(
-                              (e) => DropdownMenuItem(
-                                child: Text(e.name),
-                                value: e,
-                              ),
-                            )
-                            .toList(),
-                        decoration: InputDecoration(
-                          labelText: "what’s the occasion?",
-                          labelStyle: TextStyle(
-                              fontSize: Utils(context).getMediaWidth() * 0.04),
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            reminderTypeVal = value;
-                          });
-                          getReminderName(reminderTypeVal.id);
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return "Please Select Reminder Type";
-                          }
-                          return null;
-                        },
-                      )
+                  value: reminderTypeVal,
+                  items: remindersTypeResponse.data
+                      .map(
+                        (e) => DropdownMenuItem(
+                      child: Text(e.name),
+                      value: e,
+                    ),
+                  )
+                      .toList(),
+                  decoration: InputDecoration(
+                    labelText: "what’s the occasion?",
+                    labelStyle: TextStyle(
+                        fontSize: Utils(context).getMediaWidth() * 0.04),
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      reminderTypeVal = value;
+                    });
+                    getReminderName(reminderTypeVal.id);
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return "Please Select Reminder Type";
+                    }
+                    return null;
+                  },
+                )
                     : DropdownButtonFormField(
-                        // value: reminderTypeVal,
-                        items: [],
-                        decoration: InputDecoration(
-                          labelText: "Reminder Type",
-                          labelStyle: TextStyle(
-                              fontSize: Utils(context).getMediaWidth() * 0.04),
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (value) {
-                          // setState(() {
-                          //   reminderTypeVal = value;
-                          // });
-                          // getReminderName(reminderTypeVal.id);
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return "Please Select Reminder Type";
-                          }
-                          return null;
-                        },
-                      ),
+                  // value: reminderTypeVal,
+                  items: [],
+                  decoration: InputDecoration(
+                    labelText: "Reminder Type",
+                    labelStyle: TextStyle(
+                        fontSize: Utils(context).getMediaWidth() * 0.04),
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    // setState(() {
+                    //   reminderTypeVal = value;
+                    // });
+                    // getReminderName(reminderTypeVal.id);
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return "Please Select Reminder Type";
+                    }
+                    return null;
+                  },
+                ),
                 SizedBox(
                   height: Utils(context).getMediaHeight() * 0.03,
                 ),
                 remindersListsResponse != null
                     ? DropdownButtonFormField(
-                        // value: remindersListData,
-                        items: remindersListsResponse.data
-                            .map(
-                              (e) => DropdownMenuItem(
-                                child: Text(e.name),
-                                value: e,
-                              ),
-                            )
-                            .toList(),
-                        decoration: InputDecoration(
-                          labelText: "Reminder Title",
-                          labelStyle: TextStyle(
-                              fontSize: Utils(context).getMediaWidth() * 0.04),
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            remindersListData = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return "Please Select Reminder Title";
-                          }
-                          return null;
-                        },
-                      )
+                  value: remindersListData,
+                  items: remindersListsResponse.data
+                      .map(
+                        (e) => DropdownMenuItem(
+                      child: Text(e.name),
+                      value: e,
+                    ),
+                  )
+                      .toList(),
+                  decoration: InputDecoration(
+                    labelText: "Reminder Title",
+                    labelStyle: TextStyle(
+                        fontSize: Utils(context).getMediaWidth() * 0.04),
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      remindersListData = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return "Please Select Reminder Title";
+                    }
+                    return null;
+                  },
+                )
                     : DropdownButtonFormField(
-                        validator: (value) {
-                          if (value == null) {
-                            return "Please Select Reminder Title";
-                          }
-                          return null;
-                        },
-                        items: [],
-                        decoration: InputDecoration(
-                          labelText: "Reminder Title",
-                          labelStyle: TextStyle(
-                              fontSize: Utils(context).getMediaWidth() * 0.04),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
+                  validator: (value) {
+                    if (value == null) {
+                      return "Please Select Reminder Title";
+                    }
+                    return null;
+                  },
+                  items: [],
+                  decoration: InputDecoration(
+                    labelText: "Reminder Title",
+                    labelStyle: TextStyle(
+                        fontSize: Utils(context).getMediaWidth() * 0.04),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
                 SizedBox(
                   height: Utils(context).getMediaHeight() * 0.03,
                 ),
@@ -205,7 +238,9 @@ resizeToAvoidBottomInset: false,
                   // padding: EdgeInsets.all(8.0),
                   child: TextFormField(
                     // keyboardType: widget.TxtInputType,
-                    // controller: widget.controller,
+                    controller: customREminderNameController,
+                    // initialValue: customREminderName,
+
                     decoration: InputDecoration(
                       labelText: "Who are we celebrating?",
                       labelStyle: TextStyle(
@@ -329,15 +364,21 @@ resizeToAvoidBottomInset: false,
   void creteReminder() async {
     try {
       CreateNewReminderResponse createNewReminders =
-          await Plugs(context).createNewReminder(
+      await Plugs(context).updateReminder(
         category: reminderTypeVal.name.toString(),
         remindersListData: remindersListData,
         date: selectedDate.toString(),
         name: reminderTypeVal.name.toString(),
         customize_name: customREminderName,
+        id: widget.userListReminderData.id.toString(),
+        favourite: widget.userListReminderData.favourite,
+
       );
-      Navigator.pop(context);
-      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder:(context)=>ReminderListScreen()));
+      // widget.callback();
+      // Navigator.pop(context);
+      // Navigator.pop(context);
+
     } catch (e, s) {
       Utils(context).showMessage(
         title: "Error",
@@ -346,4 +387,5 @@ resizeToAvoidBottomInset: false,
       );
     }
   }
+
 }

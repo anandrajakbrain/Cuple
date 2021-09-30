@@ -339,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(8.0),
                     margin: EdgeInsets.only(left: 10.0),
                     child: Text(
-                      "Welcome ${userDetails != null ? userDetails.firstName ?? "" : ""}!",
+                      "Welcome ${userDetails != null ? userDetails.firstName ?? userDetails.name : ""}!",
                       style: TextStyle(
                         fontSize: Utils(context).getMediaWidth() * 0.04,
                         fontWeight: FontWeight.bold,
@@ -741,7 +741,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: Utils(context).getMediaHeight() * 0.02,
                                 ),
                                 Text(
-                                  "${DateTime.parse(remindersListsResponse.data[index].date).difference(DateTime.now()).inDays+1} day(s)",
+                                getInDays(inputDate: remindersListsResponse.data[index].date).toString() +"day(s)",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
