@@ -32,7 +32,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController dateInputController = new TextEditingController();
   File _image;
   final picker = ImagePicker();
-  String gender;
+  String gender = "Male";
 
   Future<void> _selectDate(BuildContext context, String type) async {
     final DateTime picked = await showDatePicker(
@@ -429,7 +429,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                 ),
-                Padding(
+                /*Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.035),
                 ),
@@ -466,7 +466,7 @@ class _EditProfileState extends State<EditProfile> {
                       gender = text;
                     });
                   },
-                ),
+                ),*/
                 Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.035),

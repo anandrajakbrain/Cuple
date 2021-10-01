@@ -328,7 +328,7 @@ PreviewReg previewReg;
                       });
                     },
                   ),
-                  Container(
+                  /*Container(
                     padding: EdgeInsets.all(8.0),
                     child: DropdownButtonFormField(
                       value: gender,
@@ -364,7 +364,7 @@ PreviewReg previewReg;
                         });
                       },
                     ),
-                  ),
+                  ),*/
                   SizedBox(
                     height: Utils(context).getMediaHeight() * 0.06,
                   ),
@@ -524,9 +524,9 @@ PreviewReg previewReg;
 * */
 
   beforeRagisterOtp() async{
-    BeforeRegisterResponse beforeRegisterResponse=await Plugs(context).beforeRegister(email: email, phone: phone, name: "$firstname $lastName",first_name: firstname,last_name: lastName,state: stateName,gender: gender);
+    BeforeRegisterResponse beforeRegisterResponse=await Plugs(context).beforeRegister(email: email, phone: phone, name: "$firstname $lastName",first_name: firstname,last_name: lastName,state: stateName,gender: "Male");
     if(beforeRegisterResponse.success==true){
-      previewReg =PreviewReg(firstName: firstname,lastName: lastName,name: "$firstname $lastName",phone: phone,gender: gender,state: stateName,otp: beforeRegisterResponse.data.otp.toString(),email: email);
+      previewReg =PreviewReg(firstName: firstname,lastName: lastName,name: "$firstname $lastName",phone: phone,gender: "Male",state: stateName,otp: beforeRegisterResponse.data.otp.toString(),email: email);
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
