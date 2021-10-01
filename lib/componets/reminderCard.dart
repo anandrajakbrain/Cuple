@@ -29,7 +29,7 @@ class _ReminderCardState extends State<ReminderCard> {
             context: context,
             title: "Options",
             child: Container(
-              height: Utils(context).getMediaHeight() * 0.20,
+              height: Utils(context).getMediaHeight() * 0.24,
               child: Column(
                 children: [
                   Align(
