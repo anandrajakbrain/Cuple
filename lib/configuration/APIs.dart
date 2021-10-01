@@ -20,6 +20,7 @@ const String USER_WISHLIST=APP_BASE_URL+"wishlist?user_id=";
 const String ADD_WISH_LIST=APP_BASE_URL+"add-wishlist";
 const String DELETE_WISH_LIST=APP_BASE_URL+"delete-wishlist?id=";
 const String USER_SETTINGS=APP_BASE_URL+"user-setting";
+const String STATES_LIST=APP_BASE_URL+"states";
 const String UPDATE_USER=APP_BASE_URL+"update-user";
 const String SEND_MSG=APP_BASE_URL+"send-msg";
 const String GET_MSG=APP_BASE_URL+"get-msg?user_id=";

@@ -158,7 +158,9 @@ class _FriendRequestCardState extends State<FriendRequestCard> {
       setState(() {
         userDetails.partnerid = widget.friendRequestData.fromId;
       });
-      Plugs(context).sendNotification(sendToUID:  widget.friendRequestData.fromId.toString(),title: "Friend Request Accepted",msg: "${userDetails.name } Has Been Accepted Your Friend Request Please Wait For Admin Approval.");
+      Plugs(context).sendNotification(sendToUID:  widget.friendRequestData.fromId.toString(),title: "Friend Request Accepted",
+          msg: "Congratulations, you’re paired with ${partnerData.name.split(' ').first}. Now you can see the Dates they want to remember, gifts they want, "
+              "experiences, places to travel to, romantic dates they want to go on, Love Tips they like…");
       SharedPreferences prf = await SharedPreferences.getInstance();
       // print("Update User Data");
       // print(updateUserResponse.data.toJson());

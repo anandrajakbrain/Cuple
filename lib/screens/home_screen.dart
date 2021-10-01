@@ -222,19 +222,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   selectedIndex = index;
                   controlWidget = getWidget(index: selectedIndex);
-                  if (selectedIndex == 1)
-                    if (selectedIndex == 1) {
-                      if(partnerData != null) {
-                        _title = "${partnerData.name
-                            .toString()
-                            .split(' ')
-                            .first}";
-                      }
+                  if (selectedIndex == 1) {
+                    if(partnerData != null) {
+                      _title = "${partnerData.name
+                          .toString()
+                          .split(' ')
+                          .first}";
+                    }else{
+                      _title = "Favorites";
                     }
+                  }
                   else if (selectedIndex == 3) {
                     _title = "Profile";
-                  } else
+                  } else if (selectedIndex == 0) {
                     _title = "Home";
+                  }
                 });
               },
               items: [
@@ -244,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 FFNavigationBarItem(
                   iconData: Icons.favorite_border,
-                  label: "Favorites",
+                  label: partnerData != null ? partnerData.name.toString().split(' ').first : "Favorites",
                 ),
                 FFNavigationBarItem(
                   iconData: Icons.mail_outline_outlined,
@@ -1218,7 +1220,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .size
                                               .height *
                                               0.02)),
-                                  Text(
+                                  /*Text(
                                     "Gender",
                                     style: TextStyle(
                                         color: Colors.white,
@@ -1229,7 +1231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           top: MediaQuery.of(context)
                                               .size
                                               .height *
-                                              0.02)),
+                                              0.02)),*/
                                   Text(
                                     "Birth Date",
                                     style: TextStyle(
@@ -1259,7 +1261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .size
                                               .height *
                                               0.02)),
-                                  Text(
+                                  /*Text(
                                     ":\t\t${userDetails.gender ?? ""}",
                                     style: TextStyle(
                                         color: Colors.white,
@@ -1270,7 +1272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           top: MediaQuery.of(context)
                                               .size
                                               .height *
-                                              0.02)),
+                                              0.02)),*/
                                   Text(
                                     ":\t\t${userDetails.dob}",
                                     style: TextStyle(
