@@ -8,6 +8,7 @@ import 'package:cuple_app/model/beforeRegisterResponse.dart';
 import 'package:cuple_app/model/facebookUserData.dart';
 import 'package:cuple_app/model/getOTPResponse.dart';
 import 'package:cuple_app/model/registerUserResponse.dart';
+import 'package:cuple_app/model/states_response.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/beforeReagisterOtpScreen.dart';
 import 'package:cuple_app/screens/otpVerficationScreen.dart';
@@ -42,6 +43,8 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final fbLogin = FacebookLogin();
   final FirebaseAuth auth = FirebaseAuth.instance;
+  StatesResponse statesResponse;
+  StatesData statesData;
   TextEditingController nameController,
       emailController,
       firstNameController,
@@ -59,6 +62,9 @@ PreviewReg previewReg;
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration(seconds: 0)).then((value) {
+      getStatesList();
+    });
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
@@ -69,6 +75,14 @@ PreviewReg previewReg;
     });
     _googleSignIn.signInSilently();
   }
+
+  getStatesList() async{
+    StatesResponse _stateResponse = await Plugs(context).getStatesList();
+    setState(() {
+      statesResponse = _stateResponse;
+    });
+  }
+
 
   loginWithSocialMediaData(
       {String socailType,
@@ -318,15 +332,57 @@ PreviewReg previewReg;
                       });
                     },
                   ),
-                  RegisterInputField(
-                    controller: stateController,
-                    labelName: "State",
-                    // TxtInputType: TextInputType.phone,
-                    getvalue: (value) {
-                      setState(() {
-                        stateName = value;
-                      });
-                    },
+                  Container(
+                    padding: EdgeInsets.all(8.0),
+                    child: DropdownButtonFormField(
+                      value: statesData,
+                      items: statesResponse != null ?  statesResponse.data
+                          .map(
+                            (e) => DropdownMenuItem(
+                          child: Text(e.state_name),
+                          value: e,
+                        ),
+                      )
+                          .toList() : ['--']
+                          .map((label) => DropdownMenuItem(
+                        child: Text(label.toString()),
+                        value: label,
+                      ))
+                          .toList(),
+                      decoration: InputDecoration(
+                        labelText: "State",
+                        labelStyle: TextStyle(
+                          fontSize: Utils(context).getMediaWidth() * 0.059,
+                          color: Colors.grey[500],
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          borderSide: BorderSide(
+                            color: Colors.grey[300],
+                            // width: 2.0,
+                          ),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          statesData = value;
+                          stateName = statesData.state_name;
+                        });
+                        //getReminderName(reminderTypeVal.id);
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return "Please Select State";
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                   /*Container(
                     padding: EdgeInsets.all(8.0),

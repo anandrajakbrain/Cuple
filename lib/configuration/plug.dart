@@ -26,6 +26,7 @@ import 'package:cuple_app/model/sendNotificationResponse.dart';
 import 'package:cuple_app/model/sendPartnerRequestResponse.dart';
 import 'package:cuple_app/model/settingsResponse.dart';
 import 'package:cuple_app/model/showUserResponse.dart';
+import 'package:cuple_app/model/states_response.dart';
 import 'package:cuple_app/model/suggesiontypeListsResponse.dart';
 import 'package:cuple_app/model/tipsListResponse.dart';
 import 'package:cuple_app/model/tutorialsListsResponse.dart';
@@ -270,6 +271,28 @@ class Plugs {
         print(response.body);
         Navigator.pop(context);
         return LoginResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      throw Exception(e);
+    }
+  }
+
+  Future<StatesResponse> getStatesList() async {
+    Utils(context).showProgressLoader();
+    try {
+      http.Response response =
+      await http.get(STATES_LIST, headers: getHeaders(),);
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return StatesResponse.fromJson(jsonDecode(response.body));
       } else {
         throw Exception(response.body);
       }
