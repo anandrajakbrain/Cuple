@@ -64,6 +64,7 @@ class _WisllistDetailScreenState extends State<WisllistDetailScreen> {
                   height: Utils(context).getMediaHeight() * 0.30,
                   width: Utils(context).getMediaWidth() * 0.55,
                   decoration: BoxDecoration(
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(8.0),
                     boxShadow: [
                       BoxShadow(
@@ -73,10 +74,17 @@ class _WisllistDetailScreenState extends State<WisllistDetailScreen> {
                       ),
                     ],
                   ),
-                  child: Image.network(
+                  child:widget.userWishListData.image!=null? Image.network(
                     APP_ASSET_BASE_URL + widget.userWishListData.image,
                     fit: BoxFit.fill,
-                  ),
+                    errorBuilder: (context, error, straktress) {
+                      return Image.asset(
+                        "assets/ideaImg1.png",fit: BoxFit.fill,
+                        // height: MediaQuery.of(context).size.height * 0.15,
+                        // width: MediaQuery.of(context).size.height * 0.15,
+                      );
+                    },
+                  ):Image.asset("assets/ideaImg1.png",fit: BoxFit.fill,),
                 ),
                 SizedBox(
                   height: Utils(context).getMediaHeight() * 0.01,
@@ -92,7 +100,7 @@ class _WisllistDetailScreenState extends State<WisllistDetailScreen> {
                 ),
                 Text(
                   Utils(context)
-                      .parseHtmlString(widget.userWishListData.content.toString())
+                      .parseHtmlString(widget.userWishListData.description.toString())
                       .toString(),
                   textAlign: TextAlign.center,
                   style: TextStyle(

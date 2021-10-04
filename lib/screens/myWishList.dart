@@ -8,6 +8,7 @@ import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/userWishListResponse.dart';
+import 'package:cuple_app/screens/createMyWishlist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -72,7 +73,24 @@ class _MyWishListState extends State<MyWishList> {
           "My Wish List",
           style: TextStyle(color: Colors.black),
         ),
-        actions: [],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton.icon(
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(fontSize: 15),
+              ),
+              icon: Icon(Icons.add_circle_outline_outlined),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreateMyWishlist())).then((value) => fetch());
+              },
+              label: const Text('Create New'),
+            ),
+          ),
+        ],
         elevation: 0.0,
       ),
       body: Container(

@@ -18,6 +18,7 @@ import 'package:cuple_app/model/listUserReminderResponse.dart';
 import 'package:cuple_app/model/loginResponse.dart';
 import 'package:cuple_app/model/notificationsListsResponse.dart';
 import 'package:cuple_app/model/registerUserResponse.dart';
+import 'package:cuple_app/model/regularResponse.dart';
 import 'package:cuple_app/model/reminder_type_response.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
 import 'package:cuple_app/model/sendInvitationResponse.dart';
@@ -33,6 +34,7 @@ import 'package:cuple_app/model/tutorialsListsResponse.dart';
 import 'package:cuple_app/model/userFavouritesList.dart';
 import 'package:cuple_app/model/userWishListResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
+import 'package:cuple_app/model/wishListTitleResponse.dart';
 import 'package:cuple_app/screens/updateUserResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -59,7 +61,7 @@ class Plugs {
     };
     try {
       http.Response response =
-          await http.post(LOGIN, headers: getHeaders(), body: body);
+      await http.post(LOGIN, headers: getHeaders(), body: body);
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -77,14 +79,13 @@ class Plugs {
     }
   }
 
-  Future<BeforeRegisterResponse> beforeRegister(
-      {@required String email,
-      @required String phone,
-      @required String name,
-      String first_name,
-      String last_name,
-      String state,
-      String gender}) async {
+  Future<BeforeRegisterResponse> beforeRegister({@required String email,
+    @required String phone,
+    @required String name,
+    String first_name,
+    String last_name,
+    String state,
+    String gender}) async {
     Utils(context).showProgressLoader();
     var body = {
       "email": email,
@@ -101,7 +102,7 @@ class Plugs {
     try {
       print(body);
       http.Response response =
-          await http.post(BEFORE_RAGISTER, headers: getHeaders(), body: body);
+      await http.post(BEFORE_RAGISTER, headers: getHeaders(), body: body);
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -118,7 +119,7 @@ class Plugs {
       }
     } catch (e, s) {
       Navigator.pop(context);
-     print(s);
+      print(s);
       Utils(context).showMessage(
         title: "Error",
         child: Text("$e"),
@@ -128,15 +129,13 @@ class Plugs {
   }
 
 
-
-  Future<RegisterUserResponse> register(
-      {@required String email,
-      @required String phone,
-      @required String name,
-      String first_name,
-      String last_name,
-      String state,
-      String gender}) async {
+  Future<RegisterUserResponse> register({@required String email,
+    @required String phone,
+    @required String name,
+    String first_name,
+    String last_name,
+    String state,
+    String gender}) async {
     Utils(context).showProgressLoader();
     var body = {
       "email": email,
@@ -147,12 +146,12 @@ class Plugs {
       "first_name": first_name,
       "last_name": last_name,
       "state": state,
-      "device_token":devieToken,
+      "device_token": devieToken,
       // "password":"0",
     };
     try {
       http.Response response =
-          await http.post(REGISTERUSER, headers: getHeaders(), body: body);
+      await http.post(REGISTERUSER, headers: getHeaders(), body: body);
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -185,12 +184,12 @@ class Plugs {
     };
     try {
       http.Response response =
-          await http.post(GET_OTP, headers: getHeaders(), body: body);
+      await http.post(GET_OTP, headers: getHeaders(), body: body);
       if (response.statusCode == 200) {
         // print(jsonDecode(response.body)['success']);
         Navigator.pop(context);
         GetOTPResponse _getOTP =
-            GetOTPResponse.fromJson(jsonDecode(response.body));
+        GetOTPResponse.fromJson(jsonDecode(response.body));
         print(_getOTP);
         return GetOTPResponse.fromJson(jsonDecode(response.body));
       } else {
@@ -221,7 +220,7 @@ class Plugs {
     };
     try {
       http.Response response =
-          await http.post(VERIFY_OTP, headers: getHeaders(), body: body);
+      await http.post(VERIFY_OTP, headers: getHeaders(), body: body);
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -242,16 +241,14 @@ class Plugs {
     }
   }
 
-  Future<LoginResponse> updateSettings(
-    var userId,
-    var chat,
-    var notification,
-    var frequency,
-    var questionnaire,
-    var dateNights,
-    var msgFrequency,
-    bool celebration_subscribe,
-  ) async {
+  Future<LoginResponse> updateSettings(var userId,
+      var chat,
+      var notification,
+      var frequency,
+      var questionnaire,
+      var dateNights,
+      var msgFrequency,
+      bool celebration_subscribe,) async {
     Utils(context).showProgressLoader();
     var body = {
       "user_id": userId.toString(),
@@ -266,7 +263,7 @@ class Plugs {
     print(body);
     try {
       http.Response response =
-          await http.post(USER_SETTINGS, headers: getHeaders(), body: body);
+      await http.post(USER_SETTINGS, headers: getHeaders(), body: body);
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -306,13 +303,12 @@ class Plugs {
     }
   }
 
-  Future<SettingsResponse> getSettings(
-      var userId,
-      ) async {
+  Future<SettingsResponse> getSettings(var userId,) async {
     Utils(context).showProgressLoader();
     try {
       http.Response response =
-      await http.get(USER_SETTINGS+"?user_id=$userId", headers: getHeaders(),);
+      await http.get(
+        USER_SETTINGS + "?user_id=$userId", headers: getHeaders(),);
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -330,8 +326,8 @@ class Plugs {
     }
   }
 
-  Future<User> updateUserDetails(
-      var userId, var name, var email, var phone, var dob) async {
+  Future<User> updateUserDetails(var userId, var name, var email, var phone,
+      var dob) async {
     Utils(context).showProgressLoader();
     var body = {
       "id": userId,
@@ -342,7 +338,7 @@ class Plugs {
     };
     try {
       http.Response response =
-          await http.post(UPDATE_USER, headers: getHeaders(), body: body);
+      await http.post(UPDATE_USER, headers: getHeaders(), body: body);
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -360,8 +356,7 @@ class Plugs {
     }
   }
 
-  Future<UpdateUserResponse> updateUserDetailsWithFormData(
-      var userId,
+  Future<UpdateUserResponse> updateUserDetailsWithFormData(var userId,
       var name,
       var email,
       var phone,
@@ -373,9 +368,7 @@ class Plugs {
       String gender,
       String firstName,
       String lastName,
-      String state,
-
-      ) async {
+      String state,) async {
     Utils(context).showProgressLoader();
     var body = {
       "id": userId,
@@ -393,11 +386,10 @@ class Plugs {
 
       if (phone != null) {
         request.fields['phone'] = phone.toString();
-
       }
       if (firstName != null) {
         request.fields['first_name'] = firstName.toString();
-        request.fields['name'] = firstName+" "+lastName;//name.toString();
+        request.fields['name'] = firstName + " " + lastName; //name.toString();
 
       }
       if (lastName != null) {
@@ -458,8 +450,8 @@ class Plugs {
     }
   }
 
-  Future<VerifyOTPResponse> loginWithSocialMedia(
-      var socialType, var name, var email, var phone, var image) async {
+  Future<VerifyOTPResponse> loginWithSocialMedia(var socialType, var name,
+      var email, var phone, var image) async {
     Utils(context).showProgressLoader();
     var body = {
       "social_type": socialType,
@@ -470,7 +462,7 @@ class Plugs {
     };
     try {
       http.Response response =
-          await http.post(SOCIAL_LOGIN, headers: getHeaders(), body: body);
+      await http.post(SOCIAL_LOGIN, headers: getHeaders(), body: body);
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -645,7 +637,7 @@ class Plugs {
 
     try {
       http.Response response =
-          await http.get(REMINDER_TYPE, headers: getHeaders(token: token));
+      await http.get(REMINDER_TYPE, headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -708,6 +700,7 @@ class Plugs {
       //       );;
     }
   }
+
   Future<CreateNewReminderResponse> updateReminder({
     @required String category,
     RemindersListData remindersListData,
@@ -715,7 +708,7 @@ class Plugs {
     String name,
     String customize_name,
     String id,
-   String  favourite,
+    String favourite,
   }) async {
     Utils(context).showProgressLoader();
     var body = {
@@ -726,7 +719,7 @@ class Plugs {
       "name": name,
       "favourite": "no",
       "customize_name": customize_name,
-      "id":id,
+      "id": id,
       // "password": password,
     };
     try {
@@ -736,7 +729,7 @@ class Plugs {
         // print(jsonDecode(response.body)['success']);
         Navigator.pop(context);
         print("Update Reminder Response");
-print(response.body);
+        print(response.body);
         return CreateNewReminderResponse.fromJson(jsonDecode(response.body));
       } else {
         throw Exception(jsonDecode(response.body));
@@ -760,7 +753,7 @@ print(response.body);
 
     try {
       http.Response response =
-          await http.get(TUTORIALS_LIST, headers: getHeaders(token: token));
+      await http.get(TUTORIALS_LIST, headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -786,7 +779,7 @@ print(response.body);
 
     try {
       http.Response response =
-          await http.get(FUNNY_CARD_LIST, headers: getHeaders(token: token));
+      await http.get(FUNNY_CARD_LIST, headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -812,9 +805,9 @@ print(response.body);
 
     try {
       http.Response response =
-          await http.get(SUGGESION_TYPE_LIST + "?category_id=2",
-              //According to Suggestion Type 2 is Love Tips Id
-              headers: getHeaders(token: token));
+      await http.get(SUGGESION_TYPE_LIST + "?category_id=2",
+          //According to Suggestion Type 2 is Love Tips Id
+          headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -840,10 +833,12 @@ print(response.body);
     Utils(context).showProgressLoader();
 
     try {
+      print(SUGGESION_TYPE_LIST +
+          "?category_id=1&auth_id=" + //According To Suggestion Type Date Ideas id is 1
+          userDetails.id.toString());
       http.Response response = await http.get(
           SUGGESION_TYPE_LIST +
-              "?category_id=1&auth_id=" + //According To Suggestion Type Date Ideas id is 1
-              userDetails.id.toString(),
+              "?category_id=1",
           headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
@@ -865,17 +860,79 @@ print(response.body);
     }
   }
 
-  Future<SendPartnerRequestResponse> addToWishList(
-      {String suggestionId}) async {
+  Future<RegularResponse> addAndEditToWishList(
+      {String titleId,String description,String link,File image,String id=null}) async {
     Utils(context).showProgressLoader();
 
     try {
-      var body = {
-        "suggesion_id": suggestionId,
-        "user_id": userDetails.id.toString(),
-      };
-      http.Response response = await http.post(ADD_TO_WISHLIST,
-          body: body, headers: getHeaders(token: token));
+      var uri = Uri.parse(ADD_TO_WISHLIST);
+      var request = new http.MultipartRequest("POST", uri);
+
+      request.fields["user_id"] = userDetails.id.toString();
+      request.fields["title_id"] = titleId.toString();
+      request.fields["link"] = link.toString();
+      request.fields["description"] = description.toString();
+      if(id!=null){
+        request.fields["id"] = id.toString();
+      }
+
+      if (image != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          "image",
+          image.path,
+          contentType: MediaType('application', "octet-stream"),
+        ));
+      }
+      request.headers.addAll(getHeaders(token: token));
+      var reqestReturn = await request.send();
+      var response = await http.Response.fromStream(reqestReturn);
+
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return RegularResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+  /*Future<SendPartnerRequestResponse> updateWishList(
+      {String titleId,String description,String link,File image,String id}) async {
+    Utils(context).showProgressLoader();
+
+    try {
+      var uri = Uri.parse(ADD_TO_WISHLIST);
+      var request = new http.MultipartRequest("POST", uri);
+
+      request.fields["user_id"] = userDetails.id.toString();
+      request.fields["title_id"] = titleId.toString();
+      request.fields["link"] = link.toString();
+      request.fields["description"] = description.toString();
+      request.fields["id"] = id.toString();
+
+      if (image != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          "image",
+          image.path,
+          contentType: MediaType('application', "octet-stream"),
+        ));
+      }
+      request.headers.addAll(getHeaders(token: token));
+      var reqestReturn = await request.send();
+      var response = await http.Response.fromStream(reqestReturn);
+
+
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -894,8 +951,9 @@ print(response.body);
       );
       // throw Exception(e);
     }
-  }
+  }*/
 
+/*---------------------------------WishList----------------------*/
   Future<UserWishListResponse> getUserWishList() async {
     Utils(context).showProgressLoader();
 
@@ -976,6 +1034,34 @@ print(response.body);
     }
   }
 
+  Future<WishListTitleResponse> getWishListTitles() async {
+    Utils(context).showProgressLoader();
+
+    try {
+      http.Response response = await http.get(
+          WISHLIST_TITLES,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return WishListTitleResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+
+/*---------------------------------WishList----------------------*/
   Future<DeleteWishListResponse> dELETEUSERREMINDERS({String id}) async {
     Utils(context).showProgressLoader();
 
@@ -1037,7 +1123,7 @@ print(response.body);
 
     try {
       http.Response response =
-          await http.get(GET_MSG + Userid, headers: getHeaders(token: token));
+      await http.get(GET_MSG + Userid, headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         // Navigator.pop(context);
@@ -1057,12 +1143,15 @@ print(response.body);
       // throw Exception(e);
     }
   }
-  Future<CheckUserStatusResponse> checkUserStatus({String Userid,String status="Online"}) async {
+
+  Future<CheckUserStatusResponse> checkUserStatus(
+      {String Userid, String status = "Online"}) async {
     // Utils(context).showProgressLoader();
 //status Online or Offline
     try {
       http.Response response =
-          await http.get(CHECK_USER_STATUS +"$Userid&status=$status", headers: getHeaders(token: token));
+      await http.get(CHECK_USER_STATUS + "$Userid&status=$status",
+          headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         // Navigator.pop(context);
@@ -1210,7 +1299,6 @@ print(response.body);
     Utils(context).showProgressLoader();
 
     try {
-
       var body = {
         "match_id": matchId,
       };
@@ -1245,9 +1333,9 @@ print(response.body);
 
     try {
       http.Response response =
-          await http.delete(CANCEL_PARTNER_REQUEST + matchId,
-              // body: body,
-              headers: getHeaders(token: token));
+      await http.delete(CANCEL_PARTNER_REQUEST + matchId,
+          // body: body,
+          headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -1277,9 +1365,9 @@ print(response.body);
       };*/
       print(GET_PARTNER_REQUEST + userDetails.id.toString());
       http.Response response =
-          await http.get(GET_PARTNER_REQUEST + userDetails.id.toString(),
-              // body: body,
-              headers: getHeaders(token: token));
+      await http.get(GET_PARTNER_REQUEST + userDetails.id.toString(),
+          // body: body,
+          headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);
@@ -1299,19 +1387,21 @@ print(response.body);
       // throw Exception(e);
     }
   }
-  Future<SendInvitationResponse> sendInvitation({@required String email}) async {
+
+  Future<SendInvitationResponse> sendInvitation(
+      {@required String email}) async {
     Utils(context).showProgressLoader();
 
     try {
-      var body={
-        "email":email,
-        "name":userDetails.name,
+      var body = {
+        "email": email,
+        "name": userDetails.name,
       };
       print(SEND_INVITES);
       http.Response response =
-          await http.post(SEND_INVITES,
-              body: body,
-              headers: getHeaders(token: token));
+      await http.post(SEND_INVITES,
+          body: body,
+          headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
         Navigator.pop(context);

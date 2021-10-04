@@ -76,7 +76,7 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                       padding: const EdgeInsets.all(8.0),
                       margin: EdgeInsets.only(left: 10.0),
                       child: Text(
-                        "${userDetails != null ? userDetails.name ?? "" : ""}",
+                        "${userDetails != null ? userDetails.firstName ?? "" : ""}",
                         style: TextStyle(
                           fontSize: Utils(context).getMediaWidth() * 0.04,
                           fontWeight: FontWeight.bold,
@@ -89,7 +89,7 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                       padding: const EdgeInsets.all(8.0),
                       margin: EdgeInsets.only(left: 10.0),
                       child: Text(
-                        "${partnerData != null ? partnerData.name ?? "" : ""}",
+                        "${partnerData != null ? partnerData.firstName ?? "" : ""}",
                         style: TextStyle(
                           fontSize: Utils(context).getMediaWidth() * 0.04,
                           fontWeight: FontWeight.bold,
@@ -180,30 +180,35 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                       colors: [Color(0XFF6341DF), Color(0XFF1E8FED)]),
                 ),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       padding: const EdgeInsets.all(8.0),
                       margin: EdgeInsets.only(left: 10.0),
                       child: Text(
-                        "${userDetails != null ? userDetails.name ?? "" : ""}",
+                        "${userDetails != null ? userDetails.firstName ?? "" : ""}",
                         style: TextStyle(
                             fontSize: Utils(context).getMediaWidth() * 0.04,
                             fontWeight: FontWeight.bold,
                             color: Colors.white
                         ),
+                      textAlign: TextAlign.center,
                       ),
                     ),
                     SvgPicture.asset("assets/hearts.svg", height: Utils(context).getMediaHeight() * 0.03,),
                     Container(
                       padding: const EdgeInsets.all(8.0),
-                      margin: EdgeInsets.only(left: 10.0),
+                      // margin: EdgeInsets.only(left: 10.0),
                       child: Text(
-                        "${partnerData != null ? partnerData.name ?? "" : ""}",
+                        "${partnerData != null ? partnerData.firstName ?? "" : ""}",
                         style: TextStyle(
                             fontSize: Utils(context).getMediaWidth() * 0.04,
                             fontWeight: FontWeight.bold,
                             color: Colors.white
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ],

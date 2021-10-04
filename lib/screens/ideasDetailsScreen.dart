@@ -31,7 +31,7 @@ class _IdeasDetailsScreenState extends State<IdeasDetailsScreen> {
           style: TextStyle(color: Colors.black),
         ),
         actions: [
-          IconButton(
+      /*    IconButton(
               icon: Icon(
                 widget.ideasData.wishlist_added != "no"
                     ? Icons.favorite
@@ -40,8 +40,8 @@ class _IdeasDetailsScreenState extends State<IdeasDetailsScreen> {
               ),
               onPressed: () async {
                 if (widget.ideasData.wishlist_added == "no") {
-                  Plugs(context).addToWishList(
-                      suggestionId: widget.ideasData.id.toString());
+                  // Plugs(context).addToWishList(
+                  //     suggestionId: widget.ideasData.id.toString());
                 }
 
                 setState(() {
@@ -49,7 +49,7 @@ class _IdeasDetailsScreenState extends State<IdeasDetailsScreen> {
                     widget.ideasData.wishlist_added = "yes";
                   }
                 });
-              }),
+              }),*/
           IconButton(
               icon: Icon(
                 FontAwesomeIcons.share,

@@ -2,6 +2,7 @@ import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/deleteWishListResponse.dart';
 import 'package:cuple_app/model/userWishListResponse.dart';
+import 'package:cuple_app/screens/createMyWishlist.dart';
 import 'package:cuple_app/screens/wishListDetailsScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -45,14 +46,22 @@ class _WishListContainerState extends State<WishListContainer> {
         ],
       ),
       child: ListTile(
-        onTap: (){
-
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => WisllistDetailScreen(userWishListData: widget.userWishListData,)));
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => WisllistDetailScreen(
+                        userWishListData: widget.userWishListData,
+                      )));
         },
+        subtitle: Text(widget.userWishListData.description,
+            style: TextStyle(
+              color: widget.isEven == true ? Colors.white70 : Colors.black54,
+              fontWeight: FontWeight.bold,
+            )),
         title: Text(
           Utils(context)
-              .parseHtmlString(widget.userWishListData.content)
+              .parseHtmlString(widget.userWishListData.name)
               .toString(),
           style: TextStyle(
             color: widget.isEven == true ? Colors.white70 : Colors.black54,
@@ -66,26 +75,45 @@ class _WishListContainerState extends State<WishListContainer> {
         //       fontSize: 17),
         // ),
         trailing: widget.isDelete == true
-            ? IconButton(
-                icon: Icon(
-                  Icons.delete_outline,
-                  size: 35,
-                  color: widget.isEven == true ? Colors.white : Colors.black,
-                ),
-                onPressed: () {
-                  Utils(context).showAlert(
-                      context: context,
-                      title: "Are You Sure",
-                      child: Text("Do you want delete from wish list"),
-                      handler: () async {
-                        DeleteWishListResponse deleteWishListResponse =
-                            await Plugs(context).deleteUserWishList(
-                                id: widget.userWishListData.wishlistId.toString());
-                        Navigator.pop(context);
-                        widget.handlerCall();
-                      },
-                      isCancel: true);
-                })
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                      icon: Icon(
+                        Icons.edit_outlined,
+                        size: 35,
+                        color:
+                            widget.isEven == true ? Colors.white : Colors.black,
+                      ),
+                      onPressed: () {
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateMyWishlist(isEdit: true,userWishListData: widget.userWishListData,callback: (){
+                         widget.handlerCall();
+                       },)));
+                      }),
+                  IconButton(
+                      icon: Icon(
+                        Icons.delete_outline,
+                        size: 35,
+                        color:
+                            widget.isEven == true ? Colors.white : Colors.black,
+                      ),
+                      onPressed: () {
+                        Utils(context).showAlert(
+                            context: context,
+                            title: "Are You Sure",
+                            child: Text("Do you want delete from wish list"),
+                            handler: () async {
+                              DeleteWishListResponse deleteWishListResponse =
+                                  await Plugs(context).deleteUserWishList(
+                                      id: widget.userWishListData.id
+                                          .toString());
+                              Navigator.pop(context);
+                              widget.handlerCall();
+                            },
+                            isCancel: true);
+                      }),
+                ],
+              )
             : SizedBox(),
       ),
     );

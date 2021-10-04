@@ -97,7 +97,7 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
                     fontSize: 17),
               ),
             ),
-            Positioned(
+           /* Positioned(
                 top: 0,
                 right: 0,
                 child: IconButton(
@@ -109,8 +109,8 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
                     ),
                     onPressed: () async {
                       if (widget.ideasData.wishlist_added == "no") {
-                        Plugs(context).addToWishList(
-                            suggestionId: widget.ideasData.id.toString());
+                        // Plugs(context).addToWishList(
+                        //     suggestionId: widget.ideasData.id.toString());
                       }
 
                       setState(() {
@@ -118,7 +118,7 @@ class _IdeasCardContainerState extends State<IdeasCardContainer> {
                           widget.ideasData.wishlist_added = "yes";
                         }
                       });
-                    })),
+                    })),*/
             Positioned(
                 top: 0,
                 left: 0,

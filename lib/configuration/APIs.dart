@@ -42,4 +42,5 @@ const String SEND_NOTIFICATION=APP_BASE_URL+"send-notification";
 const String BEFORE_RAGISTER=APP_BASE_URL+"before-register";
 const String SEND_INVITES=APP_BASE_URL+"send-invite";
 const String CHECK_USER_STATUS=APP_BASE_URL+"update-user-status?user_id=5";
+const String WISHLIST_TITLES=APP_BASE_URL+"wishlist-titles";
 
