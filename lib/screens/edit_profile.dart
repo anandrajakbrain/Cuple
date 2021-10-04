@@ -8,6 +8,7 @@ import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/notificationsListsResponse.dart';
+import 'package:cuple_app/model/states_response.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
 import 'package:cuple_app/screens/updateUserResponse.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,6 +34,15 @@ class _EditProfileState extends State<EditProfile> {
   File _image;
   final picker = ImagePicker();
   String gender = "Male";
+  StatesResponse statesResponse;
+  StatesData statesData;
+
+  getStatesList() async{
+    StatesResponse _stateResponse = await Plugs(context).getStatesList();
+    setState(() {
+      statesResponse = _stateResponse;
+    });
+  }
 
   Future<void> _selectDate(BuildContext context, String type) async {
     final DateTime picked = await showDatePicker(
@@ -134,6 +144,9 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Future.delayed(Duration(seconds: 0)).then((value) {
+      getStatesList();
+    });
     setState(() {
       nameController.text = userDetails.name;
       firstNameController.text = userDetails.firstName??"";
@@ -152,6 +165,8 @@ class _EditProfileState extends State<EditProfile> {
       marriageAnniversary.text = userDetails.anniversaryDate;
       loveAnniversary.text = userDetails.firstDate;
       gender = userDetails.gender;
+      //statesData.state_name = ""
+      print("state>>>>>>>>>>>>>>>>>>>>>>>>>>>"+state);
     });
     //Future.delayed(Duration(seconds: 2)).then((value) => fetch(1));
   }
@@ -525,6 +540,57 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                 ),*/
+                Container(
+                  child: DropdownButtonFormField(
+                    value: statesData,
+                    items: statesResponse != null ?  statesResponse.data
+                        .map(
+                          (e) => DropdownMenuItem(
+                        child: Text(e.state_name),
+                        value: e,
+                      ),
+                    )
+                        .toList() : ['--']
+                        .map((label) => DropdownMenuItem(
+                      child: Text(label.toString()),
+                      value: label,
+                    ))
+                        .toList(),
+                    decoration: InputDecoration(
+                      labelText: state??"State",
+                      labelStyle: TextStyle(
+                        fontSize: Utils(context).getMediaWidth() * 0.059,
+                        color: Colors.grey[500],
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        borderSide: BorderSide(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey[300],
+                          // width: 2.0,
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        statesData = value;
+                        state = statesData.state_name;
+                      });
+                      //getReminderName(reminderTypeVal.id);
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return "Please Select State";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.055),
