@@ -60,7 +60,7 @@ class _WisllistDetailScreenState extends State<WisllistDetailScreen> {
                 SizedBox(
                   height: 8,
                 ),
-                Container(
+               /* Container(
                   height: Utils(context).getMediaHeight() * 0.30,
                   width: Utils(context).getMediaWidth() * 0.55,
                   decoration: BoxDecoration(
@@ -85,7 +85,7 @@ class _WisllistDetailScreenState extends State<WisllistDetailScreen> {
                       );
                     },
                   ):Image.asset("assets/ideaImg1.png",fit: BoxFit.fill,),
-                ),
+                ),*/
                 SizedBox(
                   height: Utils(context).getMediaHeight() * 0.01,
                 ),

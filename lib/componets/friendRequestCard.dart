@@ -147,19 +147,26 @@ class _FriendRequestCardState extends State<FriendRequestCard> {
 
   actionRequest(String type) async {
     if (type == "accept") {
-
       SendPartnerRequestResponse sendPartnerRequestResponse =
           await Plugs(context).acceptPartnerRequest(
               matchId: widget.friendRequestData.id.toString());
       Navigator.pop(context);
       Utils(context).showMessage(
-          title: "", child: Text(sendPartnerRequestResponse.message));
+          title: "Congratulations",
+          child: Text(
+            "Congratulations, you’re paired with ${partnerData.firstName ?? ''}. Now you can see the Dates they want to remember, gifts they want, experiences, places to travel to, romantic dates they want to go on, Love Tips they like",
+          softWrap: true,
+
+          ));
 
       setState(() {
         userDetails.partnerid = widget.friendRequestData.fromId;
       });
-      Plugs(context).sendNotification(sendToUID:  widget.friendRequestData.fromId.toString(),title: "Friend Request Accepted",
-          msg: "Congratulations, you’re paired with ${partnerData.name.split(' ').first}. Now you can see the Dates they want to remember, gifts they want, "
+      Plugs(context).sendNotification(
+          sendToUID: widget.friendRequestData.fromId.toString(),
+          title: "Friend Request Accepted",
+          msg:
+              "Congratulations, you’re paired with ${partnerData.firstName ?? ''}. Now you can see the Dates they want to remember, gifts they want, "
               "experiences, places to travel to, romantic dates they want to go on, Love Tips they like…");
       SharedPreferences prf = await SharedPreferences.getInstance();
       // print("Update User Data");
@@ -169,7 +176,10 @@ class _FriendRequestCardState extends State<FriendRequestCard> {
       SendPartnerRequestResponse sendPartnerRequestResponse =
           await Plugs(context).cancelPartnerRequest(
               matchId: widget.friendRequestData.id.toString());
-      Plugs(context).sendNotification(sendToUID:  widget.friendRequestData.fromId.toString(),title: "Friend Request Canceled",msg: "${userDetails.name } Has Been Reject Your Friend Request.");
+      Plugs(context).sendNotification(
+          sendToUID: widget.friendRequestData.fromId.toString(),
+          title: "Friend Request Canceled",
+          msg: "${userDetails.name} Has Been Reject Your Friend Request.");
       Navigator.pop(context);
       Utils(context).showMessage(
           title: "", child: Text(sendPartnerRequestResponse.message));

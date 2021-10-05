@@ -806,7 +806,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          "Greeting Card Subscription \nfor ${partnerData != null ? partnerData.name : 'Partner'}",
+                          "Greeting Card Subscription \nfor ${partnerData != null ? partnerData.firstName??'' : 'Partner'}",
                           softWrap: true,
                           style: TextStyle(color: Colors.white),
                         )
