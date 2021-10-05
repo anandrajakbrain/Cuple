@@ -336,18 +336,7 @@ class _UserProfileState extends State<UserProfile> {
                                                   .size
                                                   .height *
                                                   0.02)),
-                                      Text(
-                                        "Gender",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                      Padding(
-                                          padding: EdgeInsets.only(
-                                              top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                                  0.02)),
+
                                       Text(
                                         "Birth Date",
                                         style: TextStyle(
@@ -360,6 +349,18 @@ class _UserProfileState extends State<UserProfile> {
                                                   .size
                                                   .height *
                                                   0.02)),
+                                          Text(
+                                        "State",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                                  0.02))
                                     ],
                                   ),
                                   Column(
@@ -377,8 +378,9 @@ class _UserProfileState extends State<UserProfile> {
                                                   .size
                                                   .height *
                                                   0.02)),
+
                                       Text(
-                                        ":\t\t${userDetails.gender ?? ""}",
+                                        ":\t\t${userDetails.dob}",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w300),
@@ -389,8 +391,9 @@ class _UserProfileState extends State<UserProfile> {
                                                   .size
                                                   .height *
                                                   0.02)),
-                                      Text(
-                                        ":\t\t${userDetails.dob}",
+
+                                       Text(
+                                        ":\t\t${userDetails.state ?? ""}",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w300),

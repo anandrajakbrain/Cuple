@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/listContainer.dart';
+import 'package:cuple_app/componets/noInterNetConnectionScreen.dart';
 import 'package:cuple_app/configuration/APIs.dart';
 import 'package:cuple_app/configuration/app_config.dart';
 import 'package:cuple_app/configuration/plug.dart';
@@ -93,8 +94,11 @@ class _EditProfileState extends State<EditProfile> {
   var firstName, lastName, state = "";
 
   fetch() async {
-    UpdateUserResponse _updateUserResponse = await Plugs(context)
-        .updateUserDetailsWithFormData(
+
+    Utils(context).checkInternet().then((value) async {
+      if (value == true) {
+        UpdateUserResponse _updateUserResponse = await Plugs(context)
+            .updateUserDetailsWithFormData(
             userDetails.id.toString(),
             name,
             email,
@@ -108,26 +112,45 @@ class _EditProfileState extends State<EditProfile> {
             lastName,
             state);
 
-    setState(() {
-      updateUserResponse = _updateUserResponse;
-      if (updateUserResponse != null) {
-        if (updateUserResponse.success == true) {
-          updateUserLocal();
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
-        } else {
-          Utils(context).showMessage(
-              title: "Error",
-              child: Text("${updateUserResponse.message}"),
-              isCancel: true);
-        }
-      } else {
-        Utils(context).showMessage(
-            title: "Error",
-            child: Text("Something Went Wrong"),
-            isCancel: true);
+        setState(() {
+          updateUserResponse = _updateUserResponse;
+          if (updateUserResponse != null) {
+            if (updateUserResponse.success == true) {
+              updateUserLocal();
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            } else {
+              Utils(context).showMessage(
+                  title: "Error",
+                  child: Text("${updateUserResponse.message}"),
+                  isCancel: true);
+            }
+          } else {
+            Utils(context).showMessage(
+                title: "Error",
+                child: Text("Something Went Wrong"),
+                isCancel: true);
+          }
+        });
+
+      }else{
+
+        Utils(context).showAlert(
+            context: context,
+            title: "",
+            child: Container(
+                height: 250, width: 150, child: NoInternetConnectionScreen()),
+            handler: () {
+              Navigator.pop(context);
+              fetch();
+            },
+            isCancel: false);
       }
     });
+
+
+
+
   }
 
   updateUserLocal() async {

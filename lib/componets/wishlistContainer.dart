@@ -58,7 +58,10 @@ class _WishListContainerState extends State<WishListContainer> {
             style: TextStyle(
               color: widget.isEven == true ? Colors.white70 : Colors.black54,
               fontWeight: FontWeight.bold,
-            )),
+            ),
+        overflow: TextOverflow.fade,
+          maxLines: 4,
+        ),
         title: Text(
           Utils(context)
               .parseHtmlString(widget.userWishListData.name)

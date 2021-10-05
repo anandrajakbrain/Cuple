@@ -1244,6 +1244,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .size
                                               .height *
                                               0.02)),
+
+                                  Text(
+                                    "State",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          top: MediaQuery.of(context)
+                                              .size
+                                              .height *
+                                              0.02)),
                                 ],
                               ),
                               Column(
@@ -1275,6 +1288,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                               0.02)),*/
                                   Text(
                                     ":\t\t${userDetails.dob}",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          top: MediaQuery.of(context)
+                                              .size
+                                              .height *
+                                              0.02)),
+                                  Text(
+                                    ":\t\t${userDetails.state ?? ""}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),

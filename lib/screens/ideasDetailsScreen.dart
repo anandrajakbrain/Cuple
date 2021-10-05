@@ -112,6 +112,16 @@ class _IdeasDetailsScreenState extends State<IdeasDetailsScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
+                Divider(
+                  endIndent:Utils(context).getMediaWidth()*0.05 ,
+                  indent:Utils(context).getMediaWidth()*0.05 ,
+                  color: Colors.grey[300],
+                  thickness: 2,
+
+                ),
+                SizedBox(
+                  height: Utils(context).getMediaHeight() * 0.01,
+                ),
                 Text(
                   Utils(context)
                       .parseHtmlString(widget.ideasData.content.toString())

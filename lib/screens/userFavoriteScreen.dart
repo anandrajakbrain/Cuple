@@ -308,6 +308,18 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
                                       .size
                                       .height *
                                       0.02)),
+                          Text(
+                            "State",
+                            style: TextStyle(
+                                //color: Colors.white,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context)
+                                      .size
+                                      .height *
+                                      0.02)),
                         ],
                       ),
                       Column(
@@ -327,6 +339,17 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
                                       0.02)),
                           Text(
                             ":\t\t${partnerData.dob}",
+                            style: TextStyle(
+                                //color: Colors.white,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context)
+                                      .size
+                                      .height *
+                                      0.02)),  Text(
+                            ":\t\t${partnerData.state??''}",
                             style: TextStyle(
                                 //color: Colors.white,
                                 fontWeight: FontWeight.w400),

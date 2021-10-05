@@ -85,7 +85,9 @@ class _MyWishListState extends State<MyWishList> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CreateMyWishlist())).then((value) => fetch());
+                        builder: (context) => CreateMyWishlist(callback: (){
+                          fetch();
+                        },)));
               },
               label: const Text('Create New'),
             ),
