@@ -124,7 +124,7 @@ resizeToAvoidBottomInset: false,
                         },
                         validator: (value) {
                           if (value == null) {
-                            return "Please Select Reminder Type";
+                            return "Please Select occasion Type";
                           }
                           return null;
                         },
@@ -133,7 +133,7 @@ resizeToAvoidBottomInset: false,
                         // value: reminderTypeVal,
                         items: [],
                         decoration: InputDecoration(
-                          labelText: "Reminder Type",
+                          labelText: "what’s the occasion?",
                           labelStyle: TextStyle(
                               fontSize: Utils(context).getMediaWidth() * 0.04),
                           border: OutlineInputBorder(),
@@ -146,7 +146,7 @@ resizeToAvoidBottomInset: false,
                         },
                         validator: (value) {
                           if (value == null) {
-                            return "Please Select Reminder Type";
+                            return "Please Select occasion Type";
                           }
                           return null;
                         },
@@ -207,7 +207,7 @@ resizeToAvoidBottomInset: false,
                     // keyboardType: widget.TxtInputType,
                     // controller: widget.controller,
                     decoration: InputDecoration(
-                      labelText: "Who are we celebrating?",
+                      labelText: "what are we celebrating? (Eg. Our dating Anniversary)",
                       labelStyle: TextStyle(
                         fontSize: Utils(context).getMediaWidth() * 0.04,
                         color: Colors.grey[500],

@@ -112,191 +112,140 @@ setOldData()async{
       body: Container(
         height: Utils(context).getMediaHeight(),
         padding: EdgeInsets.all(8.0),
-        child: Center(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: Utils(context).getMediaHeight() * 0.06,
-                ),
-                wishListTitleResponse != null
-                    ? DropdownButtonFormField(
-                  value: wishListTitlesData,
-                  items: wishListTitleResponse.data
-                      .map(
-                        (e) => DropdownMenuItem(
-                      child: Text(e.name),
-                      value: e,
-                    ),
-                  )
-                      .toList(),
-                  decoration: InputDecoration(
-                    labelText: "Wish List Title",
-                    labelStyle: TextStyle(
-                        fontSize: Utils(context).getMediaWidth() * 0.04),
-                    border: OutlineInputBorder(),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: Utils(context).getMediaHeight() * 0.06,
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      wishListTitlesData = value;
-                    });
-
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return "Please Select Wish list Title";
-                    }
-                    return null;
-                  },
-                )
-                    : DropdownButtonFormField(
-                  // value: reminderTypeVal,
-                  items: [],
-                  decoration: InputDecoration(
-                    labelText: "Wish list Title",
-                    labelStyle: TextStyle(
-                        fontSize: Utils(context).getMediaWidth() * 0.06),
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    // setState(() {
-                    //   reminderTypeVal = value;
-                    // });
-                    // getReminderName(reminderTypeVal.id);
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return "Please Select Wish list Title";
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(
-                  height: Utils(context).getMediaHeight() * 0.03,
-                ),
-
-                SizedBox(
-                  height: Utils(context).getMediaHeight() * 0.03,
-                ),
-                Container(
-                  height: Utils(context).getMediaHeight()*0.20,
-                  // padding: EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    // keyboardType: widget.TxtInputType,
-                    controller: descriptionController,
-                    maxLines: null,
-                    expands: true,
-
-                    keyboardType: TextInputType.multiline,
+                  wishListTitleResponse != null
+                      ? DropdownButtonFormField(
+                    value: wishListTitlesData,
+                    items: wishListTitleResponse.data
+                        .map(
+                          (e) => DropdownMenuItem(
+                        child: Text(e.name),
+                        value: e,
+                      ),
+                    )
+                        .toList(),
                     decoration: InputDecoration(
-                      labelText: "Tell as more about",
+                      labelText: "Wish List Title",
                       labelStyle: TextStyle(
-                        fontSize: Utils(context).getMediaWidth() * 0.06,
-                        color: Colors.grey[500],
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        borderSide: BorderSide(
-                          color: Colors.blue,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        borderSide: BorderSide(
-                          color: Colors.grey[300],
-                          // width: 2.0,
-                        ),
-                      ),
-
+                          fontSize: Utils(context).getMediaWidth() * 0.04),
+                      border: OutlineInputBorder(),
                     ),
+                    onChanged: (value) {
+                      setState(() {
+                        wishListTitlesData = value;
+                      });
+
+                    },
                     validator: (value) {
-                      if (value.isEmpty) {
-                        return "! Please tell as more about your wish";
+                      if (value == null) {
+                        return "Please Select Wish list Title";
                       }
-
                       return null;
                     },
-                    onChanged: (val) {
-                      // setState(() {
-                      //   customREminderName = val;
-                      // });
-                    },
-                    /*onChanged: (val){
-          if (_formkey.currentState.validate()) {
-            print("Validated");
-          }else{
-            print("Not Validated");
-          }
-        },*/
-                  ),
-                ),
-                SizedBox(
-                  height: Utils(context).getMediaHeight() * 0.03,
-                ),
-                Container(
-                  // padding: EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    // keyboardType: widget.TxtInputType,
-                    controller: linkController,
+                  )
+                      : DropdownButtonFormField(
+                    // value: reminderTypeVal,
+                    items: [],
                     decoration: InputDecoration(
-                      labelText: "Link (Optional)",
+                      labelText: "Wish list Title",
                       labelStyle: TextStyle(
-                        fontSize: Utils(context).getMediaWidth() * 0.06,
-                        color: Colors.grey[500],
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        borderSide: BorderSide(
-                          color: Colors.blue,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        borderSide: BorderSide(
-                          color: Colors.grey[300],
-                          // width: 2.0,
-                        ),
-                      ),
+                          fontSize: Utils(context).getMediaWidth() * 0.06),
+                      border: OutlineInputBorder(),
                     ),
+                    onChanged: (value) {
+                      // setState(() {
+                      //   reminderTypeVal = value;
+                      // });
+                      // getReminderName(reminderTypeVal.id);
+                    },
                     validator: (value) {
-                      // if (value.isEmpty) {
-                      //   return "! Please tell Who are we celebrating?";
-                      // }
-
+                      if (value == null) {
+                        return "Please Select Wish list Title";
+                      }
                       return null;
                     },
-                    onChanged: (val) {
-                      // setState(() {
-                      //   customREminderName = val;
-                      // });
-                    },
-                    /*onChanged: (val){
-          if (_formkey.currentState.validate()) {
-            print("Validated");
-          }else{
-            print("Not Validated");
-          }
-        },*/
                   ),
-                ),
-               /* InkWell(
-                  onTap: () {
-                    print("Tap Work");
-                    _selectDate(context);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(8.0),
+                  SizedBox(
+                    height: Utils(context).getMediaHeight() * 0.03,
+                  ),
+
+                  SizedBox(
+                    height: Utils(context).getMediaHeight() * 0.03,
+                  ),
+                  Container(
+                    height: Utils(context).getMediaHeight()*0.20,
+                    // padding: EdgeInsets.all(8.0),
                     child: TextFormField(
-                      enabled: false,
-                      controller: dateInputController,
+                      // keyboardType: widget.TxtInputType,
+                      controller: descriptionController,
+                      maxLines: null,
+                      expands: true,
+
+                      keyboardType: TextInputType.multiline,
                       decoration: InputDecoration(
-                        labelText: "Date",
+                        labelText: "description (eg. Cooking Lessons- I love to learn new things to cook, and I want to do it together with you) ",
                         labelStyle: TextStyle(
-                          fontSize: Utils(context).getMediaWidth() * 0.04,
+                          fontSize: Utils(context).getMediaWidth() * 0.06,
                           color: Colors.grey[500],
                         ),
-                        suffixIcon: Icon(Icons.calendar_today),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          borderSide: BorderSide(
+                            color: Colors.grey[300],
+                            // width: 2.0,
+                          ),
+                        ),
+
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "! Please Enter Description ";
+                        }
+
+                        return null;
+                      },
+                      onChanged: (val) {
+                        // setState(() {
+                        //   customREminderName = val;
+                        // });
+                      },
+                      /*onChanged: (val){
+            if (_formkey.currentState.validate()) {
+              print("Validated");
+            }else{
+              print("Not Validated");
+            }
+          },*/
+                    ),
+                  ),
+                  SizedBox(
+                    height: Utils(context).getMediaHeight() * 0.03,
+                  ),
+                  Container(
+                    // padding: EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      // keyboardType: widget.TxtInputType,
+                      controller: linkController,
+                      decoration: InputDecoration(
+                        labelText: "Link (Optional)",
+                        labelStyle: TextStyle(
+                          fontSize: Utils(context).getMediaWidth() * 0.06,
+                          color: Colors.grey[500],
+                        ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                           borderSide: BorderSide(
@@ -312,49 +261,102 @@ setOldData()async{
                         ),
                       ),
                       validator: (value) {
-                        if (value.isEmpty) {
-                          return "! Please Select Date ";
-                        }
+                        // if (value.isEmpty) {
+                        //   return "! Please tell Who are we celebrating?";
+                        // }
 
                         return null;
                       },
+                      onChanged: (val) {
+                        // setState(() {
+                        //   customREminderName = val;
+                        // });
+                      },
+                      /*onChanged: (val){
+            if (_formkey.currentState.validate()) {
+              print("Validated");
+            }else{
+              print("Not Validated");
+            }
+          },*/
                     ),
                   ),
-                ),*/
-                SizedBox(
-                  height: Utils(context).getMediaHeight() * 0.03,
-                ),
-                InkWell(
-                  onTap: () async {
-                    if (_formKey.currentState.validate()) {
-                      // creteReminder();
-createMyWishList();
-                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerificationScreen()));
-                    }
-                  },
-                  child: SizedBox(
-                    width: Utils(context).getMediaWidth() * 0.80,
+                 /* InkWell(
+                    onTap: () {
+                      print("Tap Work");
+                      _selectDate(context);
+                    },
                     child: Container(
-                      padding: EdgeInsets.all(14.0),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Color(0XFF1E8FED), Color(0XFF6341DF)]),
-                        borderRadius: BorderRadius.circular(25.0),
+                      padding: EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        enabled: false,
+                        controller: dateInputController,
+                        decoration: InputDecoration(
+                          labelText: "Date",
+                          labelStyle: TextStyle(
+                            fontSize: Utils(context).getMediaWidth() * 0.04,
+                            color: Colors.grey[500],
+                          ),
+                          suffixIcon: Icon(Icons.calendar_today),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                            borderSide: BorderSide(
+                              color: Colors.grey[300],
+                              // width: 2.0,
+                            ),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "! Please Select Date ";
+                          }
+
+                          return null;
+                        },
                       ),
-                      child: Center(
-                        child: Text(
-                          'SUBMIT',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: Utils(context).getMediaWidth() * 0.05,
-                            fontWeight: FontWeight.bold,
+                    ),
+                  ),*/
+                  SizedBox(
+                    height: Utils(context).getMediaHeight() * 0.03,
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      if (_formKey.currentState.validate()) {
+                        // creteReminder();
+createMyWishList();
+                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpVerificationScreen()));
+                      }
+                    },
+                    child: SizedBox(
+                      width: Utils(context).getMediaWidth() * 0.80,
+                      child: Container(
+                        padding: EdgeInsets.all(14.0),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [Color(0XFF1E8FED), Color(0XFF6341DF)]),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'SUBMIT',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Utils(context).getMediaWidth() * 0.05,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
