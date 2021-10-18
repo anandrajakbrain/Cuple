@@ -7,10 +7,35 @@ class CustomProgressLoader extends StatefulWidget {
 }
 
 class _CustomProgressLoaderState extends State<CustomProgressLoader> {
+
+  int num = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future changeColor() async{
+    for(int i = 0; i < 10000; i++){
+      await Future.delayed(const Duration(milliseconds: 400), () {
+        setState(() {
+          num++;
+        });
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    changeColor();
     return Center(
-      child:  SvgPicture.asset("assets/hearts.svg")//CircularProgressIndicator(),
+      child:  SvgPicture.asset("assets/hearts.svg", color: num%2==0?Colors.red:num%3==0?Colors.white:Colors.yellow,)//CircularProgressIndicator(),
     );
   }
 }
