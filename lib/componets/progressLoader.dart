@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -9,6 +11,7 @@ class CustomProgressLoader extends StatefulWidget {
 class _CustomProgressLoaderState extends State<CustomProgressLoader> {
 
   int num = 0;
+  Timer t;
 
   @override
   void initState() {
@@ -16,11 +19,12 @@ class _CustomProgressLoaderState extends State<CustomProgressLoader> {
   }
 
   Future changeColor() async{
-    for(int i = 0; i < 10000; i++){
-      await Future.delayed(const Duration(milliseconds: 400), () {
+    for(int i = 0; i < 1000; i++){
+       t = await Future.delayed(const Duration(milliseconds: 400), () {
         setState(() {
           num++;
         });
+        return;
       });
     }
   }
@@ -28,6 +32,7 @@ class _CustomProgressLoaderState extends State<CustomProgressLoader> {
   @override
   void dispose() {
     // TODO: implement dispose
+    t?.cancel();
     super.dispose();
   }
 
