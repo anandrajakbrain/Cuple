@@ -20,7 +20,7 @@ class _CustomProgressLoaderState extends State<CustomProgressLoader> {
 
   Future changeColor() async{
     for(int i = 0; i < 1000; i++){
-       t = await Future.delayed(const Duration(milliseconds: 400), () {
+       t = await Future.delayed(const Duration(seconds: 1), () {
         setState(() {
           num++;
         });
@@ -32,7 +32,7 @@ class _CustomProgressLoaderState extends State<CustomProgressLoader> {
   @override
   void dispose() {
     // TODO: implement dispose
-    t?.cancel();
+    // t?.cancel();
     super.dispose();
   }
 
@@ -40,7 +40,7 @@ class _CustomProgressLoaderState extends State<CustomProgressLoader> {
   Widget build(BuildContext context) {
     changeColor();
     return Center(
-      child:  SvgPicture.asset("assets/hearts.svg", color: num%2==0?Colors.red:num%3==0?Colors.white:Colors.yellow,)//CircularProgressIndicator(),
+      child:  SvgPicture.asset("assets/hearts.svg", color: num%2==0?Colors.red:num%3==0?Colors.white:Colors.redAccent,)//CircularProgressIndicator(),
     );
   }
 }
