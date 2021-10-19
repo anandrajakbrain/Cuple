@@ -1220,6 +1220,9 @@ class Plugs {
         throw Exception(response.body);
       }
     } catch (e, s) {
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
       Navigator.pop(context);
       print("===========================>Error========================>");
       print(e);

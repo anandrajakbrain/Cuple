@@ -6,6 +6,7 @@ import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/createNewReminderResponse.dart';
 import 'package:cuple_app/model/reminder_type_response.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
+import 'package:cuple_app/screens/reminderListScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -336,8 +337,9 @@ resizeToAvoidBottomInset: false,
         name: reminderTypeVal.name.toString(),
         customize_name: customREminderName,
       );
-      Navigator.pop(context);
-      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>ReminderListScreen()));
+      // Navigator.pop(context);
+      // Navigator.pop(context);
     } catch (e, s) {
       Utils(context).showMessage(
         title: "Error",

@@ -626,7 +626,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        CreateNewReminder())).then((value) => getApis()); //.then((value) => fetch());
+                                        CreateNewReminder())); //.then((value) => fetch());
                           },
                           label: const Text('Create New'),
                         ),

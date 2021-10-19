@@ -16,6 +16,7 @@ class _CustomProgressLoaderState extends State<CustomProgressLoader> {
   @override
   void initState() {
     super.initState();
+    changeColor();
   }
 
   Future changeColor() async{
@@ -39,7 +40,7 @@ class _CustomProgressLoaderState extends State<CustomProgressLoader> {
 
   @override
   Widget build(BuildContext context) {
-    changeColor();
+
     return Center(
       child:  SvgPicture.asset("assets/hearts.svg", color: num%2==0?Colors.red:num%3==0?Colors.white:Colors.redAccent,)//CircularProgressIndicator(),
     );
