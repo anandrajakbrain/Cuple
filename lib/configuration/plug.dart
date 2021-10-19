@@ -305,6 +305,7 @@ class Plugs {
 
   Future<SettingsResponse> getSettings(var userId,) async {
     Utils(context).showProgressLoader();
+   print("setting module");
     try {
       http.Response response =
       await http.get(
@@ -317,6 +318,8 @@ class Plugs {
         throw Exception(response.body);
       }
     } catch (e, s) {
+      print(e);
+      print(s);
       Navigator.pop(context);
       Utils(context).showMessage(
         title: "Error",
@@ -1204,6 +1207,7 @@ class Plugs {
     Utils(context).showProgressLoader();
 
     try {
+      print("SUGGESTION_TYPE_LIST_FOR_HOME : $SUGGESTION_TYPE_LIST_FOR_HOME");
       http.Response response = await http.get(SUGGESTION_TYPE_LIST_FOR_HOME,
           // body: body,
           headers: getHeaders(token: token));

@@ -24,12 +24,12 @@ class SettingsResponse {
 
 class SettingsData {
   int id;
-  String nofication;
-  String chat;
-  String frequency;
-  String questionnaire;
-  String date_nights;
-  String msg_frequency;
+  var nofication;
+  var chat;
+  var frequency;
+  var questionnaire;
+  var date_nights;
+  var msg_frequency;
   var celebration_subscribe;
 
   SettingsData({this.nofication, this.chat, this.frequency, this.questionnaire});
