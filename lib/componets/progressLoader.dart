@@ -21,9 +21,11 @@ class _CustomProgressLoaderState extends State<CustomProgressLoader> {
   Future changeColor() async{
     for(int i = 0; i < 1000; i++){
        t = await Future.delayed(const Duration(seconds: 1), () {
-        setState(() {
-          num++;
-        });
+         if(mounted){
+           setState(() {
+             num++;
+           });
+         }
         return;
       });
     }
@@ -31,8 +33,7 @@ class _CustomProgressLoaderState extends State<CustomProgressLoader> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    // t?.cancel();
+    t?.cancel();
     super.dispose();
   }
 
