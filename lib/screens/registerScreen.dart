@@ -607,7 +607,9 @@ PreviewReg previewReg;
         gender: gender,
         first_name: firstname,
         last_name: lastName,
-        state: stateName);
+        state: stateName,
+
+    );
     if (registerUserResponse.success == true) {
       Navigator.pushAndRemoveUntil(
         context,

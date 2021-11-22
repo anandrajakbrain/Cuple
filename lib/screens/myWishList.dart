@@ -105,7 +105,7 @@ class _MyWishListState extends State<MyWishList> {
                   : 0,
               itemBuilder: (context, index) {
                 return WishListContainer(
-                  isEven: true,
+                  isEven: index.isEven,
                   isDelete: true,
                   userWishListData: userWishListResponse.data[index],
                   handlerCall: (){

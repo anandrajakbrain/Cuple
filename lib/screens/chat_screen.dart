@@ -180,13 +180,18 @@ class _ChatScreenState extends State<ChatScreen> {
                                   //width: Utils(context).getMediaWidth() * 0.6,
                                   child: Row(
                                     children: [
-                                      Text(
-                                        "${getMsgResponse.data[index].msg}",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: Utils(context)
-                                                .getMediaHeight() *
-                                                0.022),
+                                      Container(
+                                        width:Utils(context).getMediaWidth()*0.40,
+                                        child: Text(
+                                          "${getMsgResponse.data[index].msg}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: Utils(context)
+                                                  .getMediaHeight() *
+                                                  0.022),
+                                          softWrap: true,
+                                          // maxLines: 1,
+                                        ),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
@@ -433,13 +438,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                   //width: Utils(context).getMediaWidth() * 0.6,
                                   child: Row(
                                     children: [
-                                      Text(
-                                        "${ getMsgResponse.data[index].msg}",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: Utils(context)
-                                                .getMediaHeight() *
-                                                0.022),
+                                      FittedBox(
+                                        child: Text(
+                                          "${ getMsgResponse.data[index].msg}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: Utils(context)
+                                                  .getMediaHeight() *
+                                                  0.022),
+                                        ),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(

@@ -23,21 +23,16 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
   String delIds = "";
 
   fetch(var id) async {
-
     Utils(context).checkInternet().then((value) async {
-      if(value==true){
-
+      if (value == true) {
         NotificationsListsResponse _notificationsListsResponse =
-        await Plugs(context).getNotificationList(id, name: "");
+            await Plugs(context).getNotificationList(id, name: "");
 
         setState(() {
           notificationsListsResponse = _notificationsListsResponse;
         });
-
-      }
-
-
-      else {
+        Plugs(context).markAsReadAllNotification();
+      } else {
         Utils(context).showAlert(
             context: context,
             title: "",
@@ -49,13 +44,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
             },
             isCancel: false);
       }
-
-
     });
-
-
-
-
   }
 
   deleteAll(String ids) async {
@@ -72,7 +61,8 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 0)).then((value) => fetch(userDetails.id.toString()));
+    Future.delayed(Duration(seconds: 0))
+        .then((value) => fetch(userDetails.id.toString()));
   }
 
   @override
@@ -86,7 +76,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
           style: TextStyle(color: Colors.black),
         ),
         actions: [
-          InkWell(
+          /*InkWell(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextButton(
@@ -99,7 +89,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
                 child: const Text('Clear All'),
               ),
             ),
-          ),
+          ),*/
         ],
         elevation: 0,
       ),
@@ -129,9 +119,9 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
                       })
                   : HartScreenComponent()
               : NoRecordFoundScreen(
-            icon: FontAwesomeIcons.fileDownload,
-            msg: "Please Wait",
-          ),
+                  icon: FontAwesomeIcons.fileDownload,
+                  msg: "Please Wait",
+                ),
         ),
       ),
     );

@@ -273,7 +273,7 @@ class _UserProfileState extends State<UserProfile> {
                 children: [
                   Container(
                     padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.08),
+                        top: MediaQuery.of(context).size.height * 0.10),
                     child: Card(
                       child: Container(
                         width: double.infinity,
@@ -298,7 +298,7 @@ class _UserProfileState extends State<UserProfile> {
                                     top:
                                     MediaQuery.of(context).size.height * 0.01)),
                             Text(
-                              "${userDetails.email}",
+                              "${userDetails.email??""}",
                               style: TextStyle(
                                   color: Colors.white, fontWeight: FontWeight.w300),
                             ),
@@ -315,9 +315,10 @@ class _UserProfileState extends State<UserProfile> {
                                     top:
                                     MediaQuery.of(context).size.height * 0.02)),
                             Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                  MediaQuery.of(context).size.height * 0.08),
+                              // padding: EdgeInsets.symmetric(
+                              //     horizontal:
+                              //     MediaQuery.of(context).size.height * 0.05),
+                              padding: EdgeInsets.all(2.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -380,7 +381,7 @@ class _UserProfileState extends State<UserProfile> {
                                                   0.02)),
 
                                       Text(
-                                        ":\t\t${userDetails.dob}",
+                                        ":\t\t${userDetails.dob??""}",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w300),
@@ -392,11 +393,19 @@ class _UserProfileState extends State<UserProfile> {
                                                   .height *
                                                   0.02)),
 
-                                       Text(
-                                        ":\t\t${userDetails.state ?? ""}",
+                                       /*Text(
+                                        ":\t\t${userDetails.state.substring(0,5) ?? ""}",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w300),
+                                      ),*/ 
+                                      FittedBox(
+                                        child: Text(
+                                          ":\t\t${userDetails.state ?? ""}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w300),
+                                        ),
                                       ),
                                       Padding(
                                           padding: EdgeInsets.only(

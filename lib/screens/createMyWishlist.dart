@@ -49,7 +49,7 @@ TextEditingController linkController=new TextEditingController();
       remindersListData = null;
     });
     RemindersListsResponse _remindersListsResponse =
-    await Plugs(context).getreminderTypeList(type: type);
+    await Plugs(context).getreminderTypeList();
     setState(() {
       remindersListsResponse = _remindersListsResponse;
     });

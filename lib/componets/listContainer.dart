@@ -48,12 +48,12 @@ class _ListContainerState extends State<ListContainer> {
               fontSize: 14),
         ),
         subtitle: Text(
-          "${widget.notificationListData.msg}",
+          "${widget.notificationListData.notification}",
           style: TextStyle(
               color: widget.isEven == true ? Colors.white : Colors.black,
               fontSize: 17),
         ),
-        trailing: IconButton(
+       /* trailing: IconButton(
             icon: Icon(
               Icons.delete_outline,
               size: 35,
@@ -61,7 +61,7 @@ class _ListContainerState extends State<ListContainer> {
             ),
             onPressed: () {
               fetch(widget.notificationListData.id);
-            }),
+            }),*/
       ),
     );
   }

@@ -45,10 +45,10 @@ class _EditReminderState extends State<EditReminder> {
   }
 setOldData() async{
     setState(() {
-      reminderTypeVal=remindersTypeResponse.data.where((element) =>element.name==widget.userListReminderData.type).first;
+      // reminderTypeVal=remindersTypeResponse.data.where((element) =>element.name==widget.userListReminderData.type).first;
     });
 
-  getReminderName(reminderTypeVal.id).then((val){
+  getReminderName().then((val){
     setState(() {
       remindersListData=remindersListsResponse.data.where((element) => element.name==widget.userListReminderData.name).first;
     });
@@ -64,19 +64,19 @@ setState(() {
 });
 
 }
-  getReminderName(int type) async {
+  getReminderName() async {
     setState(() {
       remindersListsResponse = null;
       remindersListData = null;
     });
     RemindersListsResponse _remindersListsResponse =
-    await Plugs(context).getreminderTypeList(type: type);
+    await Plugs(context).getreminderTypeList();
     setState(() {
       remindersListsResponse = _remindersListsResponse;
     });
   }
 getallApi() async{
- await getReminderType();
+ // await getReminderType();
  await setOldData();
 }
   @override
@@ -132,7 +132,7 @@ getallApi() async{
                 SizedBox(
                   height: Utils(context).getMediaHeight() * 0.06,
                 ),
-                remindersTypeResponse != null
+             /*   remindersTypeResponse != null
                     ? DropdownButtonFormField(
                   value: reminderTypeVal,
                   items: remindersTypeResponse.data
@@ -183,7 +183,7 @@ getallApi() async{
                     }
                     return null;
                   },
-                ),
+                ),*/
                 SizedBox(
                   height: Utils(context).getMediaHeight() * 0.03,
                 ),
@@ -199,7 +199,7 @@ getallApi() async{
                   )
                       .toList(),
                   decoration: InputDecoration(
-                    labelText: "Reminder Title",
+                    labelText: "what’s the occasion?",
                     labelStyle: TextStyle(
                         fontSize: Utils(context).getMediaWidth() * 0.04),
                     border: OutlineInputBorder(),
@@ -211,7 +211,7 @@ getallApi() async{
                   },
                   validator: (value) {
                     if (value == null) {
-                      return "Please Select Reminder Title";
+                      return "Please Select occasion?";
                     }
                     return null;
                   },
@@ -219,13 +219,13 @@ getallApi() async{
                     : DropdownButtonFormField(
                   validator: (value) {
                     if (value == null) {
-                      return "Please Select Reminder Title";
+                      return "Please Select occasion?";
                     }
                     return null;
                   },
                   items: [],
                   decoration: InputDecoration(
-                    labelText: "Reminder Title",
+                    labelText: "what’s the occasion?",
                     labelStyle: TextStyle(
                         fontSize: Utils(context).getMediaWidth() * 0.04),
                     border: OutlineInputBorder(),
@@ -365,10 +365,11 @@ getallApi() async{
     try {
       CreateNewReminderResponse createNewReminders =
       await Plugs(context).updateReminder(
-        category: reminderTypeVal.name.toString(),
+        // category: reminderTypeVal.name.toString(),
+        category: "",
         remindersListData: remindersListData,
         date: selectedDate.toString(),
-        name: reminderTypeVal.name.toString(),
+        name: remindersListData.name.toString(),
         customize_name: customREminderName,
         id: widget.userListReminderData.id.toString(),
         favourite: widget.userListReminderData.favourite,

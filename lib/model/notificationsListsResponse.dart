@@ -16,7 +16,7 @@ class NotificationsListsResponse {
     message = json['message'];
   }
 
-  Map<String, dynamic> toJson()  {
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
     if (this.data != null) {
@@ -30,47 +30,48 @@ class NotificationsListsResponse {
 class NotificationListData {
   int id;
   int userId;
-  int notificationTypeId;
-  String msg;
-  String status;
+  int toId;
+  String notification;
+  String type;
   String createdAt;
   String updatedAt;
   var deletedAt;
-  String notificationtype;
+  String readable;
 
   NotificationListData(
       {this.id,
         this.userId,
-        this.notificationTypeId,
-        this.msg,
-        this.status,
+        this.toId,
+        this.notification,
+        this.type,
         this.createdAt,
         this.updatedAt,
-        this.deletedAt,
-        this.notificationtype});
+        this.readable,
+        this.deletedAt});
 
   NotificationListData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
-    notificationTypeId = json['notification_id'];
-    msg = json['msg'];
-    status = json['status'];
+    toId = json['to_id'];
+    notification = json['notification'];
+    type = json['type'];
     createdAt = json['created_at'];
+    readable = json['readable'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
-    notificationtype = json['type'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['notification_id'] = this.notificationTypeId;
-    data['msg'] = this.msg;
-    data['status'] = this.status;
+    data['user_id'] = this.userId;
+    data['to_id'] = this.toId;
+    data['notification'] = this.notification;
+    data['type'] = this.type;
     data['created_at'] = this.createdAt;
+    data['readable'] = this.readable;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
-    data['type'] = this.notificationtype;
     return data;
   }
 }

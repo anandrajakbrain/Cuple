@@ -3,6 +3,7 @@ import 'package:cuple_app/configuration/plug.dart';
 import 'package:cuple_app/configuration/utils.dart';
 import 'package:cuple_app/model/getPartnerRequestResponse.dart';
 import 'package:cuple_app/model/verifyOTPResponse.dart';
+import 'package:cuple_app/screens/enquiryForm.dart';
 import 'package:cuple_app/screens/login.dart';
 import 'package:cuple_app/screens/myWishList.dart';
 import 'package:cuple_app/screens/partnerWishList.dart';
@@ -344,6 +345,38 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                   ),
                   Text("Greeting Card Subscription")
                 ],
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EnquiryForm()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Container(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey[400])),
+                        child: Icon(
+                          Icons.query_builder_rounded,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    Text("Inquiry")
+                  ],
+                ),
               ),
             ),
           ),

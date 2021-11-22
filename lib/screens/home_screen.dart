@@ -20,6 +20,7 @@ import 'package:cuple_app/model/getPartnerRequestResponse.dart';
 import 'package:cuple_app/model/getUserPartnerDetailsResponse.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
+import 'package:cuple_app/model/notificationsListsResponse.dart';
 import 'package:cuple_app/model/remindersListsResponse.dart';
 import 'package:cuple_app/model/settingsResponse.dart';
 import 'package:cuple_app/model/suggesiontypeListsResponse.dart';
@@ -37,6 +38,7 @@ import 'package:cuple_app/screens/partnerWishList.dart';
 import 'package:cuple_app/screens/reminderListScreen.dart';
 import 'package:cuple_app/screens/searchPartnerScreen.dart';
 import 'package:cuple_app/screens/settings_screen.dart';
+import 'package:cuple_app/screens/tipsDetailScreen.dart';
 import 'package:cuple_app/screens/tipsListScreen.dart';
 import 'package:cuple_app/screens/userFavoriteScreen.dart';
 import 'package:cuple_app/screens/userProfile.dart';
@@ -51,6 +53,8 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import 'ideasDetailsScreen.dart';
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -58,7 +62,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  String _title = "Home";
+  String _title = "Cuple";
   int selectedIndex = 0;
   Widget controlWidget;
   ListUserReminderResponse remindersListsResponse;
@@ -92,8 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
     Utils(context).checkInternet().then((value) async {
       if (value == true) {
         ListUserReminderResponse _listUserReminderResponse =
-        await Plugs(context)
-            .listUserReminderList(userId: userDetails.id.toString());
+            await Plugs(context)
+                .listUserReminderList(userId: userDetails.id.toString());
 
         setState(() {
           listUserReminderResponse = _listUserReminderResponse;
@@ -115,14 +119,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getSuggestionTypeList() async {
     SuggesiontypeListsResponse _suggesiontypeListsResponse =
-    await Plugs(context).getSuggestionType();
+        await Plugs(context).getSuggestionType();
     setState(() {
       suggesiontypeListsResponse = _suggesiontypeListsResponse;
     });
   }
 
-  getSettings() async{
-    SettingsResponse _settingsResponse = await Plugs(context).getSettings(userDetails.id.toString());
+  getSettings() async {
+    SettingsResponse _settingsResponse =
+        await Plugs(context).getSettings(userDetails.id.toString());
     setState(() {
       userSettings = _settingsResponse;
     });
@@ -143,6 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
+                    padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                       color: APP_BAR_COLOR,
                       shape: BoxShape.circle,
@@ -154,10 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         )
                       ],
                     ),
-                    child: Icon(
-                      Icons.menu,
-                      color: Colors.black,
-                    ),
+                    child: Image.asset("assets/logo.png",fit: BoxFit.contain,),
                   ),
                 ),
               ),
@@ -173,35 +176,59 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NotificationsListScreen()));
+                            builder: (context) => NotificationsListScreen())).then((value) => fetch(userDetails.id.toString()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: APP_BAR_COLOR,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: 2,
-                            spreadRadius: 1,
-                          )
-                        ],
-                      ),
-                      child: Icon(
-                        Icons.notifications_none_outlined,
-                        color: Colors.black,
-                      ),
+                    child: Stack(
+                      children: [
+                        Positioned(
+
+
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: APP_BAR_COLOR,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 2,
+                                  spreadRadius: 1,
+                                )
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.notifications_none_outlined,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        notificationsListsResponse!=null?notificationsListsResponse.data.where((element) => element.readable=="1").toList().length>0?  Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            padding: EdgeInsets.all(4.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red
+
+                            ),
+                            child: Text(notificationsListsResponse!=null?notificationsListsResponse.data.where((element) => element.readable=="1").toList().length.toString():''),
+                          ),
+                        ):SizedBox():SizedBox(),
+                      ],
                     ),
                   ),
                 )
               ],
             ),
-            drawer: CustomMenuDrawer(userDetails,handler: (){
-              getApis();
-            },),
+            drawer: CustomMenuDrawer(
+              userDetails,
+              handler: () {
+                getApis();
+              },
+            ),
             bottomNavigationBar: FFNavigationBar(
               theme: FFNavigationBarTheme(
                 barBackgroundColor: Colors.white,
@@ -223,30 +250,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   selectedIndex = index;
                   controlWidget = getWidget(index: selectedIndex);
                   if (selectedIndex == 1) {
-                    if(partnerData != null) {
-                      _title = "${partnerData.name
-                          .toString()
-                          .split(' ')
-                          .first}";
-                    }else{
+                    if (partnerData != null) {
+                      _title =
+                          "${partnerData.name.toString().split(' ').first}";
+                    } else {
                       _title = "Favorites";
                     }
-                  }
-                  else if (selectedIndex == 3) {
+                  } else if (selectedIndex == 3) {
                     _title = "Profile";
                   } else if (selectedIndex == 0) {
-                    _title = "Home";
+                    _title = "Cuple";
                   }
                 });
               },
               items: [
                 FFNavigationBarItem(
                   iconData: Icons.home_outlined,
-                  label: 'Home',
+                  label: 'Cuple',
                 ),
                 FFNavigationBarItem(
+
                   iconData: Icons.favorite_border,
-                  label: partnerData != null ? partnerData.name.toString().split(' ').first : "Favorites",
+                  label: partnerData != null
+                      ? partnerData.name.toString().split(' ').first
+                      : "Favorites",
                 ),
                 FFNavigationBarItem(
                   iconData: Icons.mail_outline_outlined,
@@ -351,22 +378,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                     padding: const EdgeInsets.all(8.0),
                     margin: EdgeInsets.only(left: 10.0),
-                    child: partnerData!=null? Text(
-                      "${partnerData!= null ? partnerData.firstName ?? partnerData.name : ""} Partner",
-                      style: TextStyle(
-                        fontSize: Utils(context).getMediaWidth() * 0.04,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ):TextButton(onPressed: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SearchPartnerScreen()));
-                    }, child: Text("Connect your partner",style: TextStyle(fontWeight: FontWeight.bold),)),
+                    child: partnerData != null
+                        ? Text(
+                            "${partnerData != null ? partnerData.firstName ?? partnerData.name : ""} Partner",
+                            style: TextStyle(
+                              fontSize: Utils(context).getMediaWidth() * 0.04,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SearchPartnerScreen()));
+                            },
+                            child: Text(
+                              "Connect your partner",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )),
                   ),
                 ],
               ),
-              Padding(padding: const EdgeInsets.all(8.0),),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -399,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             "See All",
                             style: TextStyle(
                                 fontSize:
-                                Utils(context).getMediaWidth() * 0.035,
+                                    Utils(context).getMediaWidth() * 0.035,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.blue),
                           ),
@@ -418,20 +455,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView.builder(
                   itemCount: ideasListResponse != null
                       ? ideasListResponse.data.length > 3
-                      ? 3
-                      : ideasListResponse.data.length
+                          ? 3
+                          : ideasListResponse.data.length
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return
-                         GestureDetector(
-                      onTap: (){
+                    return GestureDetector(
+                      onTap: () {
+                        /*Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WebViewIdea(
+                                  ideasListResponse.data[index].link),
+                            ));*/
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  WebViewIdea(ideasListResponse.data[index].link),
+                              builder: (context) =>IdeasDetailsScreen(ideasData:  ideasListResponse.data[index]),
                             ));
+
+
                       },
                       child: Container(
                         padding: EdgeInsets.all(
@@ -440,8 +483,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         margin: EdgeInsets.all(12.0),
                         decoration: BoxDecoration(
                             gradient: LinearGradient(colors: [
-                              Color(0XFFE556EB),
-                              Color(0XFF5E08B3),
+                              Color(0XFFf6feff),
+                              Color(0XFFf6feff),
                             ]),
                             borderRadius: BorderRadius.circular(8.0),
                             boxShadow: [
@@ -451,69 +494,91 @@ class _HomeScreenState extends State<HomeScreen> {
                                 blurRadius: 1,
                               )
                             ]),
-                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
                               child: Container(
-                                padding: EdgeInsets.only(top: 10.0, bottom: 8.0),
-                                child: ideasListResponse
-                                    .data[index].image!=null?Image.network(
-                                  "${APP_ASSET_BASE_URL+ ideasListResponse
-                                      .data[index].image}",
-                                  // fit: BoxFit.cover,
-                                  height: Utils(context).getMediaHeight() * 0.14,
-                                  //width: 1,
-                                  errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                                    return Image.asset(
-                                      "assets/ideaImg2.png",
-                                      // fit: BoxFit.cover,
-                                      height: Utils(context).getMediaHeight() * 0.14,
-                                      //width: 1,
-                                    );
-                                  },
-                                ):Image.asset(
-                                  "assets/ideaImg2.png",
-                                  // fit: BoxFit.cover,
-                                  height: Utils(context).getMediaHeight() * 0.14,
-                                  //width: 1,
+                                
+                                padding:
+                                    EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                child: ideasListResponse.data[index].image !=
+                                        null
+                                    ? Image.network(
+                                        "${APP_ASSET_BASE_URL + ideasListResponse.data[index].image}",
+                                        // fit: BoxFit.cover,
+                                        height:
+                                            Utils(context).getMediaHeight() *
+                                                0.18,
+                                        //width: 1,
+                                        errorBuilder: (BuildContext context,
+                                            Object exception,
+                                            StackTrace stackTrace) {
+                                          return Image.asset(
+                                            "assets/ideaImg2.png",
+                                            // fit: BoxFit.cover,
+                                            height: Utils(context)
+                                                    .getMediaHeight() *
+                                                0.18,
+                                            //width: 1,
+                                          );
+                                        },
+                                      )
+                                    : Image.asset(
+                                        "assets/ideaImg2.png",
+                                        // fit: BoxFit.cover,
+                                        height:
+                                            Utils(context).getMediaHeight() *
+                                                0.18,
+                                        //width: 1,
+                                      ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
                                 ),
                               ),
                             ),
-                            Padding(padding: const EdgeInsets.all(5.0),),
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                            ),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Best ${suggesiontypeListsResponse != null ? suggesiontypeListsResponse.data.where((element) => element.id == 1).first.name : 'Date Ideas'}",
+                              ideasListResponse.data[index].name,// "Best ${suggesiontypeListsResponse != null ? suggesiontypeListsResponse.data.where((element) => element.id == 1).first.name : 'Date Ideas'}",
                                     style: TextStyle(
-                                        color: Colors.white,
+                                        color: Color(0XFF333333),//Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: Utils(context).getMediaWidth() *
-                                            0.035),
+                                        fontSize:
+                                            Utils(context).getMediaWidth() *
+                                                0.035),
+                                    softWrap: true,
+                                    maxLines: 1,
                                   ),
                                   SizedBox(
                                     height:
-                                    Utils(context).getMediaHeight() * 0.02,
+                                        Utils(context).getMediaHeight() * 0.02,
                                   ),
                                   Text(
                                     Utils(context)
                                         .parseHtmlString(ideasListResponse
-                                        .data[index].content
-                                        .toString())
+                                            .data[index].content
+                                            .toString())
                                         .toString(),
                                     style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: Utils(context).getMediaWidth() *
-                                            0.03),
+                                        // color: Colors.white,
+                                        color: Color(0XFF333333),
+                                        fontSize:
+                                            Utils(context).getMediaWidth() *
+                                                0.03),
                                     softWrap: true,
                                     maxLines: 3,
                                     overflow: TextOverflow.fade,
                                   ),
                                   SizedBox(
                                     height:
-                                    Utils(context).getMediaHeight() * 0.02,
+                                        Utils(context).getMediaHeight() * 0.02,
                                   ),
                                   InkWell(
                                     onTap: () async {
@@ -525,10 +590,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .toString(),
                                         };
                                         Utils(context).showProgressLoader();
-                                        http.Response response = await http.post(
-                                            SUGGESSION_BOOK,
-                                            headers: Plugs(context).getHeaders(),
-                                            body: body);
+                                        http.Response response =
+                                            await http.post(SUGGESSION_BOOK,
+                                                headers:
+                                                    Plugs(context).getHeaders(),
+                                                body: body);
                                         if (response.statusCode == 200) {
                                           print(response.body);
                                           Navigator.pop(context);
@@ -546,7 +612,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Navigator.pop(context);
                                         print(s);
                                         Utils(context).showMessage(
-                                            title: "error", child: Text(e.toString()));
+                                            title: "error",
+                                            child: Text(e.toString()));
                                       }
                                     },
                                     child: Container(
@@ -563,8 +630,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize:
-                                            Utils(context).getMediaWidth() *
-                                                0.03),
+                                                Utils(context).getMediaWidth() *
+                                                    0.03),
                                       ),
                                     ),
                                   ),
@@ -575,19 +642,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     );
-
                   },
                 ),
               ),
-              Padding(padding: const EdgeInsets.all(8.0),),
-              Align(
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+              ),
+             /* Align(
                 alignment: Alignment.centerLeft,
                 child: FittedBox(
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
                     margin: EdgeInsets.only(left: 10.0),
                     child: Text(
-                      " ${partnerData!=null?"Next Date to remember for "+partnerData.name:""}",
+                      " ${partnerData != null ? "Next Date to remember for " + partnerData.name : ""}",
                       style: TextStyle(
                         fontSize: Utils(context).getMediaWidth() * 0.04,
                         fontWeight: FontWeight.bold,
@@ -595,8 +663,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-              ),
-
+              ),*/
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -614,7 +681,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Expanded(
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextButton.icon(
                           style: TextButton.styleFrom(
@@ -633,10 +701,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         InkWell(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ReminderListScreen()))
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ReminderListScreen()))
                                 .then((value) => getApis());
                           },
                           child: Row(
@@ -649,7 +717,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     "See All",
                                     style: TextStyle(
                                         fontSize:
-                                        Utils(context).getMediaWidth() * 0.035,
+                                            Utils(context).getMediaWidth() *
+                                                0.035,
                                         fontWeight: FontWeight.w300,
                                         color: Colors.blue),
                                   ),
@@ -683,25 +752,26 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: Utils(context).getMediaHeight() * 0.2,
                         margin: EdgeInsets.all(12.0),
                         decoration: BoxDecoration(
-                            gradient: REMINDER_CARD_COLOR_HOME,
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                spreadRadius: 2,
-                                color: Colors.grey[300],
-                                blurRadius: 1,
-                              )
-                            ],
+                          gradient: REMINDER_CARD_COLOR_HOME,
+                          borderRadius: BorderRadius.circular(8.0),
+                          boxShadow: [
+                            BoxShadow(
+                              spreadRadius: 2,
+                              color: Colors.grey[300],
+                              blurRadius: 1,
+                            )
+                          ],
                         ),
                         child: Stack(
                           fit: StackFit.expand,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 20.0),
                               child: SvgPicture.asset(
-                                  "assets/hearts.svg",fit: BoxFit.cover,
-                                  color: Colors.red[100],
-                                  //semanticsLabel: 'A red up arrow'
+                                "assets/hearts.svg", fit: BoxFit.cover,
+                                color: Colors.red[100],
+                                //semanticsLabel: 'A red up arrow'
                               ),
                             ),
                             Column(
@@ -709,15 +779,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "${remindersListsResponse.data[index].customize_name??remindersListsResponse.data[index].name}",
+                                  "${remindersListsResponse.data[index].customize_name ?? remindersListsResponse.data[index].name}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
-                                      fontSize:
-                                      Utils(context).getMediaWidth() * 0.03),
+                                      fontSize: Utils(context).getMediaWidth() *
+                                          0.03),
                                 ),
                                 SizedBox(
-                                  height: Utils(context).getMediaHeight() * 0.02,
+                                  height:
+                                      Utils(context).getMediaHeight() * 0.02,
                                 ),
                                 Container(
                                   padding: EdgeInsets.all(8.0),
@@ -730,36 +801,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   child: Text(
                                     DateFormat("MMM d,y").format(
-                                      DateTime.parse(
-                                          remindersListsResponse.data[index].date),
+                                      DateTime.parse(remindersListsResponse
+                                          .data[index].date),
                                     ),
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize:
-                                        Utils(context).getMediaWidth() * 0.03),
+                                            Utils(context).getMediaWidth() *
+                                                0.03),
                                   ),
                                 ),
                                 SizedBox(
-                                  height: Utils(context).getMediaHeight() * 0.02,
+                                  height:
+                                      Utils(context).getMediaHeight() * 0.02,
                                 ),
                                 Text(
-                                getInDays(inputDate: remindersListsResponse.data[index].date).toString() +"day(s)",
+                                  getInDays(
+                                              inputDate: remindersListsResponse
+                                                  .data[index].date)
+                                          .toString() +
+                                      "day(s)",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
-                                      fontSize:
-                                      Utils(context).getMediaWidth() * 0.03),
+                                      fontSize: Utils(context).getMediaWidth() *
+                                          0.03),
                                 ),
                                 SizedBox(
-                                  height: Utils(context).getMediaHeight() * 0.02,
+                                  height:
+                                      Utils(context).getMediaHeight() * 0.02,
                                 ),
                                 Text(
-                                  "To Celebrate ${remindersListsResponse.data[index].type}",
+                                  "To Celebrate ${remindersListsResponse.data[index].name}",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.black,
-                                      fontSize:
-                                      Utils(context).getMediaWidth() * 0.03),
+                                      fontSize: Utils(context).getMediaWidth() *
+                                          0.03),
                                 ),
                               ],
                             ),
@@ -768,7 +846,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }),
               ),
-              Padding(padding: const EdgeInsets.all(8.0),),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+              ),
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -781,7 +861,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       )).then((value) => getApis());
                 },
                 child: Container(
-                  width: Utils(context).getMediaWidth() * 0.5,
+                  width: Utils(context).getMediaWidth() * 0.90,
+                  // padding: EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(colors: [
                       Color(0XFF663DDF),
@@ -805,17 +886,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        Text(
-                          "Greeting Card Subscription \nfor ${partnerData != null ? partnerData.firstName??'' : 'Partner'}",
-                          softWrap: true,
-                          style: TextStyle(color: Colors.white),
+                        Padding(
+
+                          padding: const EdgeInsets.only(right:8.0),
+                          child: Text(
+                            "Browse amazing cards for ${partnerData != null ? partnerData.firstName ?? '' : 'Partner'}",
+                            softWrap: true,
+                            style: TextStyle(color: Colors.white),
+                          ),
                         )
                       ],
                     ),
                   ),
                 ),
               ),
-              Padding(padding: const EdgeInsets.all(10.0),),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+              ),
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -833,9 +920,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(
                         suggesiontypeListsResponse != null
                             ? suggesiontypeListsResponse.data
-                            .where((element) => element.id == 2)
-                            .first
-                            .name
+                                .where((element) => element.id == 2)
+                                .first
+                                .name
                             : 'Love Tips',
                         style: TextStyle(
                           fontSize: Utils(context).getMediaWidth() * 0.04,
@@ -852,7 +939,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             "See All",
                             style: TextStyle(
                                 fontSize:
-                                Utils(context).getMediaWidth() * 0.035,
+                                    Utils(context).getMediaWidth() * 0.035,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.blue),
                           ),
@@ -871,19 +958,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView.builder(
                   itemCount: tipsListResponse != null
                       ? tipsListResponse.data.length > 3
-                      ? 3
-                      : tipsListResponse.data.length
+                          ? 3
+                          : tipsListResponse.data.length
                       : 0,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return  GestureDetector(
-                      onTap: (){
+                    return GestureDetector(
+                      onTap: () {
+                        /*Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WebViewIdea(
+                                  tipsListResponse.data[index].link),
+                            ));*/
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  WebViewIdea(tipsListResponse.data[index].link),
+                              builder: (context) => TipsDetailScreen(tipsData: tipsListResponse.data[index]),
                             ));
+
+
+
                       },
                       child: Container(
                         padding: EdgeInsets.all(
@@ -892,8 +987,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         margin: EdgeInsets.all(12.0),
                         decoration: BoxDecoration(
                             gradient: LinearGradient(colors: [
-                              Color(0XFF9250E7),
-                              Color(0XFFC55E3E),
+                              Color(0XFFf6feff),
+                              Color(0XFFf6feff),
+                              /*Color(0XFF9250E7),
+                              Color(0XFFC55E3E),*/
+
                             ]),
                             borderRadius: BorderRadius.circular(8.0),
                             boxShadow: [
@@ -903,76 +1001,97 @@ class _HomeScreenState extends State<HomeScreen> {
                                 blurRadius: 1,
                               )
                             ]),
-                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
                               child: Container(
-                                padding: EdgeInsets.only(top: 10.0, bottom: 8.0),
-                                child: tipsListResponse
-                                    .data[index].image!=null?Image.network(
-                                  "${APP_ASSET_BASE_URL+ tipsListResponse
-                                      .data[index].image}",
-                                  // fit: BoxFit.cover,
-                                  height: Utils(context).getMediaHeight() * 0.14,
-                                  //width: 1,
-                                  errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                                    return Image.asset(
-                                      "assets/ideaImg2.png",
-                                      // fit: BoxFit.cover,
-                                      height: Utils(context).getMediaHeight() * 0.14,
-                                      //width: 1,
-                                    );
-                                  },
-                                ):Image.asset(
-                                  "assets/ideaImg2.png",
-                                  // fit: BoxFit.cover,
-                                  height: Utils(context).getMediaHeight() * 0.14,
-                                  //width: 1,
-                                ),
+                                padding:
+                                    EdgeInsets.only(top: 10.0, bottom: 8.0),
+                                child: tipsListResponse.data[index].image !=
+                                        null
+                                    ? Image.network(
+                                        "${APP_ASSET_BASE_URL + tipsListResponse.data[index].image}",
+                                        // fit: BoxFit.cover,
+                                        height:
+                                            Utils(context).getMediaHeight() *
+                                                0.14,
+                                        //width: 1,
+                                        errorBuilder: (BuildContext context,
+                                            Object exception,
+                                            StackTrace stackTrace) {
+                                          return Image.asset(
+                                            "assets/ideaImg2.png",
+                                            // fit: BoxFit.cover,
+                                            height: Utils(context)
+                                                    .getMediaHeight() *
+                                                0.14,
+                                            //width: 1,
+                                          );
+                                        },
+                                      )
+                                    : Image.asset(
+                                        "assets/ideaImg2.png",
+                                        // fit: BoxFit.cover,
+                                        height:
+                                            Utils(context).getMediaHeight() *
+                                                0.14,
+                                        //width: 1,
+                                      ),
                               ),
                             ),
-                            Padding(padding: const EdgeInsets.all(5.0),),
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                            ),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Best Date Tips",
+                                    tipsListResponse.data[index].name,
+                                    // "Best Date Tips",
                                     style: TextStyle(
-                                        color: Colors.white,
+                                        // color: Colors.white,
+                                        color: Color(0XFF333333),
                                         fontWeight: FontWeight.bold,
-                                        fontSize: Utils(context).getMediaWidth() *
-                                            0.035),
+                                        fontSize:
+                                            Utils(context).getMediaWidth() *
+                                                0.035),
+                                    softWrap: true,
+                                    maxLines: 1,
                                   ),
                                   SizedBox(
                                     height:
-                                    Utils(context).getMediaHeight() * 0.02,
+                                        Utils(context).getMediaHeight() * 0.02,
                                   ),
                                   Text(
                                     Utils(context)
                                         .parseHtmlString(tipsListResponse
-                                        .data[index].content
-                                        .toString())
+                                            .data[index].content
+                                            .toString())
                                         .toString(),
                                     style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: Utils(context).getMediaWidth() *
-                                            0.03),
+
+                                        color: Color(0XFF333333),
+                                        // color: Colors.white,
+                                        fontSize:
+                                            Utils(context).getMediaWidth() *
+                                                0.03),
                                     softWrap: true,
                                     maxLines: 3,
                                     overflow: TextOverflow.fade,
                                   ),
                                   SizedBox(
                                     height:
-                                    Utils(context).getMediaHeight() * 0.02,
+                                        Utils(context).getMediaHeight() * 0.02,
                                   ),
                                   Container(
                                     padding: EdgeInsets.all(8.0),
                                     decoration: BoxDecoration(
                                       gradient: LinearGradient(colors: [
-                                        Color(0XFFFAFAFA),
-                                        Color(0XFFFFFFFF),
+                                        Color(0XFF2487EC),
+                                        Color(0XFF663DDF),
                                       ]),
                                       borderRadius: BorderRadius.circular(50),
                                     ),
@@ -981,8 +1100,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       style: TextStyle(
                                           color: Color(0XFFB05983),
                                           fontSize:
-                                          Utils(context).getMediaWidth() *
-                                              0.03),
+                                              Utils(context).getMediaWidth() *
+                                                  0.03),
                                     ),
                                   ),
                                 ],
@@ -992,11 +1111,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     );
-
                   },
                 ),
               ),
-              InkWell(
+            /*  InkWell(
                 onTap: () {
                   Navigator.push(
                       context,
@@ -1006,7 +1124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: Padding(
                   padding:
-                  EdgeInsets.all(Utils(context).getMediaHeight() * 0.02),
+                      EdgeInsets.all(Utils(context).getMediaHeight() * 0.02),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1092,6 +1210,94 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+              ),*/
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyWishList(),
+                      )).then((value) => getApis());
+                },
+                child: Container(
+                  margin: EdgeInsets.all(8.0),
+                  width: Utils(context).getMediaWidth() * 0.90,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Color(0XFF2487EC),
+                      Color(0XFF663DDF),
+                    ]),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          //padding: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white)),
+                          child: Icon(
+                            Icons.star_border,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "My Wish List",
+                        style: TextStyle(color: Colors.white),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PartnerWishlist(
+                            partnerName: partnerData != null
+                                ? partnerData.name
+                                : 'Partner'),
+                      ));
+                },
+                child: Container(
+                  width: Utils(context).getMediaWidth() * 0.90,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Color(0XFF2487EC),
+                      Color(0XFF663DDF),
+                    ]),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          //padding: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white)),
+                          child: Icon(
+                            Icons.star_border,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          "${partnerData != null ? partnerData.name : 'Partner'} Wish List",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
               GestureDetector(
                 onTap: () {
@@ -1103,7 +1309,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ));
                 },
                 child: Container(
-                  width: Utils(context).getMediaWidth() * 0.85,
+                  margin: EdgeInsets.all(8.0),
+                  width: Utils(context).getMediaWidth() * 0.90,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(colors: [
                       Color(0XFF663DDF),
@@ -1112,7 +1319,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: FittedBox(
-                    child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -1157,10 +1365,10 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                 padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.08),
+                    top: MediaQuery.of(context).size.height * 0.10),
                 child: Card(
                   child: Container(
-                    width: double.infinity,
+                    // width: double.infinity,
                     padding: EdgeInsets.symmetric(
                         horizontal: MediaQuery.of(context).size.height * 0.03),
                     decoration: BoxDecoration(
@@ -1180,7 +1388,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                             padding: EdgeInsets.only(
                                 top:
-                                MediaQuery.of(context).size.height * 0.01)),
+                                    MediaQuery.of(context).size.height * 0.01)),
                         Text(
                           "${userDetails.email}",
                           style: TextStyle(
@@ -1189,7 +1397,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                             padding: EdgeInsets.only(
                                 top:
-                                MediaQuery.of(context).size.height * 0.02)),
+                                    MediaQuery.of(context).size.height * 0.02)),
                         Divider(
                           thickness: 0.2,
                           color: Colors.white,
@@ -1197,11 +1405,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                             padding: EdgeInsets.only(
                                 top:
-                                MediaQuery.of(context).size.height * 0.02)),
+                                    MediaQuery.of(context).size.height * 0.02)),
                         Padding(
-                          padding: EdgeInsets.symmetric(
+                          /*padding: EdgeInsets.symmetric(
                               horizontal:
-                              MediaQuery.of(context).size.height * 0.08),
+                                  MediaQuery.of(context).size.height * 0.02),*/
+                          padding: EdgeInsets.all(2.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -1217,8 +1426,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Padding(
                                       padding: EdgeInsets.only(
                                           top: MediaQuery.of(context)
-                                              .size
-                                              .height *
+                                                  .size
+                                                  .height *
                                               0.02)),
                                   /*Text(
                                     "Gender",
@@ -1241,10 +1450,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Padding(
                                       padding: EdgeInsets.only(
                                           top: MediaQuery.of(context)
-                                              .size
-                                              .height *
+                                                  .size
+                                                  .height *
                                               0.02)),
-
                                   Text(
                                     "State",
                                     style: TextStyle(
@@ -1254,8 +1462,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Padding(
                                       padding: EdgeInsets.only(
                                           top: MediaQuery.of(context)
-                                              .size
-                                              .height *
+                                                  .size
+                                                  .height *
                                               0.02)),
                                 ],
                               ),
@@ -1271,8 +1479,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Padding(
                                       padding: EdgeInsets.only(
                                           top: MediaQuery.of(context)
-                                              .size
-                                              .height *
+                                                  .size
+                                                  .height *
                                               0.02)),
                                   /*Text(
                                     ":\t\t${userDetails.gender ?? ""}",
@@ -1287,7 +1495,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .height *
                                               0.02)),*/
                                   Text(
-                                    ":\t\t${userDetails.dob}",
+                                    ":\t\t${userDetails.dob??""}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
@@ -1295,20 +1503,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Padding(
                                       padding: EdgeInsets.only(
                                           top: MediaQuery.of(context)
-                                              .size
-                                              .height *
+                                                  .size
+                                                  .height *
                                               0.02)),
-                                  Text(
-                                    ":\t\t${userDetails.state ?? ""}",
+                                  /* Text(
+                                    ":\t\t${userDetails.state.substring(0,5) ?? ""}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w300),
+                                  ),  */
+                                  FittedBox(
+                                    child: Text(
+                                      ":\t\t${userDetails.state ?? ""}",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w300),
+                                    ),
                                   ),
                                   Padding(
                                       padding: EdgeInsets.only(
                                           top: MediaQuery.of(context)
-                                              .size
-                                              .height *
+                                                  .size
+                                                  .height *
                                               0.02)),
                                 ],
                               )
@@ -1347,10 +1563,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       icon: Icon(Icons.add_circle_outline_outlined),
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    CreateNewReminder())).then((value) {
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CreateNewReminder()))
+                            .then((value) {
                           // getApis();
                           fetchReminders();
                         }); //.then((value) => fetch());
@@ -1388,22 +1604,22 @@ class _HomeScreenState extends State<HomeScreen> {
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal:
-                                    MediaQuery.of(context).size.height *
-                                        0.03),
+                                        MediaQuery.of(context).size.height *
+                                            0.03),
                                 child: FittedBox(
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Padding(
                                               padding: EdgeInsets.only(
                                                   top: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
+                                                          .size
+                                                          .height *
                                                       0.02)),
                                           Text(
                                             "${listUserReminderResponse.data[index].name}",
@@ -1414,20 +1630,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Padding(
                                               padding: EdgeInsets.only(
                                                   top: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
+                                                          .size
+                                                          .height *
                                                       0.02)),
                                         ],
                                       ),
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Padding(
                                               padding: EdgeInsets.only(
                                                   top: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
+                                                          .size
+                                                          .height *
                                                       0.02)),
                                           FittedBox(
                                             child: Text(
@@ -1440,8 +1656,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Padding(
                                               padding: EdgeInsets.only(
                                                   top: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
+                                                          .size
+                                                          .height *
                                                       0.02)),
                                         ],
                                       )
@@ -1463,9 +1679,9 @@ class _HomeScreenState extends State<HomeScreen> {
               GestureDetector(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EditProfile()))
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditProfile()))
                       .then((value) => getApis());
                 },
                 child: Container(
@@ -1511,27 +1727,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       MediaQuery.of(context).size.height * 0.1),
                   child: userDetails.picture != "0"
                       ? Image.network(
-                    userDetails.uploaded != null
-                        ? APP_ASSET_BASE_URL + userDetails.picture
-                        : userDetails.picture,
-                    fit: BoxFit.cover,
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.height * 0.15,
-                    errorBuilder: (context, error, straktress) {
-                      return Image.asset(
-                        "assets/profile_user.jpg",
-                        fit: BoxFit.cover,
-                        height: MediaQuery.of(context).size.height * 0.15,
-                        width: MediaQuery.of(context).size.height * 0.15,
-                      );
-                    },
-                  )
+                          userDetails.uploaded != null
+                              ? APP_ASSET_BASE_URL + userDetails.picture
+                              : userDetails.picture,
+                          fit: BoxFit.cover,
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          width: MediaQuery.of(context).size.height * 0.15,
+                          errorBuilder: (context, error, straktress) {
+                            return Image.asset(
+                              "assets/profile_user.jpg",
+                              fit: BoxFit.cover,
+                              height: MediaQuery.of(context).size.height * 0.15,
+                              width: MediaQuery.of(context).size.height * 0.15,
+                            );
+                          },
+                        )
                       : Image.asset(
-                    "assets/profile_user.jpg",
-                    fit: BoxFit.cover,
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.height * 0.15,
-                  ),
+                          "assets/profile_user.jpg",
+                          fit: BoxFit.cover,
+                          height: MediaQuery.of(context).size.height * 0.15,
+                          width: MediaQuery.of(context).size.height * 0.15,
+                        ),
                 ),
               ),
             ),
@@ -1559,8 +1775,8 @@ class _HomeScreenState extends State<HomeScreen> {
               height: Utils(context).getMediaHeight() * 0.70,
               child: Center(
                   child: NoRecordFoundScreen(
-                    msg: "Please Select Partner First",
-                  )));
+                msg: "Please Select Partner First",
+              )));
         }
 
         break;
@@ -1576,7 +1792,7 @@ class _HomeScreenState extends State<HomeScreen> {
   getApis() async {
     Utils(context).checkInternet().then((value) async {
       if (value == true) {
-        await getSuggestionTypeList();
+        // await getSuggestionTypeList();
         await getReminder();
         await getIdeasList();
         await getTipsList();
@@ -1584,6 +1800,7 @@ class _HomeScreenState extends State<HomeScreen> {
         await getfrendRequest();
         await fetchReminders();
         await getSettings();
+        await fetch(userDetails.id);
       } else {
         Utils(context).showAlert(
             context: context,
@@ -1618,7 +1835,7 @@ class _HomeScreenState extends State<HomeScreen> {
   getIdeasList() async {
     try {
       IdeasListResponse _ideasListResponse =
-      await Plugs(context).getIdeasList(type: "Ideas");
+          await Plugs(context).getIdeasList(type: "Ideas");
       setState(() {
         ideasListResponse = _ideasListResponse;
       });
@@ -1634,7 +1851,7 @@ class _HomeScreenState extends State<HomeScreen> {
   getTipsList() async {
     try {
       TipsListResponse _tipsListResponse =
-      await Plugs(context).getTipsList(type: "tips");
+          await Plugs(context).getTipsList(type: "tips");
       setState(() {
         tipsListResponse = _tipsListResponse;
       });
@@ -1649,11 +1866,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getpartnerDetails() async {
     try {
-
       if (userDetails.partnerid != 0) {
         GetUserPartnerDetailsResponse _getUserPartnerDetailsResponse =
-        await Plugs(context)
-            .getUserPartnerDetails(Userid: userDetails.id.toString());
+            await Plugs(context)
+                .getUserPartnerDetails(Userid: userDetails.id.toString());
         if (_getUserPartnerDetailsResponse.success == true) {
           setState(() {
             partnerData = _getUserPartnerDetailsResponse.data;
@@ -1673,34 +1889,32 @@ class _HomeScreenState extends State<HomeScreen> {
     String friendname;
 
     GetPartnerRequestResponse _getPartnerRequestResponse =
-    await Plugs(context).getFriendRequest();
+        await Plugs(context).getFriendRequest();
     print("Request Element");
     setState(() {
       getPartnerRequestResponse = _getPartnerRequestResponse;
       getPartnerRequestResponseGlobal = _getPartnerRequestResponse;
     });
 
-
-print("Partner Requester Condition True or false ");
-print(jsonEncode(getPartnerRequestResponse.date));
-print(_getPartnerRequestResponse.date
+    print("Partner Requester Condition True or false ");
+    print(jsonEncode(getPartnerRequestResponse.date));
+    print(_getPartnerRequestResponse.date
         .where((element) =>
-
-        element.invitationStatus == "Accepted" &&
-        // element.toId == userDetails.id &&
-        element.adminStatus == "Appprove")
+            element.invitationStatus == "Accepted" &&
+            // element.toId == userDetails.id &&
+            element.adminStatus == "Appprove")
         .isEmpty);
 
     if (_getPartnerRequestResponse.date
-        .where((element) =>
-    element.invitationStatus == "Pending" &&
-        element.toId == userDetails.id)
-        .isEmpty ==
+            .where((element) =>
+                element.invitationStatus == "Pending" &&
+                element.toId == userDetails.id)
+            .isEmpty ==
         false) {
       FriendRequestData friendRequestData = _getPartnerRequestResponse.date
           .where((element) =>
-      element.invitationStatus == "Pending" &&
-          element.toId == userDetails.id)
+              element.invitationStatus == "Pending" &&
+              element.toId == userDetails.id)
           .first;
       /*Utils(context).showMessage(
         title: "$friendname send Friend Request",
@@ -1727,26 +1941,53 @@ print(_getPartnerRequestResponse.date
             );
           });
     } else if (_getPartnerRequestResponse.date
-        .where((element) =>
-    element.invitationStatus == "Accepted" &&
-        // element.toId == userDetails.id &&
-        element.adminStatus == "Appprove")
-        .isEmpty ==
+            .where((element) =>
+                element.invitationStatus == "Accepted" &&
+                // element.toId == userDetails.id &&
+                element.adminStatus == "Appprove")
+            .isEmpty ==
         false) {
       print("Partner Data Inserting");
       if (userDetails.partnerid == 0) {
         FriendRequestData friendRequestData = _getPartnerRequestResponse.date
             .where((element) =>
-        element.invitationStatus == "Accepted" &&
-            // element.toId == userDetails.id &&
-            element.adminStatus == "Appprove")
+                element.invitationStatus == "Accepted" &&
+                // element.toId == userDetails.id &&
+                element.adminStatus == "Appprove")
             .first;
         SharedPreferences prf = await SharedPreferences.getInstance();
-        userDetails.partnerid = friendRequestData.fromId==userDetails.id?friendRequestData.toId:friendRequestData.fromId;
+        userDetails.partnerid = friendRequestData.fromId == userDetails.id
+            ? friendRequestData.toId
+            : friendRequestData.fromId;
         prf.setString("user", jsonEncode(userDetails));
 
         await getpartnerDetails();
       }
     }
+  }
+  NotificationsListsResponse notificationsListsResponse;
+  fetch(var id) async {
+    Utils(context).checkInternet().then((value) async {
+      if (value == true) {
+        NotificationsListsResponse _notificationsListsResponse =
+        await Plugs(context).getNotificationList(id, name: "");
+
+        setState(() {
+          notificationsListsResponse = _notificationsListsResponse;
+        });
+      
+      } else {
+        Utils(context).showAlert(
+            context: context,
+            title: "",
+            child: Container(
+                height: 250, width: 150, child: NoInternetConnectionScreen()),
+            handler: () {
+              Navigator.pop(context);
+              fetch(userDetails.id.toString());
+            },
+            isCancel: false);
+      }
+    });
   }
 }

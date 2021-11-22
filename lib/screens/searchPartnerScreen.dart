@@ -157,33 +157,39 @@ class _SearchPartnerScreenState extends State<SearchPartnerScreen> {
     FindPartnerResponse _findPartnerResponse =
         await Plugs(context).findPartner(search_key: searchPartner);
     print("Work");
-    if (_findPartnerResponse.alldata.data.length < 1) {
-      print("Not Exist");
-      Utils(context).showAlert(
-          context: context,
-          title: "Sorry",
-          child: Text(
-              "We Did'nt Find $searchPartner would you want to send invitation ?"),
-          handler: () async{
-          SendInvitationResponse sendInvitationResponse= await  Plugs(context).sendInvitation(email: searchPartner);
-         if(sendInvitationResponse.success==true){
-           Navigator.pop(context);
-           Utils(context).showMessage(title: "Success",child: Text("Partner has been invited successfully. "),
-           actionButtonTitle: "Ok",
-           trigger: (){
-             Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-           }
-           );
-         }
+    if(_findPartnerResponse.alldata==null){
 
-          },
-          handlerButtonTitle: "Invite",
-          isCancel: true);
-    } else {
-      print("exist");
-      setState(() {
-        findPartnerResponse = _findPartnerResponse;
-      });
+      Utils(context).showMessage(title: "Sorry",child: Text("You Can't Search Same Mail Id or Number"));
+    }else{
+      if (_findPartnerResponse.alldata.data.length < 1) {
+        print("Not Exist");
+        Utils(context).showAlert(
+            context: context,
+            title: "Sorry",
+            child: Text(
+                "We Did'nt Find $searchPartner would you want to send invitation ?"),
+            handler: () async{
+              SendInvitationResponse sendInvitationResponse= await  Plugs(context).sendInvitation(email: searchPartner);
+              if(sendInvitationResponse.success==true){
+                Navigator.pop(context);
+                Utils(context).showMessage(title: "Success",child: Text("Partner has been invited successfully. "),
+                    actionButtonTitle: "Ok",
+                    trigger: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                    }
+                );
+              }
+
+            },
+            handlerButtonTitle: "Invite",
+            isCancel: true);
+      } else {
+        print("exist");
+        setState(() {
+          findPartnerResponse = _findPartnerResponse;
+        });
+      }
     }
+
   }
 }

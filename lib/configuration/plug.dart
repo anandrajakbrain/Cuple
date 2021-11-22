@@ -14,8 +14,10 @@ import 'package:cuple_app/model/getOTPResponse.dart';
 import 'package:cuple_app/model/getPartnerRequestResponse.dart';
 import 'package:cuple_app/model/getUserPartnerDetailsResponse.dart';
 import 'package:cuple_app/model/ideasListResponse.dart';
+import 'package:cuple_app/model/inquiryFormResponse.dart';
 import 'package:cuple_app/model/listUserReminderResponse.dart';
 import 'package:cuple_app/model/loginResponse.dart';
+import 'package:cuple_app/model/markAsReadNotificationsListsResponse.dart';
 import 'package:cuple_app/model/notificationsListsResponse.dart';
 import 'package:cuple_app/model/registerUserResponse.dart';
 import 'package:cuple_app/model/regularResponse.dart';
@@ -149,6 +151,8 @@ class Plugs {
       "device_token": devieToken,
       // "password":"0",
     };
+    print("Register Api Work");
+    print(body);
     try {
       http.Response response =
       await http.post(REGISTERUSER, headers: getHeaders(), body: body);
@@ -493,7 +497,7 @@ class Plugs {
     };
     try {
       http.Response response = await http.get(
-          NOTIFICATION_LIST + "?user_id=$id",
+          NOTIFICATION_LIST + id.toString(),
           headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
@@ -504,6 +508,41 @@ class Plugs {
       }
     } catch (e, s) {
       Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+
+
+  Future<MarkAsReadNotificationsListsResponse> markAsReadAllNotification(
+      ) async {
+    // Utils(context).showProgressLoader();
+    print("Mark as Read All Notification");
+    var body = {
+      "user_id": userDetails.id.toString(),
+
+      // "password": password,
+    };
+    try {
+      http.Response response = await http.post(
+          MARK_AS_READ_ALL_NOTIFICATION ,
+          body: body,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        // Navigator.pop(context);
+        return MarkAsReadNotificationsListsResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      // Navigator.pop(context);
       print("===========================>Error========================>");
       print(e);
       print(s);
@@ -608,12 +647,15 @@ class Plugs {
   }
 
   Future<RemindersListsResponse> getreminderTypeList(
-      {@required int type}) async {
+
+        // @required int type
+      ) async {
+
     Utils(context).showProgressLoader();
 
     try {
       http.Response response = await http.get(
-          REMINDERS_LIST + "?reminders_type_id=$type",
+          REMINDERS_LIST /*+ "?reminders_type_id=$type"*/,
           headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
@@ -680,10 +722,12 @@ class Plugs {
       // "password": password,
     };
     try {
+      print(body);
       http.Response response = await http.post(CREATE_USER_REMINDER,
           headers: getHeaders(), body: body);
       if (response.statusCode == 200) {
         // print(jsonDecode(response.body)['success']);
+        print(response.body);
         Navigator.pop(context);
 
         return CreateNewReminderResponse.fromJson(jsonDecode(response.body));
@@ -691,6 +735,8 @@ class Plugs {
         throw Exception(jsonDecode(response.body));
       }
     } catch (e, s) {
+      print(e);
+      print(s);
       Navigator.pop(context);
       print("===========================>Error========================>");
       print(e);
@@ -808,7 +854,7 @@ class Plugs {
 
     try {
       http.Response response =
-      await http.get(SUGGESION_TYPE_LIST + "?category_id=2",
+      await http.get(LOVE_TIPS_LIST,
           //According to Suggestion Type 2 is Love Tips Id
           headers: getHeaders(token: token));
       if (response.statusCode == 200) {
@@ -836,12 +882,9 @@ class Plugs {
     Utils(context).showProgressLoader();
 
     try {
-      print(SUGGESION_TYPE_LIST +
-          "?category_id=1&auth_id=" + //According To Suggestion Type Date Ideas id is 1
-          userDetails.id.toString());
+      print(DATE_IDEAS_LIST);
       http.Response response = await http.get(
-          SUGGESION_TYPE_LIST +
-              "?category_id=1",
+          DATE_IDEAS_LIST,
           headers: getHeaders(token: token));
       if (response.statusCode == 200) {
         print(response.body);
@@ -1242,6 +1285,7 @@ class Plugs {
     try {
       var body = {
         "search_key": search_key,
+        "login_id":userDetails.id.toString(),
       };
       print("Search Partner");
       print(body);
@@ -1555,6 +1599,39 @@ class Plugs {
   }
 
 /*------------------------NOTIFICATION WITH FCM-------------------------*/
+  Future<InquiryFormResponse> submitInquiryForm({String msg}) async {
+    Utils(context).showProgressLoader();
+
+    try {
+      var body = {
+        "userid": userDetails.id.toString(),
+        "query": msg,
+      };
+      print(body);
+      http.Response response = await http.post(INQUIRY_FORM ,
+          body: body,
+          headers: getHeaders(token: token));
+      if (response.statusCode == 200) {
+        print(response.body);
+        Navigator.pop(context);
+        return InquiryFormResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e, s) {
+      Navigator.pop(context);
+      print("===========================>Error========================>");
+      print(e);
+      print(s);
+      Utils(context).showMessage(
+        title: "Error",
+        child: Text("$e"),
+      );
+      // throw Exception(e);
+    }
+  }
+
+
   Map<String, String> getHeaders({String token = null}) {
     return <String, String>{
       // 'content-type': 'application/json',

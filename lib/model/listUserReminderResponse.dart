@@ -29,6 +29,7 @@ class ListUserReminderResponse {
 
 class UserListReminderData {
   int id;
+  String customize_name;
   int userId;
   int reminderId;
   String date;
@@ -36,14 +37,12 @@ class UserListReminderData {
   var createdAt;
   var updatedAt;
   var deletedAt;
-  String name;
-  String category;
-  String type;
   String favourite;
-  String customize_name;
+  String name;
 
   UserListReminderData(
       {this.id,
+        this.customize_name,
         this.userId,
         this.reminderId,
         this.date,
@@ -51,15 +50,12 @@ class UserListReminderData {
         this.createdAt,
         this.updatedAt,
         this.deletedAt,
-        this.name,
-        this.category,
-      this.type,
-      this.favourite,
-        this.customize_name,
-      });
+        this.favourite,
+        this.name});
 
   UserListReminderData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    customize_name = json['customize_name'];
     userId = json['user_id'];
     reminderId = json['reminder_id'];
     date = json['date'];
@@ -67,16 +63,14 @@ class UserListReminderData {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
-    name = json['name'];
-    category = json['category'];
-    type = json['type'];
     favourite = json['favourite'];
-    customize_name = json['customize_name'];
+    name = json['name'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['customize_name'] = this.customize_name;
     data['user_id'] = this.userId;
     data['reminder_id'] = this.reminderId;
     data['date'] = this.date;
@@ -84,11 +78,8 @@ class UserListReminderData {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
-    data['name'] = this.name;
-    data['category'] = this.category;
-    data['type'] = this.type;
     data['favourite'] = this.favourite;
-    data['customize_name'] = this.customize_name;
+    data['name'] = this.name;
     return data;
   }
 }

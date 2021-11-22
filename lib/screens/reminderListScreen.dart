@@ -126,19 +126,22 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        child: ListView.builder(
+        child:Container(
+          height: Utils(context).getMediaHeight() ,
+          child: getReminder(context, ""),
+        ), /*ListView.builder(
           shrinkWrap: true,
           itemCount: reminderTypeList.length,
           itemBuilder: (BuildContext context, int index){
             return Column(
               children: [
-                Text(
-                  "${reminderTypeList[index]}",
-                  style: TextStyle(
-                    fontSize: Utils(context).getMediaWidth() * 0.04,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                // Text(
+                //   "${reminderTypeList[index]}",
+                //   style: TextStyle(
+                //     fontSize: Utils(context).getMediaWidth() * 0.04,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
                 Container(
                   height: Utils(context).getMediaHeight() * 0.3,
                   child: getReminder(context, reminderTypeList[index]),
@@ -146,24 +149,24 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
               ],
             );
           },
-        ),
+        ),*/
       ),
     );
   }
 
   getReminder(BuildContext context, var name){
-    return listUserReminderResponse!=null? listUserReminderResponse.data
+    return /*listUserReminderResponse!=null? listUserReminderResponse.data
         .where((element) => element.type.toString() == reminderIdsObj[name].toString())
         .toList()
-        .length>0?  Container(
+        .length>0?*/ listUserReminderResponse!=null? listUserReminderResponse.data.length>0? Container(
       height: Utils(context).getMediaHeight() * 0.28,
           child: GridView.builder(
             shrinkWrap: true,
               controller: ScrollController(),
-              itemCount:listUserReminderResponse!=null? listUserReminderResponse.data
+              itemCount:listUserReminderResponse.data.length,/*listUserReminderResponse!=null? listUserReminderResponse.data
                   .where((element) => element.type.toString() == reminderIdsObj[name].toString())
                   .toList()
-                  .length:0,
+                  .length:0*/
               // physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -172,7 +175,12 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                 // childAspectRatio:10/10,
               ),
               itemBuilder: (BuildContext context, index) {
-                return ReminderCard(
+                return ReminderCard(userListReminderData: listUserReminderResponse.data[index], handlerCall: (){
+    fetch();
+    },);
+
+
+               /* ReminderCard(
                   userListReminderData: listUserReminderResponse.data
                       .where(
                           (element) => element.type.toString() == reminderIdsObj[name].toString())
@@ -180,7 +188,7 @@ class _ReminderListScreenState extends State<ReminderListScreen> {
                   handlerCall: (){
                     fetch();
                   },
-                );
+                );*/
               }),
         ):HartScreenComponent():NoRecordFoundScreen(
       icon: FontAwesomeIcons.fileDownload,

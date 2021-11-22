@@ -8,7 +8,8 @@ const String REMINDERS_LIST=APP_BASE_URL+"reminders-lists";
 const String DELETE_USER_REMINDERS=APP_BASE_URL+"delete-user-reminder?id=";
 const String UPDATE_USER_REMINDERS=APP_BASE_URL+"update-user-reminder";
 const String NOTIFICATION_TYPE=APP_BASE_URL+"notificationtype-lists";
-const String NOTIFICATION_LIST=APP_BASE_URL+"lists-user-notifications";
+const String NOTIFICATION_LIST=APP_BASE_URL+"notifications-by-partner?to_id=";
+const String MARK_AS_READ_ALL_NOTIFICATION=APP_BASE_URL+"read-all-notifications";
 const String CREATE_USER_REMINDER=APP_BASE_URL+"create-user-reminder";
 const String LIST_USER_REMINDER=APP_BASE_URL+"lists-user-reminders";
 const String TUTORIALS_LIST=APP_BASE_URL+"tutorials-lists";
@@ -43,4 +44,7 @@ const String BEFORE_RAGISTER=APP_BASE_URL+"before-register";
 const String SEND_INVITES=APP_BASE_URL+"send-invite";
 const String CHECK_USER_STATUS=APP_BASE_URL+"update-user-status?user_id=5";
 const String WISHLIST_TITLES=APP_BASE_URL+"wishlist-titles";
+const String LOVE_TIPS_LIST=APP_BASE_URL+"tips-lists";
+const String DATE_IDEAS_LIST=APP_BASE_URL+"ideas-lists";
+const String INQUIRY_FORM=APP_BASE_URL+"inquiry-form";
 

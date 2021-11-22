@@ -119,7 +119,7 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
   fetchIdeasList() async {
     Utils(context).checkInternet().then((value) async {
       if(value==true){
-        IdeasListResponse _ideasListResponse = await Plugs(context).getIdeasList();
+        IdeasListResponse _ideasListResponse = await Plugs(context).getIdeasList(type: "");
         setState(() {
           ideasListResponse = _ideasListResponse;
         });
@@ -397,7 +397,11 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
             Padding(
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.02)),
-            ListView.builder(
+            Container(
+              //height: Utils(context).getMediaHeight() * 0.3,
+              child: getReminder(context, ""),
+            )
+            /*ListView.builder(
               shrinkWrap: true,
               controller: ScrollController(),
               itemCount: reminderTypeList.length,
@@ -418,8 +422,8 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
                   ],
                 );
               },
-            ),
-            Padding(
+            ),*/
+            ,Padding(
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.02)),
             Row(mainAxisAlignment: MainAxisAlignment.start,
@@ -566,18 +570,22 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
   }
 
   getReminder(BuildContext context, var name){
-    return listUserReminderResponse!=null? listUserReminderResponse.data
+    return /*listUserReminderResponse!=null? listUserReminderResponse.data
         .where((element) => element.type.toString() == reminderIdsObj[name].toString())
         .toList()
-        .length>0?  Container(
+        .length>0? */
+
+      listUserReminderResponse!=null? listUserReminderResponse.data.length>0?
+    Container(
       //height: Utils(context).getMediaHeight() * 0.28,
       child: GridView.builder(
           shrinkWrap: true,
           controller: ScrollController(),
-          itemCount:listUserReminderResponse!=null? listUserReminderResponse.data
+          /*itemCount:listUserReminderResponse!=null? listUserReminderResponse.data
               .where((element) => element.type.toString() == reminderIdsObj[name].toString())
               .toList()
-              .length:0,
+              .length:0,*/
+          itemCount:listUserReminderResponse!=null? listUserReminderResponse.data.length:0,
           // physics: NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -587,14 +595,23 @@ class _UserFavoriteScreenState extends State<UserFavoriteScreen> {
           ),
           itemBuilder: (BuildContext context, index) {
             return ReminderCard(
+              userListReminderData: listUserReminderResponse.data[index],
+              handlerCall: (){
+                fetch();
+              },
+            );/*return ReminderCard(
               userListReminderData: listUserReminderResponse.data
                   .where(
-                      (element) => element.type.toString() == reminderIdsObj[name].toString())
+                      (element) =>
+                      element.type.toString() == reminderIdsObj[name].toString()
+
+
+              )
                   .toList()[index],
               handlerCall: (){
                 fetch();
               },
-            );
+            );*/
           }),
     ):NoRecordFoundScreen():NoRecordFoundScreen(
       icon: FontAwesomeIcons.fileDownload,

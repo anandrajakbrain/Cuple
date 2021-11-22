@@ -1,16 +1,16 @@
-class IdeasListResponse {
+class MarkAsReadNotificationsListsResponse {
   bool success;
-  List<IdeasData> data;
+  List<Data> data;
   String message;
 
-  IdeasListResponse({this.success, this.data, this.message});
+  MarkAsReadNotificationsListsResponse({this.success, this.data, this.message});
 
-  IdeasListResponse.fromJson(Map<String, dynamic> json) {
+  MarkAsReadNotificationsListsResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
-      data = new List<IdeasData>();
+      data = new List<Data>();
       json['data'].forEach((v) {
-        data.add(new IdeasData.fromJson(v));
+        data.add(new Data.fromJson(v));
       });
     }
     message = json['message'];
@@ -27,55 +27,51 @@ class IdeasListResponse {
   }
 }
 
-class IdeasData {
+class Data {
   int id;
-  String name;
-  String content;
-  String image;
-  String link;
-  int order;
-  String status;
+  int userId;
+  int toId;
+  String notification;
   String createdAt;
   String updatedAt;
-  var deletedAt;
+  Null deletedAt;
+  String type;
+  String readable;
 
-  IdeasData(
+  Data(
       {this.id,
-        this.name,
-        this.content,
-        this.image,
-        this.link,
-        this.order,
-        this.status,
+        this.userId,
+        this.toId,
+        this.notification,
         this.createdAt,
         this.updatedAt,
-        this.deletedAt});
+        this.deletedAt,
+        this.type,
+        this.readable});
 
-  IdeasData.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
-    content = json['content'];
-    image = json['image'];
-    link = json['link'];
-    order = json['order'];
-    status = json['status'];
+    userId = json['user_id'];
+    toId = json['to_id'];
+    notification = json['notification'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    type = json['type'];
+    readable = json['readable'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['name'] = this.name;
-    data['content'] = this.content;
-    data['image'] = this.image;
-    data['link'] = this.link;
-    data['order'] = this.order;
-    data['status'] = this.status;
+    data['user_id'] = this.userId;
+    data['to_id'] = this.toId;
+    data['notification'] = this.notification;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['type'] = this.type;
+    data['readable'] = this.readable;
     return data;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cuple_app/componets/appBarActionButton.dart';
+import 'package:cuple_app/componets/backButton.dart';
 import 'package:cuple_app/componets/customMenuButton.dart';
 import 'package:cuple_app/componets/customMenuDrawer.dart';
 import 'package:cuple_app/componets/hartScreen.dart';
@@ -32,7 +33,7 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
   fetchIdeasList() async {
     Utils(context).checkInternet().then((value) async {
       if(value==true){
-        IdeasListResponse _ideasListResponse = await Plugs(context).getIdeasList();
+        IdeasListResponse _ideasListResponse = await Plugs(context).getIdeasList(type: "");
         setState(() {
           ideasListResponse = _ideasListResponse;
         });
@@ -168,50 +169,55 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
         : Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
-              leading: CustomMenuButton(
+              leading: CustomBackButton(), /*CustomMenuButton(
                 handler: () {
                   _scaffoldKey.currentState.openDrawer();
                 },
-              ),
+              ),*/
               backgroundColor: APP_BAR_COLOR,
               title: partnerData != null ? Container(
+
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                       colors: [Color(0XFF6341DF), Color(0XFF1E8FED)]),
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      margin: EdgeInsets.only(left: 10.0),
-                      child: Text(
-                        "${userDetails != null ? userDetails.firstName ?? "" : ""}",
-                        style: TextStyle(
-                            fontSize: Utils(context).getMediaWidth() * 0.04,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white
+                child: Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        // margin: EdgeInsets.only(left: 10.0),
+                        child: FittedBox(
+                          child: Text(
+                            "${userDetails != null ? userDetails.firstName ?? "" : ""}",
+                            style: TextStyle(
+                                fontSize: Utils(context).getMediaWidth() * 0.04,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white
+                            ),
+                          textAlign: TextAlign.center,
+                          ),
                         ),
-                      textAlign: TextAlign.center,
                       ),
-                    ),
-                    SvgPicture.asset("assets/hearts.svg", height: Utils(context).getMediaHeight() * 0.03,),
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      // margin: EdgeInsets.only(left: 10.0),
-                      child: Text(
-                        "${partnerData != null ? partnerData.firstName ?? "" : ""}",
-                        style: TextStyle(
-                            fontSize: Utils(context).getMediaWidth() * 0.04,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white
+                      SvgPicture.asset("assets/hearts.svg", height: Utils(context).getMediaHeight() * 0.03,),
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        // margin: EdgeInsets.only(left: 10.0),
+                        child: Text(
+                          "${partnerData != null ? partnerData.firstName ?? "" : ""}",
+                          style: TextStyle(
+                              fontSize: Utils(context).getMediaWidth() * 0.04,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ) : Container(child: Text(
                 "${suggesiontypeListsResponse!=null?suggesiontypeListsResponse.data.where((element) => element.id==1).first.name:'Date Ideas'}",
@@ -262,7 +268,9 @@ class _IdeasListScreenState extends State<IdeasListScreen> {
                       ),
               ),
             ),
-            drawer: CustomMenuDrawer(userDetails),
+            drawer: CustomMenuDrawer(userDetails,handler: (){
+
+            },),
           );
   }
 }
